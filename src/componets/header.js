@@ -41,7 +41,7 @@ export default function Header() {
             <VStack>
                 <Menu>
                     <Container height="120px" w="100%" maxWidth="100%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
-                        <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
+                        <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>               
                     </Container>
                 </Menu>
                 <Menu m="0">

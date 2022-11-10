@@ -14,7 +14,7 @@ export default function Register() {
             <Flex
                bg='blackAlpha.800' p='20px' borderRadius='10px' flexDirection='column' minWidth='max-content' alignSelf='center' alignItems='center' gap='2' w='550px' boxShadow='dark-lg'>
                 <Box p='1'>
-                    <Heading size='md'>Iniciar sesión</Heading>
+                    <Heading size='md'>Registrarse</Heading>
                 </Box>
 
                 <Spacer />

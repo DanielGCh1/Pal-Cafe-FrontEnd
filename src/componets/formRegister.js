@@ -93,7 +93,7 @@ export default function FormRegister() {
                             <Field name='numeroUno'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.numeroUno && form.touched.numeroUno}>
-                                        <FormLabel>Numero de teléfono 2</FormLabel>
+                                        <FormLabel>Numero de teléfono 1</FormLabel>
                                         <Input {...field} type='number'  />
                                         <FormErrorMessage>{form.errors.numeroUno}</FormErrorMessage>
                                     </FormControl>
@@ -102,7 +102,7 @@ export default function FormRegister() {
                             <Field name='numeroDos'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.numeroDos && form.touched.numeroDos}>
-                                        <FormLabel>Numero de teléfono 1</FormLabel>
+                                        <FormLabel>Numero de teléfono 2</FormLabel>
                                         <Input {...field} type='number' />
                                         <FormErrorMessage>{form.errors.numeroDos}</FormErrorMessage>
                                     </FormControl>
