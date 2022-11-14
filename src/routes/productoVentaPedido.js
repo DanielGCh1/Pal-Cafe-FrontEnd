@@ -22,15 +22,19 @@ import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
 
 export default function ProductoVentaPedido() {
   return (
-    <Container backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+    <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
       justifyContent='center'>
+
+      <HeaderPaginaPrincipal />
 
       <VStack
         divider={<StackDivider borderColor='gray.200' />}
         spacing={4}
         align='stretch'
       >
-        <HeaderPaginaPrincipal />
+        <Stack maxW={['10', '100']} h='430'>
+
+        </Stack>
 
         <SimpleGrid
           columns={{ base: 1, lg: 2 }}

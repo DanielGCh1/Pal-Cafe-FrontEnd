@@ -17,50 +17,54 @@ import {
     Image,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { Select } from '@chakra-ui/react'
+
 const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
 
     return <>
-        <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-            <Td>
-                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" />
-            </Td>
-            <Td>
-                <Image src={require(hoverImage ? "../assets/eliminarHover.png" : "../assets/eliminar.png")} width="35px" height="35px" alt="" m="auto"
-                    _hover={{ cursor: "pointer" }}
-                    onMouseEnter={() => setHoverImege(true)} onMouseLeave={() => setHoverImege(false)} />
-            </Td>
+        <Tr alignItems='center' textAlign="center">
+            <Td textAlign="center" >Freddy</Td>
+            <Select placeholder='Pendiente'>
+                <option value='option1'>Aceptado</option>
+                <option value='option2'>No Aceptado</option>
+                <option value='option3'>Pendiente</option>
+                <option value='option3'>De baja</option>
+            </Select>
+            <Td textAlign="center">1</Td>
+            <Td textAlign="center">1</Td>
+            <Td textAlign="center">1</Td>
+            <Td textAlign="center">1</Td>
+
         </Tr>
     </>
 }
 
-export default function BuscarMaterial() {
+export default function BuscarCliente() {
 
     return <>
         <VStack color='white' bg='blackAlpha.800' width="100%" h='calc(100vh)' padding="50px 0px 20px 0px" >
             <VStack>
                 <HStack>
-                    <h1 className="title">Buscar Materiales</h1>
+                    <h1 className="title">Buscar Clientes</h1>
                 </HStack>
             </VStack>
-            <TableContainer width='80%' bg='white' color='black'>
+            <TableContainer width='95%' bg='white' color='black'>
                 <Table variant='striped' colorScheme='blackAlpha'>
                     <Thead bg='red.900'>
-                        <Tr>
-                            <Th color='white' textAlign="center">Nombre</Th>
-                            <Th color='white' textAlign="center">Cantidad Actual</Th>
-                            <Th color='white' textAlign="center">Venta Online</Th>
-                            <Th color='white' textAlign="center">Editar</Th>
-                            <Th color='white' textAlign="center">Eliminar</Th>
+                        <Tr >
+                            <Th color='white' textAlign="center">Nombre:</Th>
+                            <Th color='white' textAlign="center">Estado</Th>
+                            <Th color='white' textAlign="center">Pedidos Hechos</Th>
+                            <Th color='white' textAlign="center">Pedidos Exitosos</Th>
+                            <Th color='white' textAlign="center">Pedidos no Pagados</Th>
+                            <Th color='white' textAlign="center">Pendientes</Th>
                         </Tr>
                     </Thead>
-                    <Tbody>
-                        <Fila/>
-                        <Fila/>
-                        <Fila/>
+                    <Tbody alignItems='center'>
+                        <Fila />
+                        <Fila />
+                        <Fila />
                     </Tbody>
                 </Table>
             </TableContainer>

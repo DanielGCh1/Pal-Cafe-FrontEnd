@@ -30,10 +30,10 @@ const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
 
     return <>
-        <Tr>
-            <Td isNumeric>1</Td>
-            <Td >₡ 1 200</Td>
-            <Td >Pan dulce</Td>
+        <Tr alignItems='center' textAlign="center">
+            <Td textAlign="center" >1</Td>
+            <Td textAlign="center">₡ 1 200</Td>
+            <Td textAlign="center">Pan dulce</Td>
         </Tr>
     </>
 }
@@ -44,19 +44,21 @@ export default function PerfilUsuario() {
         <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
             justifyContent='center'>
 
+            <HeaderPaginaPrincipal />
+
             <VStack
                 spacing={4}
 
                 align='center'
             >
-                <HeaderPaginaPrincipal />
-                <div id="divCenter">
-                    <Outlet />
-                </div>
-                <Box p='1'>
-                    <Heading size='md'>Cliente</Heading>
-                </Box>
+                <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+                    justifyContent='center' >
 
+                </Stack>
+
+                <Box p='2'>
+                    <Heading size='2xl'>Cliente</Heading>
+                </Box>
                 <Formik
                     initialValues={{
                         nombre: '',
@@ -102,10 +104,10 @@ export default function PerfilUsuario() {
                     }}
                 >
                     {(props) => (
-                        <Container bg='blackAlpha.800' p='20px' color='white' borderRadius='10px' minWidth='max-content' alignSelf='center' alignItems='center' gap='2' w='550px' boxShadow='dark-lg'>
+                        <Container bg='blackAlpha.800' p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
                             <Form>
                                 <HStack spacing='28'>
-                                    <SimpleGrid columns={[1, null, 2]} spacing='40px'>
+                                    <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing='40px' alignItems='center'>
                                         <Field name='nombre'>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
@@ -213,13 +215,13 @@ export default function PerfilUsuario() {
                                 <TableContainer width='100%' bg='white' color='black'>
                                     <Table variant='striped' colorScheme='blackAlpha'>
                                         <Thead bg='red.900'>
-                                            <Tr>
+                                            <Tr >
                                                 <Th color='white' textAlign="center">Pedido Numero:</Th>
                                                 <Th color='white' textAlign="center">Costo</Th>
                                                 <Th color='white' textAlign="center">Descripción</Th>
                                             </Tr>
                                         </Thead>
-                                        <Tbody>
+                                        <Tbody alignItems='center'>
                                             <Fila />
                                             <Fila />
                                             <Fila />
