@@ -1,0 +1,6 @@
+.overflow {
+    overflow-y: scroll;
+}
+.limited {
+    max-height: 475px;
+}

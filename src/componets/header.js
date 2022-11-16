@@ -24,7 +24,7 @@ const buttonMenu = (name) => {
             m="0"
             h='70px'
             w="100%"
-            _hover={{ bg: 'white' }}
+            _hover={{ bg: '#dcdcdc' }}
             _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px' }}
             _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: '#56070C' }}
         >
@@ -40,7 +40,7 @@ export default function Header() {
         <Container position='fixed' width='15%' maxWidth="15%" h='calc(100vh)' bg='white' color='black' p='0' m="0">
             <VStack>
                 <Menu>
-                    <Container height="120px" w="100%" maxWidth="100%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
+                    <Container height="120px" w="100%" maxWidth="100%" bg="black" p="0px" display="flex" justifyContent="center" alignItems="center">
                         <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>               
                     </Container>
                 </Menu>
@@ -58,7 +58,7 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Productos')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
+                        <MenuItem></MenuItem>
                         <MenuItem>New Window</MenuItem>
                         <MenuItem>Open...</MenuItem>
                     </MenuList>
@@ -121,8 +121,8 @@ export default function Header() {
                 </Menu>
                 <Menu >
                     <MenuButton color='White'
-                        bgColor='#822424' borderRadius='0px' h='100px' w="100%"
-                        _hover={{ bg: '#FFDB58', color: 'red.900', borderColor: "red.900", borderStyle: "solid", borderWidth: "2px" }} >
+                        bgColor='#56070C' borderRadius='0px' h='100px' w="100%"
+                        _hover={{ bg: '#c3473f' }} >
                         Cerrar sesion
                     </MenuButton>
                 </Menu>
