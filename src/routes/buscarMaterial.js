@@ -20,13 +20,20 @@ import { useState } from 'react'
 const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
 
+    const handleClick = () => {
+        console.log("presione editar, el lapicero");
+      };
+
     return <>
         <Tr>
             <Td>inches</Td>
             <Td>millimetres (mm)</Td>
             <Td isNumeric>25.4</Td>
             <Td>
-                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" />
+                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" 
+                onClick={() => {
+                    handleClick();
+                  }}/>
             </Td>
             <Td>
                 <Image src={require(hoverImage ? "../assets/eliminarHover.png" : "../assets/eliminar.png")} width="35px" height="35px" alt="" m="auto"

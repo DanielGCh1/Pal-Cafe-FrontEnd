@@ -5,14 +5,20 @@ import ProductoPresentacion from '../componets/productoPresentacion'
 
 import { SimpleGrid } from '@chakra-ui/react'
 
-import useProducts from '../context/Product/UseProduct';
-import { useEffect, useState } from 'react';
+//import useProducts from '../context/Product/UseProduct';
+
+import { useContext, useEffect, useState } from 'react';
+
+import ProductosValoresContext from '../context/Product/ProductosValoresContext';
 
 
 
 export default function ProductosVentaPaginaPrincipal() {
-    const { products, selected, getProduct, getProducts, setSelected } =
-        useProducts();
+    
+
+
+    const { products, selected, getProduct, getProducts, setSelected, hola } =
+        useContext(ProductosValoresContext);
 
     const errors = validate(
         selected ? selected.id : '',
@@ -33,7 +39,7 @@ export default function ProductosVentaPaginaPrincipal() {
 
 
     return <>
-        <SimpleGrid columns={[1, null, 3]} spacing='40px'>
+        <SimpleGrid columns={[1, 2, 3]} spacing='40px'>
         {products.length
                   ? products.map(prod => (
                     <ProductoPresentacion nombre = {prod.first_name} id = {prod.id}/>

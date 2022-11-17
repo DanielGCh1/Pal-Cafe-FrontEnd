@@ -21,34 +21,35 @@ import { MdLocalShipping } from 'react-icons/md';
 import { Link } from '@chakra-ui/react'
 
 import useProducts from '../context/Product/UseProduct';
-import { useEffect, useState } from 'react';
 
-export default function ProductoPresentacion({id, nombre}) {
-  const { products, selected, getProduct, getProducts, setSelected } =
-      useProducts();
+import { useContext, useEffect, useState } from 'react';
+import ProductosValoresContext from '../context/Product/ProductosValoresContext';
 
-    const errors = validate(
-      selected ? selected.id : '',
-      selected ? selected.last_name : '',
-      selected ? selected.first_name : '',
-      selected ? selected.email : '',
-      selected ? selected.first_name : '',
-      selected ? selected.first_name : ''
-    );
+export default function ProductoPresentacion({ id, nombre }) {
+  const { products, selected, getProduct, getProducts, setSelected, hola } =
+    useContext(ProductosValoresContext);
 
-    useEffect(() => {
-      getProducts();
-    }, []);
+  const errors = validate(
+    selected ? selected.id : '',
+    selected ? selected.last_name : '',
+    selected ? selected.first_name : '',
+    selected ? selected.email : '',
+    selected ? selected.first_name : '',
+    selected ? selected.first_name : ''
+  );
 
-    const handleClick = id => {
-      getProduct(id);
-    };
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const handleClick = id => {
+    getProduct(id);
+  };
 
 
 
   return (
     <Link href='/ProductoVentaPedido'>
-      <Text fontSize='5xl'>{nombre}</Text>
       <Image
         rounded={'md'}
         alt={'product image'}
@@ -62,7 +63,6 @@ export default function ProductoPresentacion({id, nombre}) {
         }}
       />
     </Link>
-
   );
 }
 

@@ -20,13 +20,13 @@ import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
 
-import useProducts from '../context/Product/UseProduct';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import ProductosValoresContext from '../context/Product/ProductosValoresContext';
 
 export default function ProductoVentaPedido() {
 
-  const { products, selected, getProduct, getProducts, setSelected } =
-    useProducts();
+  const { products, selected, getProduct, getProducts, setSelected, hola } =
+        useContext(ProductosValoresContext);
 
   const errors = validate(
     selected ? selected.id : '',

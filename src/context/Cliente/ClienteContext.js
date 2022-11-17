@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
+import API from '../api';
 
 const ClienteContext = createContext(null)
 
@@ -15,8 +16,8 @@ const ClienteProvider = props => {
 
   const getClientes = async () => {
     try {
-      const res = await axios.get('https://reqres.in/api/users');
-      const data = res.data.data;
+      const res = await API.get('/users/get-all');
+      const data = res.data;
       setClientes(data)
       console.log(clientes)
     } catch (error) {
@@ -26,23 +27,22 @@ const ClienteProvider = props => {
 
   const getCliente = id => {
     try {
-      const cliente = clientes.find((cliente) => {return cliente.id === id})
+      const cliente = clientes.find((cliente) => { return cliente.id === id })
       console.log(cliente)
       setClienteSelecionado(cliente)
-      
-    } catch (error) {}
+
+    } catch (error) { }
   };
-/*
+
   const setCliente = async () => {
     try {
-      const res = await axios.post();
-      const data = res.data.data;
-      setClientes(data)
+      const res = await API.post('/users/add');
+      getCliente()
       console.log(clientes)
     } catch (error) {
       console.error(error);
     }
-  };*/
+  };
 
   return (
     <ClienteContext.Provider
@@ -52,6 +52,7 @@ const ClienteProvider = props => {
         setClienteSelecionado,
         getClientes,
         getCliente,
+        setCliente
       }}
     >
       {props.children}

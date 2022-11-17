@@ -82,35 +82,7 @@ export default function PerfilUsuario() {
                 <Box p='2'>
                     <Heading size='2xl'>Cliente</Heading>
                 </Box>
-                <Container bg='blackAlpha.800' p='20px' color='black' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
-                    <form
-                        onSubmit={ev => {
-                            ev.preventDefault();
-                            console.log("Cliente que estoy editando " + clienteSelecionado);
-                            handleClick();
-                        }}
-                    >
-                        <FormLabel>Nombre</FormLabel>
-                        <input
-                            type="text"
-                            name="nombre"
-                            autoComplete="off"
-                            value={clienteSelecionado ? clienteSelecionado.first_name : ''}
-                            onChange={ev => setClienteSelecionado({ ...clienteSelecionado, id: ev.target.value })}
-                        ></input>
 
-                        <p>{errors}</p>
-
-                        <Button
-                            mt={4}
-                            colorScheme='red'
-                            type='submit'
-                            marginTop='10'
-                        >
-                            Guardar Cambios
-                        </Button>
-                    </form>
-                </Container>
 
 
                 <Formik

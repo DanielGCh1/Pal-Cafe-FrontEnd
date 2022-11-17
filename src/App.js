@@ -20,38 +20,38 @@ import Contacto from "./routes/contacto";
 import BuscarCliente from './routes/buscarCliente';
 import IngredientContext, { IngredientProvider } from './context/Ingredients/IngredientContext';
 import { ProductProvider } from './context/Product/ProductContext';
-import  { ClienteProvider } from './context/Cliente/ClienteContext';
+import { ClienteProvider } from './context/Cliente/ClienteContext';
+import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <IngredientProvider>
-        <ProductProvider>
-        <ClienteProvider>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/LoginCliente" element={<LoginCliente />} />
-            <Route path="Register" element={<Register />} />
-            <Route path="/Home" element={<Home />} >
-              <Route path="RegisterMaterial" element={<RegisterMaterial />} />
-              <Route path="BuscarMaterial" element={<BuscarMaterial />} />
-              <Route path="BuscarCliente" element={<BuscarCliente />} />
+      <ProductosValoresProvider>
+        <IngredientProvider>
+          <ProductProvider>
+            <ClienteProvider>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/LoginCliente" element={<LoginCliente />} />
+                <Route path="Register" element={<Register />} />
+                <Route path="/Home" element={<Home />} >
+                  <Route path="RegisterMaterial"  element={<RegisterMaterial />} />
+                  <Route path="BuscarMaterial" element={<BuscarMaterial />} />
+                  <Route path="BuscarCliente" element={<BuscarCliente />} />
 
+                </Route>
+                <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
 
-
-              
-            </Route>
-            <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
-
-            <Route path="ProductoVentaPedido" element={<ProductoVentaPedido />} />
-            <Route path="PerfilUsuario" element={<PerfilUsuario />} />
-            <Route path="RegistrarCliente" element={<RegistrarCliente />} />
-            <Route path="Nosotros" element={<Nosotros />} />
-            <Route path="Contacto" element={<Contacto />} />
-          </Routes>
-          </ClienteProvider>
-        </ProductProvider>
-      </IngredientProvider>
+                <Route path="ProductoVentaPedido" element={<ProductoVentaPedido />} />
+                <Route path="PerfilUsuario" element={<PerfilUsuario />} />
+                <Route path="RegistrarCliente" element={<RegistrarCliente />} />
+                <Route path="Nosotros" element={<Nosotros />} />
+                <Route path="Contacto" element={<Contacto />} />
+              </Routes>
+            </ClienteProvider>
+          </ProductProvider>
+        </IngredientProvider>
+      </ProductosValoresProvider>
     </ChakraProvider>
   );
 }
