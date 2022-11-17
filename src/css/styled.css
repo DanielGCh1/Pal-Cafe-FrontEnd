@@ -1,16 +1,41 @@
-.linksto:hover{
-    color:red
+.linksto:hover {
+    color: red
 }
 
-#divCenter{
+#divCenter {
     width: 85%;
     position: relative;
     top: 0px;
     left: 15%;
     height: calc(100vh);
 }
-.title{
+
+.title {
     font-size: 34px;
     font-weight: bolder;
     margin-bottom: 29px;
+}
+
+.btnEditarImage {
+    background-image: url('../assets/edit.png');
+    background-size: cover;
+    border-color: transparent;
+}
+
+.btnEditarImage:hover {
+    background-image: url('../assets/edithover.png');
+    cursor: pointer;
+}
+
+.btnEliminarImage {
+    background-image: url('../assets/eliminar.png');
+    background-size: cover;
+    border-color: transparent;
+}
+
+.btnEliminarImage:hover {
+    background-image: url('../assets/eliminarHover.png');
+    filter: invert(0.4) sepia(1) hue-rotate(20deg) saturate(1000%);
+    cursor: pointer;
+    -webkit-filter: invert(0.4) sepia(1) hue-rotate(20deg) saturate(1000%);
 }

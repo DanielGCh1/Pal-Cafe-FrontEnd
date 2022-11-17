@@ -15,29 +15,23 @@ import {
     Button,
     background,
     Image,
+    Input,
 } from '@chakra-ui/react'
-import { useState } from 'react'
-const Fila = () => {
-    const [hoverImage, setHoverImege] = useState(false);
-
-    return <>
-        <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-            <Td>
-                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" />
-            </Td>
-            <Td>
-                <Image src={require(hoverImage ? "../assets/eliminarHover.png" : "../assets/eliminar.png")} width="35px" height="35px" alt="" m="auto"
-                    _hover={{ cursor: "pointer" }}
-                    onMouseEnter={() => setHoverImege(true)} onMouseLeave={() => setHoverImege(false)} />
-            </Td>
-        </Tr>
-    </>
-}
+import { useState, useEffect, useRef } from 'react'
+import { CargarIngredientes } from '../componets/PeticionesServer'
+import useHover from "@react-hook/hover";
 
 export default function BuscarMaterial() {
+    const [materiales, setMateriales] = useState([])
+
+    useEffect(() => {
+        return async () => {
+            const response = await CargarIngredientes();
+            setMateriales(response)
+        }
+    }, [])
+
+
 
     return <>
         <VStack color='white' bg='blackAlpha.800' width="100%" h='calc(100vh)' padding="50px 0px 20px 0px" >
@@ -51,16 +45,33 @@ export default function BuscarMaterial() {
                     <Thead bg='red.900'>
                         <Tr>
                             <Th color='white' textAlign="center">Nombre</Th>
+                            <Th color='white' textAlign="center">Descripcion</Th>
+                            <Th color='white' textAlign="center">Precio</Th>
                             <Th color='white' textAlign="center">Cantidad Actual</Th>
-                            <Th color='white' textAlign="center">Venta Online</Th>
+                            <Th color='white' textAlign="center">UnidadMedia</Th>
                             <Th color='white' textAlign="center">Editar</Th>
                             <Th color='white' textAlign="center">Eliminar</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Fila/>
-                        <Fila/>
-                        <Fila/>
+                        {materiales && materiales.map((p) => {
+                            return (
+                                <Tr key={p.id}>
+                                    <Td><Input> </Input>
+                                        {p.nombre}</Td>
+                                    <Td>{p.descripcion}</Td>
+                                    <Td>{p.precio}</Td>
+                                    <Td>{p.cantidad}</Td>
+                                    <Td>{p.unidadMedida}</Td>
+                                    <Td>
+                                    <Container className="btnEditarImage" w='35px' h='35px'/>
+                                    </Td>
+                                    <Td>
+                                        <Container className="btnEliminarImage" w='35px' h='35px'/>
+                                    </Td>
+                                </Tr>
+                            )
+                        })}
                     </Tbody>
                 </Table>
             </TableContainer>
@@ -93,3 +104,5 @@ export default function BuscarMaterial() {
         </VStack>
     </>
 }
+
+
