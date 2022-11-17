@@ -13,12 +13,12 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import useProducts from '../context/Product/UseProduct';
+import useEmployees from '../context/Empleados/UseEmployees';
 import { useEffect } from 'react';
 
-const CreacionProductos = () => {
-  const { products, selected, getProduct, getProducts, setSelected } =
-    useProducts();
+const CreacionEmpleados = () => {
+  const { employees, selected, getEmployee, getEmployees, setSelected } =
+    useEmployees();
 
   const errors = validate(
     selected,
@@ -31,11 +31,12 @@ const CreacionProductos = () => {
   );
 
   useEffect(() => {
-    getProducts();
+    getEmployees();
+    console.log(selected);
   }, []);
 
   const handleClick = id => {
-    getProduct(id);
+    getEmployee(id);
   };
 
   return (
@@ -63,7 +64,7 @@ const CreacionProductos = () => {
           className="formProducto"
           onSubmit={ev => {
             ev.preventDefault();
-            saveProduct(selected);
+            saveEmployee(selected);
           }}
         >
           <FormLabel>Nombre</FormLabel>
@@ -140,7 +141,13 @@ const CreacionProductos = () => {
 
           <p style={error}>{errors}</p>
 
-          <HStack position={["absolute","relative"]} bottom="6" alignSelf="flex-end" display="flex" flexWrap="wrap">
+          <HStack
+            position={['absolute', 'relative']}
+            bottom="6"
+            alignSelf="flex-end"
+            display="flex"
+            flexWrap="wrap"
+          >
             <Button
               color="White"
               bgColor="#822424"
@@ -207,14 +214,14 @@ const CreacionProductos = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {products.length
-                  ? products.map(prod => (
-                      <Tr key={prod.id}>
-                        <Td>{prod.first_name}</Td>
+                {employees.length
+                  ? employees.map(emp => (
+                      <Tr key={emp.id}>
+                        <Td>{emp.first_name}</Td>
                         <Td isNumeric>
                           <Button
                             onClick={() => {
-                              handleClick(prod.id);
+                              handleClick(emp.id);
                             }}
                           ></Button>
                         </Td>
@@ -230,9 +237,9 @@ const CreacionProductos = () => {
   );
 };
 
-const saveProduct = product => {
+const saveEmployee = employee => {
   setTimeout(() => {
-    alert(JSON.stringify(product, null, 2));
+    alert(JSON.stringify(employee, null, 2));
   }, 1000);
 };
 
@@ -280,4 +287,4 @@ const mr = {
   margin_right: '20px',
 };
 
-export default CreacionProductos;
+export default CreacionEmpleados;

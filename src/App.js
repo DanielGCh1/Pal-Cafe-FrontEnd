@@ -14,30 +14,42 @@ import { CrearProducto } from './routes/CrearProducto';
 import CrearReseta from './routes/CrearReseta';
 import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
-import IngredientContext, { IngredientProvider } from './context/Ingredients/IngredientContext';
+import CreacionEmpleados from './routes/CreacionEmpleados';
+import IngredientContext, {
+  IngredientProvider,
+} from './context/Ingredients/IngredientContext';
+import { EmployeeProvider } from './context/Empleados/EmployeeContext';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <IngredientProvider>
         <ProductProvider>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="Register" element={<Register />} />
-            <Route path="/Home" element={<Home />}>
-              <Route path="RegisterMaterial" element={<RegisterMaterial />} />
-              <Route path="BuscarMaterial" element={<BuscarMaterial />} />
-            </Route>
-            <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
-            <Route
-              path="ProductoVentaPedido"
-              element={<ProductoVentaPedido />}
-            />
-            <Route path="PerfilUsuario" element={<PerfilUsuario />} />
-            <Route path="/CrearProducto" element={<CrearProducto />} />
-            <Route path="/CrearReseta" element={<CrearReseta />} />
-            <Route path="/CreacionProductos" element={<CreacionProductos />} />
-          </Routes>
+          <EmployeeProvider>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="Register" element={<Register />} />
+              <Route path="/Home" element={<Home />}>
+                <Route path="RegisterMaterial" element={<RegisterMaterial />} />
+                <Route path="BuscarMaterial" element={<BuscarMaterial />} />
+                <Route path="CrearReseta" element={<CrearReseta />} />
+                <Route
+                  path="CreacionProductos"
+                  element={<CreacionProductos />}
+                />
+                <Route
+                  path="CreacionEmpleados"
+                  element={<CreacionEmpleados />}
+                />
+              </Route>
+              <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
+              <Route
+                path="ProductoVentaPedido"
+                element={<ProductoVentaPedido />}
+              />
+              <Route path="PerfilUsuario" element={<PerfilUsuario />} />
+            </Routes>
+          </EmployeeProvider>
         </ProductProvider>
       </IngredientProvider>
     </ChakraProvider>

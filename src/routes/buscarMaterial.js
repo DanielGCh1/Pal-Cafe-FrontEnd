@@ -40,7 +40,8 @@ const Fila = () => {
 export default function BuscarMaterial() {
 
     return <>
-        <VStack color='white' bg='blackAlpha.800' width="100%" h='calc(100vh)' padding="50px 0px 20px 0px" >
+        <VStack color='white' bg='blackAlpha.800' width="100%" 
+        h='calc(100vh)' padding="50px 0px 20px 0px" >
             <VStack>
                 <HStack>
                     <h1 className="title">Buscar Materiales</h1>
@@ -71,7 +72,6 @@ export default function BuscarMaterial() {
             <Button
                 color='White'
                 bgColor='#822424'
-                _hover={{ bg: 'red.900', color: 'White' }}
                 position='absolute'
                 right='12px'
                 top='10px'

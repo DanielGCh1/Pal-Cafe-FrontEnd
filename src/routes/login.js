@@ -2,6 +2,7 @@ import { Container, Box, Heading, Spacer, Button, Flex, Input, Text, HStack, Ima
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 import Axios from "axios";
+import useProducts from '../context/Product/UseProduct';
 
 export default function Login() {
   const [user, setUser] = useState('')
@@ -68,7 +69,6 @@ export default function Login() {
         <Spacer w='50px' />
 
         <Button colorScheme='red' onClick={() => validateLogin()}>Ingresar</Button>
-
         <Spacer />
 
         <HStack>
