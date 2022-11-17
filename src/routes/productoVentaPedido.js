@@ -20,7 +20,33 @@ import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
 
+import useProducts from '../context/Product/UseProduct';
+import { useEffect, useState } from 'react';
+
 export default function ProductoVentaPedido() {
+
+  const { products, selected, getProduct, getProducts, setSelected } =
+    useProducts();
+
+  const errors = validate(
+    selected ? selected.id : '',
+    selected ? selected.last_name : 'hola',
+    selected ? selected.first_name : '',
+    selected ? selected.email : '',
+    selected ? selected.first_name : '',
+    selected ? selected.first_name : ''
+  );
+
+  useEffect(() => {
+    //getProducts();
+    console.log(products);
+    console.log("Imprimiendo el producto "+ selected);
+  }, []);
+
+  const handleClick = id => {
+    getProduct(id);
+  };
+
   return (
     <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
       justifyContent='center'>
@@ -32,7 +58,8 @@ export default function ProductoVentaPedido() {
         spacing={4}
         align='stretch'
       >
-        <Stack maxW={['10', '100']} h='430'>
+        <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+          justifyContent='center' >
 
         </Stack>
 
@@ -58,7 +85,7 @@ export default function ProductoVentaPedido() {
                 lineHeight={1.1}
                 fontWeight={600}
                 fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                Pan Dulce
+                Pan dulce
               </Heading>
               <Text
                 color={useColorModeValue('gray.900', 'gray.400')}
@@ -98,3 +125,26 @@ export default function ProductoVentaPedido() {
 
   );
 }
+
+const validate = (
+  name,
+  description,
+  amount,
+  materialPrice,
+  salePrice,
+  preparationTime
+) => {
+  if (name !== undefined) if (name.length === 0) return 'Se requiere un nombre';
+  if (description !== undefined)
+    if (description.length === 0) return 'Se requiere una descripcion';
+  if (amount !== undefined)
+    if (amount.length === 0) return 'Se requiere una cantidad';
+  if (materialPrice !== undefined)
+    if (materialPrice.length === 0)
+      return 'Se requiere el gasto en ingredientes';
+  if (salePrice !== undefined)
+    if (salePrice.length === 0) return 'Se requiere el precio de venta';
+  if (preparationTime !== undefined)
+    if (preparationTime.length === 0)
+      return 'Se requiere el tiempo preparacion';
+};

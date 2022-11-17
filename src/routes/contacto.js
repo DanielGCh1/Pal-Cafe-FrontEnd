@@ -31,7 +31,8 @@ export default function Contacto() {
             >
 
 
-                <Stack maxW={['10', '100']} h='430'>
+                <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+                    justifyContent='center' >
 
                 </Stack>
 

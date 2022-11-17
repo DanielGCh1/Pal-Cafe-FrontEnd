@@ -29,10 +29,11 @@ export default function paginaPrincipal() {
                 align='stretch'
             >
 
-                <Stack maxW={['10', '100']} h='430'>
+                <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+                    justifyContent='center' >
 
                 </Stack>
-  
+
 
                 <Stack spacing={5} alignItems='center'>
                     <Text fontSize='5xl'>PAL CAFÉ</Text>

@@ -24,7 +24,9 @@ import { Text } from '@chakra-ui/react'
 import { FormControl, FormLabel, FormErrorMessage, Button, Input } from '@chakra-ui/react'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react'
+
+import useClientes from '../context/Cliente/UseClientes';
+import { useEffect, useState } from 'react';
 
 const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
@@ -39,6 +41,27 @@ const Fila = () => {
 }
 
 export default function PerfilUsuario() {
+
+    const { clientes, clienteSelecionado, getClientes, setClienteSelecionado, getCliente } =
+        useClientes();
+
+    useEffect(() => {
+        getClientes();
+        getCliente(1);
+    }, []);
+
+    const handleClick = id => {
+        getCliente(1);
+    };
+
+    const errors = validate(
+        clienteSelecionado ? clienteSelecionado.id : '',
+        clienteSelecionado ? clienteSelecionado.last_name : '',
+        clienteSelecionado ? clienteSelecionado.first_name : '',
+        clienteSelecionado ? clienteSelecionado.email : '',
+        clienteSelecionado ? clienteSelecionado.first_name : '',
+        clienteSelecionado ? clienteSelecionado.first_name : ''
+    );
 
     return <>
         <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
@@ -59,6 +82,37 @@ export default function PerfilUsuario() {
                 <Box p='2'>
                     <Heading size='2xl'>Cliente</Heading>
                 </Box>
+                <Container bg='blackAlpha.800' p='20px' color='black' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
+                    <form
+                        onSubmit={ev => {
+                            ev.preventDefault();
+                            console.log("Cliente que estoy editando " + clienteSelecionado);
+                            handleClick();
+                        }}
+                    >
+                        <FormLabel>Nombre</FormLabel>
+                        <input
+                            type="text"
+                            name="nombre"
+                            autoComplete="off"
+                            value={clienteSelecionado ? clienteSelecionado.first_name : ''}
+                            onChange={ev => setClienteSelecionado({ ...clienteSelecionado, id: ev.target.value })}
+                        ></input>
+
+                        <p>{errors}</p>
+
+                        <Button
+                            mt={4}
+                            colorScheme='red'
+                            type='submit'
+                            marginTop='10'
+                        >
+                            Guardar Cambios
+                        </Button>
+                    </form>
+                </Container>
+
+
                 <Formik
                     initialValues={{
                         nombre: '',
@@ -268,8 +322,35 @@ export default function PerfilUsuario() {
                         </Container>
                     )}
                 </Formik>
+
             </VStack>
 
         </Container>
     </>
 }
+const guardarCambiosCliente = nombre => {
+    alert(nombre);
+};
+
+const validate = (
+    name,
+    description,
+    amount,
+    materialPrice,
+    salePrice,
+    preparationTime
+) => {
+    if (name !== undefined) if (name.length === 0) return 'Se requiere un nombre';
+    if (description !== undefined)
+        if (description.length === 0) return 'Se requiere una descripcion';
+    if (amount !== undefined)
+        if (amount.length === 0) return 'Se requiere una cantidad';
+    if (materialPrice !== undefined)
+        if (materialPrice.length === 0)
+            return 'Se requiere el gasto en ingredientes';
+    if (salePrice !== undefined)
+        if (salePrice.length === 0) return 'Se requiere el precio de venta';
+    if (preparationTime !== undefined)
+        if (preparationTime.length === 0)
+            return 'Se requiere el tiempo preparacion';
+};

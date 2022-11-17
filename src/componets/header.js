@@ -58,9 +58,12 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Productos')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CrealProducto'>Crear Producto</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CrearReceta'>Buscar </Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>
