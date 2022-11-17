@@ -268,6 +268,7 @@ const validate = (
 const error = {
   color: 'red',
   fontSize: '20px',
+  
 };
 const input = {
   border: '1px solid black',
@@ -277,8 +278,6 @@ const ml = {
   margin_left: '2%',
 };
 
-const mr = {
-  margin_right: '20px',
-};
+
 
 export default CreacionPromociones;

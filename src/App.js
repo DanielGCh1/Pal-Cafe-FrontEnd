@@ -11,13 +11,9 @@ import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
 import { CrearProducto } from './routes/CrearProducto';
-import CrearReseta from './routes/CrearReseta';
 import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
 import CreacionEmpleados from './routes/CreacionEmpleados';
-import IngredientContext, {
-  IngredientProvider,
-} from './context/Ingredient/IngredientContext';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
 import { PromotionProvider } from './context/Promotion/PromotionContext';
 import CreacionPromociones from './routes/CreacionPromociones';
@@ -25,7 +21,6 @@ import CreacionPromociones from './routes/CreacionPromociones';
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <IngredientProvider>
         <ProductProvider>
           <EmployeeProvider>
             <PromotionProvider>
@@ -35,7 +30,6 @@ function App() {
               <Route path="/Home" element={<Home />}>
                 <Route path="RegisterMaterial" element={<RegisterMaterial />} />
                 <Route path="BuscarMaterial" element={<BuscarMaterial />} />
-                <Route path="CrearReseta" element={<CrearReseta />} />
                 <Route
                   path="CreacionProductos"
                   element={<CreacionProductos />}
@@ -59,7 +53,6 @@ function App() {
             </PromotionProvider>
           </EmployeeProvider>
         </ProductProvider>
-      </IngredientProvider>
     </ChakraProvider>
   );
 }
