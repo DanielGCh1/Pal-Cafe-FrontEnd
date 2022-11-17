@@ -17,21 +17,89 @@ import {
     Image,
     Input,
 } from '@chakra-ui/react'
-import { useState, useEffect, useRef } from 'react'
-import { CargarIngredientes } from '../componets/PeticionesServer'
+import { useState, useEffect, useRef, useContext } from 'react'
 import useHover from "@react-hook/hover";
+import useIngredients from '../context/Ingredients/UseIngredients';
 
-export default function BuscarMaterial() {
-    const [materiales, setMateriales] = useState([])
+const Fila = ({ props }) => {
+    const [desbloquear, setDesbloquear] = useState(true);
+    const { getIngredient, agregarIngredientePrelista} = useIngredients();
+    const [selected, setSelected] = useState(null)
+
 
     useEffect(() => {
-        return async () => {
-            const response = await CargarIngredientes();
-            setMateriales(response)
+        agregarIngredientePrelista({selected});
+    }, [selected])
+
+
+    const handleClickEditar = (id) => {
+        return () => {
+            desbloquear ? setDesbloquear(false) : setDesbloquear(true);
+            setSelected(getIngredient(id))
         }
-    }, [])
+    };
 
+    return (
+        <Tr >
+            <Td><input
+                type="text"
+                name="nombre"
+                autoComplete="off"
+                disabled={desbloquear ? true : false}
+                value={desbloquear ? props.ing_nombre : (selected ? selected.ing_nombre : '')}
+                onChange={(ev) => setSelected({ ...selected, ing_nombre: ev.target.value })}
+            ></input></Td>
+            <Td><input
+                type="text"
+                name="nombre"
+                autoComplete="off"
+                disabled={desbloquear ? true : false}
+                value={desbloquear ? props.ing_descripcion : (selected ? selected.ing_descripcion : '')}
+                onChange={(ev) => setSelected({ ...selected, ing_descripcion: ev.target.value })}
+            ></input></Td>
+            <Td><input
+                type="text"
+                name="nombre"
+                autoComplete="off"
+                disabled={desbloquear ? true : false}
+                value={desbloquear ? props.ing_precio : (selected ? selected.ing_precio : '')}
+                onChange={(ev) => setSelected({ ...selected, ing_precio: ev.target.value })}
+            ></input></Td>
+            <Td><input
+                type="text"
+                name="nombre"
+                autoComplete="off"
+                disabled={desbloquear ? true : false}
+                value={desbloquear ? props.ing_cantidad : (selected ? selected.ing_cantidad : '')}
+                onChange={(ev) => setSelected({ ...selected, ing_cantidad: ev.target.value })}
+            ></input></Td>
+            <Td><input
+                type="text"
+                name="nombre"
+                autoComplete="off"
+                disabled={desbloquear ? true : false}
+                value={desbloquear ? props.ing_unidadMedida : (selected ? selected.ing_unidadMedida : '')}
+                onChange={(ev) => setSelected({ ...selected, ing_unidadMedida: ev.target.value })}
+            ></input></Td>
+            <Td>
+                <Container className="btnEditarImage" w='35px' h='35px' onClick={handleClickEditar(props._id)} />
+            </Td>
+            <Td>
+                <Container className="btnEliminarImage" w='35px' h='35px' />
+            </Td>
+        </Tr>
+    )
+}
 
+export default function BuscarMaterial() {
+    const { ingredients, selected, getIngredients, getIngredient, setSelected, } = useIngredients();
+
+    useEffect(() => {
+        getIngredients();
+    }, []);
+    const handleSavedChanges = () => {
+
+    }
 
     return <>
         <VStack color='white' bg='blackAlpha.800' width="100%" h='calc(100vh)' padding="50px 0px 20px 0px" >
@@ -54,25 +122,21 @@ export default function BuscarMaterial() {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {materiales && materiales.map((p) => {
+                        {ingredients && ingredients.map((p) => {
                             return (
-                                <Tr key={p.id}>
-                                    <Td><Input> </Input>
-                                        {p.nombre}</Td>
-                                    <Td>{p.descripcion}</Td>
-                                    <Td>{p.precio}</Td>
-                                    <Td>{p.cantidad}</Td>
-                                    <Td>{p.unidadMedida}</Td>
-                                    <Td>
-                                    <Container className="btnEditarImage" w='35px' h='35px'/>
-                                    </Td>
-                                    <Td>
-                                        <Container className="btnEliminarImage" w='35px' h='35px'/>
-                                    </Td>
-                                </Tr>
-                            )
+                                <Fila key={p._id} props={p} />
+                            );
                         })}
                     </Tbody>
+                    <Tfoot bg='red.900'>
+                        <Th color='white' textAlign="center">Ventas</Th>
+                        <Th color='white' textAlign="center">Regalias</Th>
+                        <Th color='white' textAlign="center">Experidos</Th>
+                        <Th color='white' textAlign="center">Sobrantes</Th>
+                        <Th color='white' textAlign="center">Producto</Th>
+                        <Th color='white' textAlign="center">Editar</Th>
+                        <Th color='white' textAlign="center">Eliminar</Th>
+                    </Tfoot>
                 </Table>
             </TableContainer>
 
@@ -97,6 +161,7 @@ export default function BuscarMaterial() {
                 left='12px'
                 top='10px'
                 _hover={{ bg: '#FFDB58', color: 'red.900', borderColor: "red.900", borderStyle: "solid", borderWidth: "2px" }}
+                onClick={{handleSavedChanges}}
             >
                 Guardar Cambios
             </Button>
