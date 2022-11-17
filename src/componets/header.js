@@ -107,11 +107,11 @@ export default function Header() {
                     </MenuList>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Promocionee')}
+                    {buttonMenu('Promociones')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CreacionPromociones'>Administrar Promociones</Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>

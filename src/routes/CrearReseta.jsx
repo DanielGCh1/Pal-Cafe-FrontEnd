@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import useIngredients from '../context/Ingredients/UseIngredients';
+import useIngredients from '../context/Ingredient/UseIngredients';
 
 const CrearReseta = () => {
   const { ingredients, selected, getIngredients, getIngredient } = useIngredients();

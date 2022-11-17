@@ -13,34 +13,29 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import useEmployees from '../context/Employee/UseEmployees';
+import useProducts from '../context/Product/UseProduct';
 import { useEffect } from 'react';
 
-import useProducts from '../context/Product/UseProduct';
-
-const CreacionEmpleados = () => {
-  const { employees, selected, getEmployee, getEmployees, guardar } =
-    useEmployees();
-    const { setSelected } = useProducts();
+const CreacionProductos = () => {
+  const { products, selected, getProduct, getProducts, setSelected } =
+    useProducts();
 
   const errors = validate(
     selected,
-    selected ? selected.first_name : '',
-    selected ? selected.last_name : '',
-    selected ? selected.email : ''
+    selected ? selected.pro_nombre : '',
+    selected ? selected.pro_descripcion : '',
+    selected ? selected.pro_cantidad : '',
+    selected ? selected.pro_precio_mano_obra : '',
+    selected ? selected.pro_precio_sugerido : ''
   );
 
   useEffect(() => {
-    getEmployees();
-  }, []);
+    getProducts()
+  }, [])
 
   const handleClick = id => {
-    getEmployee(id);
+    getProduct(id);
   };
-
-  const handleEdit = () => {
-
-  }
 
   return (
     <VStack
@@ -67,7 +62,7 @@ const CreacionEmpleados = () => {
           className="formProducto"
           onSubmit={ev => {
             ev.preventDefault();
-            saveEmployee(selected);
+            saveProduct(selected);
           }}
         >
           <FormLabel>Nombre</FormLabel>
@@ -76,44 +71,62 @@ const CreacionEmpleados = () => {
             name="nombre"
             className="inputsFoms"
             autoComplete="off"
-            value={selected ? selected.first_name : ''}
-            onChange={ev => setSelected({ ...selected, first_name: ev.target.value })}
+            value={selected ? selected.pro_nombre : ''}
+            onChange={ev => setSelected({ ...selected, pro_nombre: ev.target.value })}
             style={input}
           ></input>
-          <FormLabel>Apellidos</FormLabel>
+          <FormLabel>Descripcion</FormLabel>
           <input
             type="text"
             name="descripcion"
             autoComplete="off"
             className="inputsFoms"
-            value={selected ? selected.last_name : ''}
+            value={selected ? selected.pro_descripcion : ''}
             onChange={ev =>
-              setSelected({ ...selected, last_name: ev.target.value })
+              setSelected({ ...selected, pro_descripcion: ev.target.value })
             }
             style={input}
           ></input>
-          <FormLabel>Email</FormLabel>
+          <FormLabel>Cantidad</FormLabel>
           <input
             type="text"
             name="amount"
             autoComplete="off"
             className="inputsFoms"
-            value={selected ? selected.email : ''}
+            value={selected ? selected.pro_cantidad : ''}
             onChange={ev =>
-              setSelected({ ...selected, email: ev.target.value })
+              setSelected({ ...selected, pro_cantidad: ev.target.value })
+            }
+            style={input}
+          ></input>
+          <FormLabel>Precio mano de obra</FormLabel>
+          <input
+            type="text"
+            name="materialPrice"
+            autoComplete="off"
+            className="inputsFoms"
+            value={selected ? selected.pro_precio_mano_obra.$numberDecimal : ''}
+            onChange={ev =>
+              setSelected({ ...selected, pro_precio_mano_obra: ev.target.value })
+            }
+            style={input}
+          ></input>
+          <FormLabel>Precio Sugerido</FormLabel>
+          <input
+            type="text"
+            name="salePrice"
+            autoComplete="off"
+            className="inputsFoms"
+            value={selected ? selected.pro_precio_sugerido.$numberDecimal : ''}
+            onChange={ev =>
+              setSelected({ ...selected, pro_precio_sugerido: ev.target.value })
             }
             style={input}
           ></input>
 
           <p style={error}>{errors}</p>
 
-          <HStack
-            position="absolute"
-            bottom="6"
-            alignSelf="flex-end"
-            display="flex"
-            flexWrap="wrap"
-          >
+          <HStack position="absolute" bottom="6" alignSelf="flex-end" display="flex" flexWrap="wrap">
             <Button
               color="White"
               bgColor="#822424"
@@ -142,7 +155,6 @@ const CreacionEmpleados = () => {
                 borderStyle: 'solid',
                 borderWidth: '2px',
               }}
-              onClick={handleEdit()}
             >
               Editar
             </Button>
@@ -181,20 +193,18 @@ const CreacionEmpleados = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {employees.length
-                  ? employees.map(emp => (
-                      <Tr key={emp.id}>
-                        <Td>{emp.first_name}</Td>
+                {products && products.map(prod => (
+                      <Tr key={prod._id}>
+                        <Td>{prod.pro_nombre}</Td>
                         <Td isNumeric>
                           <Button
                             onClick={() => {
-                              handleClick(emp.id);
+                              handleClick(prod._id);
                             }}
                           ></Button>
                         </Td>
                       </Tr>
-                    ))
-                  : null}
+                    ))}
               </Tbody>
             </Table>
           </TableContainer>
@@ -204,25 +214,32 @@ const CreacionEmpleados = () => {
   );
 };
 
-const saveEmployee = employee => {
+const saveProduct = product => {
   setTimeout(() => {
-    alert(JSON.stringify(employee, null, 2));
+    alert(JSON.stringify(product, null, 2));
   }, 1000);
 };
 
 const validate = (
   selected,
-  first_name,
-  last_name,
-  email
+  pro_nombre,
+  pro_descripcion,
+  pro_cantidad,
+  pro_precio_mano_obra,
+  pro_precio_sugerido
 ) => {
   if (selected !== null) {
-    if (first_name !== undefined)
-      if (first_name.length === 0) return 'Se requiere un nombre';
-    if (last_name !== undefined)
-      if (last_name.length === 0) return 'Se requiere un apellido';
-    if (email !== undefined)
-      if (email.length === 0) return 'Se requiere un correo';
+    if (pro_nombre !== undefined)
+      if (pro_nombre.length === 0) return 'Se requiere un nombre';
+    if (pro_descripcion !== undefined)
+      if (pro_descripcion.length === 0) return 'Se requiere una descripcion';
+    if (pro_cantidad !== undefined)
+      if (pro_cantidad.length === 0) return 'Se requiere una cantidad';
+    if (pro_precio_mano_obra !== undefined)
+      if (pro_precio_mano_obra.length === 0)
+        return 'Se requiere el precio de mano de obra';
+    if (pro_precio_sugerido !== undefined)
+      if (pro_precio_sugerido.length === 0) return 'Se requiere el precio sugerido';
   } else {
     return '';
   }
@@ -236,12 +253,5 @@ const input = {
   border: '1px solid black',
   width: '100%',
 };
-const ml = {
-  margin_left: '2%',
-};
 
-const mr = {
-  margin_right: '20px',
-};
-
-export default CreacionEmpleados;
+export default CreacionProductos;

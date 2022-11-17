@@ -1,5 +1,7 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
+import API from '../api';
+import { string } from 'yup';
 
 const ProductContext = createContext(null)
 
@@ -10,8 +12,8 @@ const ProductProvider = props => {
 
   const getProducts = async () => {
     try {
-      const res = await axios.get('https://reqres.in/api/users');
-      const data = res.data.data;
+      const res = await API.get('/productos/get-all');
+      const data = res.data;
       setProducts(data)
     } catch (error) {
       console.error(error);
@@ -20,8 +22,8 @@ const ProductProvider = props => {
 
   const getProduct = id => {
     try {
-      const product = products.find((product) => {return product.id === id})
-       setSelected(product)  
+      const product = products.find((product) => {return product._id === id})   
+      setSelected(product)
     } catch (error) {}
   };
 

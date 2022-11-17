@@ -13,12 +13,12 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import useProducts from '../context/Product/UseProduct';
+import usePromotions from '../context/Promotion/UsePromotion';
 import { useEffect } from 'react';
 
-const CreacionProductos = () => {
-  const { products, selected, getProduct, getProducts, setSelected } =
-    useProducts();
+const CreacionPromociones = () => {
+  const { promotions, selected, getPromotion, getPromotions, setSelected } =
+    usePromotions();
 
   const errors = validate(
     selected,
@@ -31,11 +31,11 @@ const CreacionProductos = () => {
   );
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    getPromotions()
+  }, [])
 
   const handleClick = id => {
-    getProduct(id);
+    getPromotion(id);
   };
 
   return (
@@ -140,7 +140,7 @@ const CreacionProductos = () => {
 
           <p style={error}>{errors}</p>
 
-          <HStack position={["absolute","relative"]} bottom="6" alignSelf="flex-end" display="flex" flexWrap="wrap">
+          <HStack position="absolute" bottom="6" alignSelf="flex-end" display="flex" flexWrap="wrap">
             <Button
               color="White"
               bgColor="#822424"
@@ -170,7 +170,7 @@ const CreacionProductos = () => {
                 borderWidth: '2px',
               }}
             >
-              Crear
+              Editar
             </Button>
             <Button
               color="White"
@@ -185,7 +185,7 @@ const CreacionProductos = () => {
                 borderWidth: '2px',
               }}
             >
-              Crear
+              Eliminar
             </Button>
           </HStack>
         </form>
@@ -207,8 +207,8 @@ const CreacionProductos = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {products.length
-                  ? products.map(prod => (
+                {promotions.length
+                  ? promotions.map(prod => (
                       <Tr key={prod.id}>
                         <Td>{prod.first_name}</Td>
                         <Td isNumeric>
@@ -230,9 +230,9 @@ const CreacionProductos = () => {
   );
 };
 
-const saveProduct = product => {
+const saveProduct = promotion => {
   setTimeout(() => {
-    alert(JSON.stringify(product, null, 2));
+    alert(JSON.stringify(promotion, null, 2));
   }, 1000);
 };
 
@@ -267,6 +267,7 @@ const validate = (
 
 const error = {
   color: 'red',
+  fontSize: '20px',
 };
 const input = {
   border: '1px solid black',
@@ -280,4 +281,4 @@ const mr = {
   margin_right: '20px',
 };
 
-export default CreacionProductos;
+export default CreacionPromociones;

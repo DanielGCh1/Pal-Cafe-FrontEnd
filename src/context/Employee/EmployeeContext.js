@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
+import API from '../api';
 
 const EmployeeContext = createContext(null)
 
@@ -23,6 +24,11 @@ const EmployeeProvider = props => {
     try {
       const employee = employees.find((employee) => {return employee.id === id})
        setSelected(employee)  
+    } catch (error) {}
+  };
+
+  const guardar = async employee => {
+    try {
     } catch (error) {}
   };
 

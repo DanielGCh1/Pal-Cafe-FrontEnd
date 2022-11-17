@@ -17,8 +17,10 @@ import CreacionProductos from './routes/CreacionProductos';
 import CreacionEmpleados from './routes/CreacionEmpleados';
 import IngredientContext, {
   IngredientProvider,
-} from './context/Ingredients/IngredientContext';
-import { EmployeeProvider } from './context/Empleados/EmployeeContext';
+} from './context/Ingredient/IngredientContext';
+import { EmployeeProvider } from './context/Employee/EmployeeContext';
+import { PromotionProvider } from './context/Promotion/PromotionContext';
+import CreacionPromociones from './routes/CreacionPromociones';
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
       <IngredientProvider>
         <ProductProvider>
           <EmployeeProvider>
+            <PromotionProvider>
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="Register" element={<Register />} />
@@ -41,6 +44,10 @@ function App() {
                   path="CreacionEmpleados"
                   element={<CreacionEmpleados />}
                 />
+                <Route
+                  path="CreacionPromociones"
+                  element={<CreacionPromociones />}
+                />
               </Route>
               <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
               <Route
@@ -49,6 +56,7 @@ function App() {
               />
               <Route path="PerfilUsuario" element={<PerfilUsuario />} />
             </Routes>
+            </PromotionProvider>
           </EmployeeProvider>
         </ProductProvider>
       </IngredientProvider>
