@@ -32,17 +32,17 @@ const ClienteProvider = props => {
       
     } catch (error) {}
   };
-
+/*
   const setCliente = async () => {
     try {
-      const res = await axios.post(clienteSelecionado);
+      const res = await axios.post();
       const data = res.data.data;
       setClientes(data)
       console.log(clientes)
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
 
   return (
     <ClienteContext.Provider

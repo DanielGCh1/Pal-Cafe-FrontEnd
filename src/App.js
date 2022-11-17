@@ -36,6 +36,10 @@ function App() {
               <Route path="RegisterMaterial" element={<RegisterMaterial />} />
               <Route path="BuscarMaterial" element={<BuscarMaterial />} />
               <Route path="BuscarCliente" element={<BuscarCliente />} />
+
+
+
+              
             </Route>
             <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
 
