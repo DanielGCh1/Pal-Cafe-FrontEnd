@@ -20,13 +20,20 @@ import { useState } from 'react'
 const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
 
+    const handleClick = () => {
+        console.log("presione editar, el lapicero");
+      };
+
     return <>
         <Tr>
             <Td>inches</Td>
             <Td>millimetres (mm)</Td>
             <Td isNumeric>25.4</Td>
             <Td>
-                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" />
+                <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto" 
+                onClick={() => {
+                    handleClick();
+                  }}/>
             </Td>
             <Td>
                 <Image src={require(hoverImage ? "../assets/eliminarHover.png" : "../assets/eliminar.png")} width="35px" height="35px" alt="" m="auto"
@@ -75,7 +82,7 @@ export default function BuscarMaterial() {
                 position='absolute'
                 right='12px'
                 top='10px'
-                _hover={{ bg: '#FFDB58', color: 'red.900', borderColor: "red.900", borderStyle: "solid", borderWidth: "2px" }}
+                hover={{ bg: '#FFDB58', color: 'red.900', borderColor: "red.900", borderStyle: "solid", borderWidth: "2px" }}
             >
                 Configuracion
             </Button>

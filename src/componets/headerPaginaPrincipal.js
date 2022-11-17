@@ -42,6 +42,7 @@ const buttonMenu = (name) => {
 }
 
 
+
 export default function HeaderPaginaPrincipal() {
 
     return <>
@@ -49,11 +50,12 @@ export default function HeaderPaginaPrincipal() {
 
             <Flex
                 h='100px'
-                direction={{ base: 'column', md: 'row' }}
+                direction={ ['column','row' ]}
+                color= {['white','black' ]}
                 alignItems='center'
             >
                 <Menu>
-                    <Container height="100px" w="140px" maxWidth="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
+                    <Container height="100px" w="140px" maxWidth="25%" minW="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
                         <Link href='/PaginaPrincipal'>
                             <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
                         </Link>
@@ -61,21 +63,23 @@ export default function HeaderPaginaPrincipal() {
                 </Menu>
                 <Spacer />
                 <Menu>
-                    <Link href='/'>
+                    <Link href='/LoginCliente'>
                         {buttonMenu('Inicio Sesión')}
                     </Link>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Nosotros')}
-
+                    <Link href='/Nosotros'>
+                        {buttonMenu('Nosotros')}
+                    </Link>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Contacto')}
-
+                    <Link href='/Contacto'>
+                        {buttonMenu('Contacto')}
+                    </Link>
                 </Menu>
                 <Menu>
                     {buttonMenu('NombreUsuario')}
-                    <MenuList>
+                    <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
                             <Link href='/PerfilUsuario'>
                                 Perfil
@@ -86,8 +90,8 @@ export default function HeaderPaginaPrincipal() {
                 </Menu>
 
                 <Menu>
-                    {buttonMenu(<SettingsIcon />)}
-                    <MenuList>
+                    {buttonMenu(<SettingsIcon  />)}
+                    <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
                             <Link href='/PerfilUsuario'>
                                 Perfil
