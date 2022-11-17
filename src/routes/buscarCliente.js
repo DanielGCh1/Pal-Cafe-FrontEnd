@@ -29,7 +29,7 @@ const Fila = () => {
                 <option value='option1'>Aceptado</option>
                 <option value='option2'>No Aceptado</option>
                 <option value='option3'>Pendiente</option>
-                <option value='option3'>De baja</option>
+                <option value='option3'>De baja </option>
             </Select>
             <Td textAlign="center">1</Td>
             <Td textAlign="center">1</Td>
