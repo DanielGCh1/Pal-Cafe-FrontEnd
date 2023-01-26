@@ -23,11 +23,25 @@ import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
 import { useContext, useEffect, useState } from 'react';
 import ProductosValoresContext from '../context/Product/ProductosValoresContext';
 
+import  useProducts2  from '../context/Product2/UseProduct2';
+
+import { Product2Contex } from '../context/Product2/Product2Contex';
+import { useParams } from 'react-router-dom';
+
 export default function ProductoVentaPedido() {
 
-  const { products, selected, getProduct, getProducts, setSelected, hola } =
-        useContext(ProductosValoresContext);
+  const { products2, selected2, getProduct2, getProducts2, setSelected2, idProdu } =
+  useProducts2();
 
+
+  const {product3} = useContext(Product2Contex);
+
+  const params = useParams()
+  useEffect(() => {
+  console.log("Params", params)
+},[]);
+
+        /*
   const errors = validate(
     selected ? selected.id : '',
     selected ? selected.last_name : 'hola',
@@ -35,23 +49,30 @@ export default function ProductoVentaPedido() {
     selected ? selected.email : '',
     selected ? selected.first_name : '',
     selected ? selected.first_name : ''
-  );
-
-  useEffect(() => {
-    //getProducts();
-    console.log(products);
-    console.log("Imprimiendo el producto "+ selected);
-  }, []);
+  );*/
 
   const handleClick = id => {
-    getProduct(id);
+    getProduct2(id);
   };
+
+  const hola = id => {
+    console.log(products2);
+    console.log(selected2);
+    console.log("Lo que imprime idProdu",idProdu,".")
+    console.log("Valor de product3",product3,".")
+  };
+
+  
 
   return (
     <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
       justifyContent='center'>
 
       <HeaderPaginaPrincipal />
+
+      <Button onClick={hola}>
+
+        </Button>
 
       <VStack
         divider={<StackDivider borderColor='gray.200' />}
@@ -125,7 +146,7 @@ export default function ProductoVentaPedido() {
 
   );
 }
-
+/*
 const validate = (
   name,
   description,
@@ -147,4 +168,4 @@ const validate = (
   if (preparationTime !== undefined)
     if (preparationTime.length === 0)
       return 'Se requiere el tiempo preparacion';
-};
+};*/

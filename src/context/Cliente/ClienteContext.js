@@ -11,7 +11,7 @@ const ClienteProvider = props => {
   const [clienteSelecionado, setClienteSelecionado] = useState(null)
 
   useEffect(() => {
-    console.log(clienteSelecionado)
+  //  console.log(clienteSelecionado)
   }, [clienteSelecionado])
 
   const getClientes = async () => {

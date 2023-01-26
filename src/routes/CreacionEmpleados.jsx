@@ -32,6 +32,7 @@ const CreacionEmpleados = () => {
 
   useEffect(() => {
     getEmployees();
+    console.log(employees)
   }, []);
 
   const handleClick = id => {

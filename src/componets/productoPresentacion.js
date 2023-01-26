@@ -23,12 +23,19 @@ import { Link } from '@chakra-ui/react'
 import useProducts from '../context/Product/UseProduct';
 
 import { useContext, useEffect, useState } from 'react';
-import ProductosValoresContext from '../context/Product/ProductosValoresContext';
 
-export default function ProductoPresentacion({ id, nombre }) {
-  const { products, selected, getProduct, getProducts, setSelected, hola } =
-    useContext(ProductosValoresContext);
+import  useProducts2  from '../context/Product2/UseProduct2';
 
+import { Product2Contex } from '../context/Product2/Product2Contex';
+
+export default function ProductoPresentacion({ nombre, id }) {
+  const { products2, selected2, getProduct2, getProducts2, setSelected2 } =
+  useProducts2();
+
+  const {product3, setProduct3} = useContext(Product2Contex);
+
+
+  /*
   const errors = validate(
     selected ? selected.id : '',
     selected ? selected.last_name : '',
@@ -36,20 +43,32 @@ export default function ProductoPresentacion({ id, nombre }) {
     selected ? selected.email : '',
     selected ? selected.first_name : '',
     selected ? selected.first_name : ''
-  );
-
-  useEffect(() => {
-    getProducts();
-  }, []);
+  );*/
 
   const handleClick = id => {
-    getProduct(id);
+    //getProduct2(id);
+    setProduct3("panes");
+    console.log("el product3 es",product3, ".");
   };
 
 
+  /*
+  <Link href='/ProductoVentaPedido' onClick={() => {
+      HandleClick(id);
+    }}>
+      <Image
+        rounded={'md'}
+        alt={'product image'}
+        src={require('../assets/panDulce.png')}
+        fit={'cover'}
+        align={'center'}
+        w={'10rem'}
+        h={'10rem'}
+      />
+    </Link>
 
-  return (
-    <Link href='/ProductoVentaPedido'>
+
+  <Link href='/ProductoVentaPedido'>
       <Image
         rounded={'md'}
         alt={'product image'}
@@ -61,6 +80,23 @@ export default function ProductoPresentacion({ id, nombre }) {
         onClick={() => {
           handleClick(id);
         }}
+      />
+    </Link>
+
+  */
+
+  return (
+    <Link href={`/ProductoVentaPedido/${id}`} onClick={() => {
+      handleClick(id);
+    }}>
+      <Image
+        rounded={'md'}
+        alt={'product image'}
+        src={require('../assets/panDulce.png')}
+        fit={'cover'}
+        align={'center'}
+        w={'10rem'}
+        h={'10rem'}
       />
     </Link>
   );

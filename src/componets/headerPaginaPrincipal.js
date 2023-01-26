@@ -101,6 +101,18 @@ export default function HeaderPaginaPrincipal() {
                     </MenuList>
                 </Menu>
 
+                <Menu>
+                    {buttonMenu('Carrito')}
+                    <MenuList color='#d5ae0f' bg='#56070c'>
+                        <MenuItem>
+                            <Link href='/PerfilUsuario'>
+                                Carrito
+                            </Link>
+                        </MenuItem>
+                        <MenuItem>Carrito</MenuItem>
+                    </MenuList>
+                </Menu>
+
             </Flex>
 
         </Container>

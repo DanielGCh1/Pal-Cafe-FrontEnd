@@ -13,7 +13,7 @@ const ProductProvider = props => {
   const getProducts = async () => {
     try {
       const res = await API.get('/productos/get-all');
-      const data = res.data;
+      const data = res.data.data;
       setProducts(data)
     } catch (error) {
       console.error(error);

@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
 
-const ProductosValoresContext = createContext()
+const ProductosValoresContext = createContext();
 
 const ProductosValoresProvider = ({ children }) => {
 
@@ -10,7 +10,7 @@ const ProductosValoresProvider = ({ children }) => {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    console.log(selected)
+  //  console.log(selected)
   }, [selected])
 
   const getProducts = async () => {
