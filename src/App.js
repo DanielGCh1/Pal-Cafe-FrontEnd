@@ -17,6 +17,8 @@ import CreacionEmpleados from './routes/CreacionEmpleados';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
 import { PromotionProvider } from './context/Promotion/PromotionContext';
 import CreacionPromociones from './routes/CreacionPromociones';
+import HistorialProduccion from './routes/HistorialProduccion';
+
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
               <Route path="/Home" element={<Home />}>
                 <Route path="RegisterMaterial" element={<RegisterMaterial />} />
                 <Route path="BuscarMaterial" element={<BuscarMaterial />} />
+                <Route path="HistorialProduccion" element={<HistorialProduccion />} />
                 <Route
                   path="CreacionProductos"
                   element={<CreacionProductos />}

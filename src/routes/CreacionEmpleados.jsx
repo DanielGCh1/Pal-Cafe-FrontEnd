@@ -13,34 +13,33 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
+import { useFormik } from 'formik'
+import * as Yup from "yup"
 import useEmployees from '../context/Employee/UseEmployees';
-import { useEffect } from 'react';
-
-import useProducts from '../context/Product/UseProduct';
+import { useEffect, useState } from 'react';
+import { EditIcon } from '@chakra-ui/icons';
 
 const CreacionEmpleados = () => {
-  const { employees, selected, getEmployee, getEmployees, guardar } =
-    useEmployees();
-    const { setSelected } = useProducts();
 
-  const errors = validate(
-    selected,
-    selected ? selected.first_name : '',
-    selected ? selected.last_name : '',
-    selected ? selected.email : ''
-  );
-
+  const { employees, getEmployees } = useEmployees();
+  const [sel, setSel] = useState()
   useEffect(() => {
     getEmployees();
   }, []);
 
-  const handleClick = id => {
-    getEmployee(id);
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      last_name: '',
+      email: '',
+    },
+    validationSchemas: {
 
-  const handleEdit = () => {
-
-  }
+    },
+    onSubmit: values => {
+      console.log('Form data', values)
+    }
+  })
 
   return (
     <VStack
@@ -65,47 +64,35 @@ const CreacionEmpleados = () => {
       >
         <form
           className="formProducto"
-          onSubmit={ev => {
-            ev.preventDefault();
-            saveEmployee(selected);
-          }}
+          onSubmit={formik.handleSubmit}
         >
           <FormLabel>Nombre</FormLabel>
           <input
             type="text"
-            name="nombre"
+            name="name"
             className="inputsFoms"
             autoComplete="off"
-            value={selected ? selected.first_name : ''}
-            onChange={ev => setSelected({ ...selected, first_name: ev.target.value })}
-            style={input}
+            value={formik.values.name}
+            onChange={formik.handleChange}
           ></input>
           <FormLabel>Apellidos</FormLabel>
           <input
             type="text"
-            name="descripcion"
+            name="last_name"
             autoComplete="off"
             className="inputsFoms"
-            value={selected ? selected.last_name : ''}
-            onChange={ev =>
-              setSelected({ ...selected, last_name: ev.target.value })
-            }
-            style={input}
+            value={formik.values.last_name}
+            onChange={formik.handleChange}
           ></input>
           <FormLabel>Email</FormLabel>
           <input
             type="text"
-            name="amount"
+            name="email"
             autoComplete="off"
             className="inputsFoms"
-            value={selected ? selected.email : ''}
-            onChange={ev =>
-              setSelected({ ...selected, email: ev.target.value })
-            }
-            style={input}
+            value={formik.values.email}
+            onChange={formik.handleChange}
           ></input>
-
-          <p style={error}>{errors}</p>
 
           <HStack
             position="absolute"
@@ -130,37 +117,7 @@ const CreacionEmpleados = () => {
             >
               Crear
             </Button>
-            <Button
-              color="White"
-              bgColor="#822424"
-              w="140px"
-              h="47px"
-              _hover={{
-                bg: '#FFDB58',
-                color: 'red.900',
-                borderColor: 'red.900',
-                borderStyle: 'solid',
-                borderWidth: '2px',
-              }}
-              onClick={handleEdit()}
-            >
-              Editar
-            </Button>
-            <Button
-              color="White"
-              bgColor="#822424"
-              w="140px"
-              h="47px"
-              _hover={{
-                bg: '#FFDB58',
-                color: 'red.900',
-                borderColor: 'red.900',
-                borderStyle: 'solid',
-                borderWidth: '2px',
-              }}
-            >
-              Eliminar
-            </Button>
+                
           </HStack>
         </form>
         <Divider orientation="vertical" bg="whiteAlpha.900" minW="2px" />
@@ -181,20 +138,7 @@ const CreacionEmpleados = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {employees.length
-                  ? employees.map(emp => (
-                      <Tr key={emp.id}>
-                        <Td>{emp.first_name}</Td>
-                        <Td isNumeric>
-                          <Button
-                            onClick={() => {
-                              handleClick(emp.id);
-                            }}
-                          ></Button>
-                        </Td>
-                      </Tr>
-                    ))
-                  : null}
+                
               </Tbody>
             </Table>
           </TableContainer>
@@ -202,46 +146,6 @@ const CreacionEmpleados = () => {
       </HStack>
     </VStack>
   );
-};
-
-const saveEmployee = employee => {
-  setTimeout(() => {
-    alert(JSON.stringify(employee, null, 2));
-  }, 1000);
-};
-
-const validate = (
-  selected,
-  first_name,
-  last_name,
-  email
-) => {
-  if (selected !== null) {
-    if (first_name !== undefined)
-      if (first_name.length === 0) return 'Se requiere un nombre';
-    if (last_name !== undefined)
-      if (last_name.length === 0) return 'Se requiere un apellido';
-    if (email !== undefined)
-      if (email.length === 0) return 'Se requiere un correo';
-  } else {
-    return '';
-  }
-};
-
-const error = {
-  color: 'red',
-  fontSize: '20px',
-};
-const input = {
-  border: '1px solid black',
-  width: '100%',
-};
-const ml = {
-  margin_left: '2%',
-};
-
-const mr = {
-  margin_right: '20px',
 };
 
 export default CreacionEmpleados;

@@ -75,12 +75,7 @@ export default function Header() {
                     </MenuList>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Historial de Produccion')}
-                    <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
-                    </MenuList>
+                    <Link to='/Home/HistorialProduccion'>Historial Produccion</Link>
                 </Menu>
                 <Menu>
                     {buttonMenu('Notificaciones')}

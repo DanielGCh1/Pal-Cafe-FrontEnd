@@ -14,17 +14,9 @@ const EmployeeProvider = props => {
       const res = await axios.get('https://reqres.in/api/users');
       const data = res.data.data;
       setEmployees(data)
-      console.log(employees)
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const getEmployee = id => {
-    try {
-      const employee = employees.find((employee) => {return employee.id === id})
-       setSelected(employee)  
-    } catch (error) {}
   };
 
   const guardar = async employee => {
@@ -39,7 +31,7 @@ const EmployeeProvider = props => {
         selected,
         setSelected,
         getEmployees,
-        getEmployee,
+        guardar
       }}
     >
       {props.children}
