@@ -11,11 +11,12 @@ import {
     Spacer,
     Button,
     VStack,
-    Image
+    Image,
+    
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
-import { Link } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 import { SettingsIcon } from '@chakra-ui/icons'
 
 import { Flex } from '@chakra-ui/react'
@@ -56,24 +57,24 @@ export default function HeaderPaginaPrincipal() {
             >
                 <Menu>
                     <Container height="100px" w="140px" maxWidth="25%" minW="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
-                        <Link href='/PaginaPrincipal'>
+                        <Link to='/PalCafe/PaginaPrincipal'>
                             <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
                         </Link>
                     </Container>
                 </Menu>
                 <Spacer />
                 <Menu>
-                    <Link href='/LoginCliente'>
+                    <Link to='/PalCafe/LoginCliente'>
                         {buttonMenu('Inicio Sesión')}
                     </Link>
                 </Menu>
                 <Menu>
-                    <Link href='/Nosotros'>
+                    <Link to='/PalCafe/Nosotros'>
                         {buttonMenu('Nosotros')}
                     </Link>
                 </Menu>
                 <Menu>
-                    <Link href='/Contacto'>
+                    <Link to='/PalCafe/Contacto'>
                         {buttonMenu('Contacto')}
                     </Link>
                 </Menu>
@@ -81,7 +82,7 @@ export default function HeaderPaginaPrincipal() {
                     {buttonMenu('NombreUsuario')}
                     <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
-                            <Link href='/PerfilUsuario'>
+                            <Link to='/PalCafe/PerfilUsuario'>
                                 Perfil
                             </Link>
                         </MenuItem>
@@ -93,7 +94,7 @@ export default function HeaderPaginaPrincipal() {
                     {buttonMenu(<SettingsIcon  />)}
                     <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
-                            <Link href='/PerfilUsuario'>
+                            <Link to='/PalCafe/PerfilUsuario'>
                                 Perfil
                             </Link>
                         </MenuItem>
@@ -105,7 +106,7 @@ export default function HeaderPaginaPrincipal() {
                     {buttonMenu('Carrito')}
                     <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
-                            <Link href='/PerfilUsuario'>
+                            <Link to='/PalCafe/PerfilUsuario'>
                                 Carrito
                             </Link>
                         </MenuItem>

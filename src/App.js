@@ -33,6 +33,8 @@ import { ProductProvider2 } from './context/Product2/ProductContext2';
 import { useState, useMemo, useEffect } from "react";
 import { Product2Contex } from './context/Product2/Product2Contex';
 
+import PalCafe from './routes/PalCafe';
+
 function App() {
 
   const [product3, setProduct3] = useState(null);
@@ -72,17 +74,21 @@ function App() {
                           <Route path="BuscarCliente" element={<BuscarCliente />} />
 
                         </Route>
-                        <Route path="/PaginaPrincipal" element={<PaginaPrincipal />} />
 
-                        <Route
-                          path="/ProductoVentaPedido/:id"
-                          element={<ProductoVentaPedido />}
-                        />
-                        <Route path="/LoginCliente" element={<LoginCliente />} />
-                        <Route path="PerfilUsuario" element={<PerfilUsuario />} />
-                        <Route path="RegistrarCliente" element={<RegistrarCliente />} />
-                        <Route path="Nosotros" element={<Nosotros />} />
-                        <Route path="Contacto" element={<Contacto />} />
+                        <Route path="/PalCafe" element={<PalCafe />} >
+                          <Route path="PaginaPrincipal" element={<PaginaPrincipal />} />
+                          <Route
+                            path="ProductoVentaPedido/:id"
+                            element={<ProductoVentaPedido />}
+                          />
+                          <Route path="LoginCliente" element={<LoginCliente />} />
+                          <Route path="PerfilUsuario" element={<PerfilUsuario />} />
+                          <Route path="RegistrarCliente" element={<RegistrarCliente />} />
+                          <Route path="Nosotros" element={<Nosotros />} />
+                          <Route path="Contacto" element={<Contacto />} />
+                        </Route>
+
+
 
                       </Routes>
                     </PromotionProvider>

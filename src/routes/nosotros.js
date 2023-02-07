@@ -18,50 +18,38 @@ import { AspectRatio } from '@chakra-ui/react'
 export default function paginaPrincipal() {
 
     return <>
-        <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-            justifyContent='center'>
 
-            <HeaderPaginaPrincipal />
+        <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
+            justifyContent='center' >
 
-            <VStack
-                divider={<StackDivider borderColor='gray.200' />}
-                spacing={4}
-                align='stretch'
-            >
+        </Stack>
 
+        <Stack spacing={5} alignItems='center'>
+            <Text fontSize='6xl'>Sobre Nosotros</Text>
+            <Text fontSize='4xl'>Historia</Text>
+            <Text fontSize='2xl' p='50px'>Contrary to popular belief, Lorem Ipsum is not simply
+                random text. It has roots in a piece of classical Latin literature from
+                45 BC, making it over 2000 years old.</Text>
 
-                <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-                    justifyContent='center' >
+        </Stack>
 
-                </Stack>
+        <Flex
 
-                <Stack spacing={5} alignItems='center'>
-                    <Text fontSize='6xl'>Sobre Nosotros</Text>
-                    <Text fontSize='4xl'>Historia</Text>
-                    <Text fontSize='2xl' p='50px'>Contrary to popular belief, Lorem Ipsum is not simply
-                        random text. It has roots in a piece of classical Latin literature from
-                        45 BC, making it over 2000 years old.</Text>
+            direction={{ base: 'column', md: 'row' }}
+            alignItems='center'
+        >
+            <Stack spacing={1} alignItems='center'>
+                <Text fontSize='4xl'>Visión</Text>
+                <Text fontSize='2xl' p='25px'>Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
 
-                </Stack>
+            </Stack>
+            <Spacer />
+            <Stack spacing={1} alignItems='center'>
+                <Text fontSize='4xl'>Misión</Text>
+                <Text fontSize='2xl' p='25px'>Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
+            </Stack>
 
-                <Flex
+        </Flex>
 
-                    direction={{ base: 'column', md: 'row' }}
-                    alignItems='center'
-                >
-                    <Stack spacing={1} alignItems='center'>
-                        <Text fontSize='4xl'>Visión</Text>
-                        <Text fontSize='2xl' p='25px'>Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
-
-                    </Stack>
-                    <Spacer />
-                    <Stack spacing={1} alignItems='center'>
-                        <Text fontSize='4xl'>Misión</Text>
-                        <Text fontSize='2xl' p='25px'>Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
-                    </Stack>
-
-                </Flex>
-            </VStack>
-        </Container>
     </>
 }

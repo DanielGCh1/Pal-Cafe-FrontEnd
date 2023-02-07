@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
-import { Link } from '@chakra-ui/react'
+import { Link } from 'react-router-dom';
 
 import useProducts from '../context/Product/UseProduct';
 
@@ -86,7 +86,7 @@ export default function ProductoPresentacion({ nombre, id }) {
   */
 
   return (
-    <Link href={`/ProductoVentaPedido/${id}`} onClick={() => {
+    <Link to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
       handleClick(id);
     }}>
       <Image
