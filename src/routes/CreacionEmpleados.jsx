@@ -1,151 +1,99 @@
-import {
-  Button,
-  Container,
-  Divider,
-  FormLabel,
-  HStack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from '@chakra-ui/react';
-import { useFormik } from 'formik'
-import * as Yup from "yup"
-import useEmployees from '../context/Employee/UseEmployees';
-import { useEffect, useState } from 'react';
-import { EditIcon } from '@chakra-ui/icons';
+import { HStack, Image, Table, TableCaption, TableContainer, Tbody, Tfoot, Th, Thead, Tr, VStack, Text, Select } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 
-const CreacionEmpleados = () => {
+const AdministracionEmpleados = () => {
 
-  const { employees, getEmployees } = useEmployees();
-  const [sel, setSel] = useState()
-  useEffect(() => {
-    getEmployees();
-  }, []);
-
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      last_name: '',
-      email: '',
+  const empleados = [
+    {
+      id: '1',
+      nombre: 'Heilen',
+      primerApellido: 'Segura',
+      segundoApellido: 'Cordero',
+      fechaRegistro: '12/12/2022'
     },
-    validationSchemas: {
-
+    {
+      id: '2',
+      nombre: 'Ana',
+      primerApellido: 'Segura',
+      segundoApellido: 'Cordero',
+      fechaRegistro: '12/12/2022'
     },
-    onSubmit: values => {
-      console.log('Form data', values)
+    {
+      id: '3',
+      nombre: 'Laura',
+      primerApellido: 'Segura',
+      segundoApellido: 'Cordero',
+      fechaRegistro: '12/12/2022'
     }
-  })
+  ]
+
+  useEffect(() => {
+
+  }, [])
 
   return (
-    <VStack
-      color="white"
-      bg="blackAlpha.800"
-      width="100%"
-      h="calc(100vh)"
-      padding="50px 0px 20px 0px"
-    >
-      <HStack
-        justifyContent="center"
-        maxW="100%"
-        w="90%"
-        // w="1px"
-        py="30px"
-        px="30px"
-        alignItems="flex-start"
-        borderColor="white"
-        borderStyle="solid"
-        borderWidth="2px"
-        position="relative"
-      >
-        <form
-          className="formProducto"
-          onSubmit={formik.handleSubmit}
-        >
-          <FormLabel>Nombre</FormLabel>
-          <input
-            type="text"
-            name="name"
-            className="inputsFoms"
-            autoComplete="off"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          ></input>
-          <FormLabel>Apellidos</FormLabel>
-          <input
-            type="text"
-            name="last_name"
-            autoComplete="off"
-            className="inputsFoms"
-            value={formik.values.last_name}
-            onChange={formik.handleChange}
-          ></input>
-          <FormLabel>Email</FormLabel>
-          <input
-            type="text"
-            name="email"
-            autoComplete="off"
-            className="inputsFoms"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-          ></input>
-
-          <HStack
-            position="absolute"
-            bottom="6"
-            alignSelf="flex-end"
-            display="flex"
-            flexWrap="wrap"
-          >
-            <Button
-              color="White"
-              bgColor="#822424"
-              type="submit"
-              w="140px"
-              h="47px"
-              _hover={{
-                bg: '#FFDB58',
-                color: 'red.900',
-                borderColor: 'red.900',
-                borderStyle: 'solid',
-                borderWidth: '2px',
-              }}
-            >
-              Crear
-            </Button>
-                
-          </HStack>
-        </form>
-        <Divider orientation="vertical" bg="whiteAlpha.900" minW="2px" />
-        <Container>
-          <TableContainer
-            className="overflow limited"
-            width="100%"
-            bg="white"
-            color="black"
-          >
-            <Table variant="striped" colorScheme="blackAlpha">
-              <Thead bg="red.900">
-                <Tr>
-                  <Th color="white" textAlign="center">
-                    Nombre
-                  </Th>
-                  <Th color="white" textAlign="center"></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </Container>
+    <VStack>
+      <HStack marginBottom="2%" width="100%" padding="2%" bg="rgba(0,0,0,0.1)" alignItems="center" justifyContent="center">
+        <Text border={'2px'} borderRadius={'10'} textColor={'#e9bd15'} fontSize='2xl'>Administración de Empleados</Text>
       </HStack>
-    </VStack>
-  );
-};
+      <TableContainer width="90%">
+        <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px" color="#fff">
+          <TableCaption color="#000">Pal Café Administración de Empleados</TableCaption>
+          <Thead>
+            <Tr>
+              <Th color="#000">Nombre</Th>
+              <Th color="#000">Primer apellido</Th>
+              <Th color="#000">Segundo apellido</Th>
+              <Th color="#000">Fecha registro</Th>
+              <Th color="#000">Rol</Th>
 
-export default CreacionEmpleados;
+            </Tr>
+          </Thead>
+          <Tbody>
+            {empleados.length
+              ? empleados.map(emp => (
+                <tr>
+                  <td>
+                    {emp.nombre}
+                  </td>
+                  <td>
+                    {emp.primerApellido}
+                  </td>
+                  <td>
+                    {emp.segundoApellido}
+                  </td>
+                  <td>
+                    {emp.fechaRegistro}
+                  </td>
+                  <td>
+                    <Select style={{ fontWeight: "bold" }} color="#fff" placeholder='Seleccionar opción' textColor={'black'}>
+                      <option value='option1'>Administrador</option>
+                      <option value='option2'>Cajero</option>
+                    </Select>
+                  </td>
+                  <td>
+                    <Image src={require("../assets/eliminar.png")} width="35px" height="35px" alt="Eliminar" m="auto" borderBlock="1px" borderRadius="5px" bg="rgba(0,0,0,.2)" />
+                  </td>
+                  <td>
+                    <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="Modificar" m="auto" borderBlock="1px" borderRadius="5px" bg="rgba(0,0,0,.2)" />
+                  </td>
+                </tr>
+              ))
+              : null}
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th color="#000">Nombre</Th>
+              <Th color="#000">Primer apellido</Th>
+              <Th color="#000">Segundo apellido</Th>
+              <Th color="#000">Fecha registro</Th>
+              <Th color="#000">Rol</Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </VStack>
+  )
+}
+
+export default AdministracionEmpleados
