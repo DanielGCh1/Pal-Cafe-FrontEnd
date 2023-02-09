@@ -89,7 +89,10 @@ export default function Header() {
                     {buttonMenu('Empleados')}
                     <MenuList>
                         <MenuItem>
-                            <Link to='/Home/CreacionEmpleados'>Administrar Empleados</Link>
+                            <Link to='/Home/AdministracionEmpleados'>Administrar Empleados</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/RegistrarEmpleados'>Registrar Empleados</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>

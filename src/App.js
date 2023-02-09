@@ -13,12 +13,12 @@ import PerfilUsuario from './routes/perfilUsuario';
 import { CrearProducto } from './routes/CrearProducto';
 import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
-import CreacionEmpleados from './routes/CreacionEmpleados';
+import AdministracionEmpleados from './routes/AdministracionEmpleados';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
 import { PromotionProvider } from './context/Promotion/PromotionContext';
 import CreacionPromociones from './routes/CreacionPromociones';
 import HistorialProduccion from './routes/HistorialProduccion';
-
+import RegistrarEmpleados from './routes/RegistrarEmpleados';
 
 function App() {
   return (
@@ -38,8 +38,12 @@ function App() {
                   element={<CreacionProductos />}
                 />
                 <Route
-                  path="CreacionEmpleados"
-                  element={<CreacionEmpleados />}
+                  path="AdministracionEmpleados"
+                  element={<AdministracionEmpleados />}
+                />
+                <Route
+                  path="RegistrarEmpleados"
+                  element={<RegistrarEmpleados />}
                 />
                 <Route
                   path="CreacionPromociones"
