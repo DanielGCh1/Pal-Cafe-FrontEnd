@@ -56,7 +56,7 @@ const ProductProvider = props => {
 
   const getProduct = id => {
     try {
-      const product = products.find((product) => {return product._id === id})   
+      const product = products.find((product) => {return product.pro_id == id})   
       setProductSelected(product)
     } catch (error) {}
   };

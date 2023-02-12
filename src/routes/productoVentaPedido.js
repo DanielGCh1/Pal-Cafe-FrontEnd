@@ -14,23 +14,28 @@ import {
   useColorModeValue
 } from '@chakra-ui/react';
 
+import { useParams } from 'react-router-dom';
+
 
 import { useContext, useEffect, useState } from 'react';
- import useProducts from '../context/Product/UseProduct';
+import useProducts from '../context/Product/UseProduct';
 
 
 export default function ProductoVentaPedido() {
 
   const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
     useProducts();
+  const params = useParams()
 
   useEffect(() => {
+    console.log("Params", params)
+
 
     if (typeof products == 'undefined' || products.length <= 0) {
       getProducts();
     }
 
-    if (typeof productSelected == 'undefined') {
+    if (typeof productSelected == 'undefined' || productSelected == null) {
       getProduct(params.id);
     }
 
@@ -50,11 +55,11 @@ selected ? selected.first_name : ''
     getProduct(params.id);
   };
 
-  const { match: { params } } = this.props;
+  //const { match: { params } } = this.props;
   const hola = id => {
-    console.log(products);
-    console.log(productSelected);
-    console.log("Lo que imprime idProdu", params.id, ".")
+      console.log(products);
+      console.log(productSelected);
+      console.log("Lo que imprime idProdu", params.id, ".")
   };
 
 
@@ -81,7 +86,7 @@ selected ? selected.first_name : ''
 
           rounded={'md'}
           alt={'product image'}
-          src={productSelected !== null ? productSelected.pro_imagen : require('../assets/panDulce.png')}
+          src={(typeof productSelected !== 'undefined' && productSelected !== null) ? productSelected.pro_imagen : require('../assets/panDulce.png')}
           fit={'cover'}
           align={'center'}
           w={'100%'}
