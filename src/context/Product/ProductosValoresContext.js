@@ -40,6 +40,7 @@ const ProductosValoresProvider = ({ children }) => {
       products,
       selected,
       setSelected,
+      setProducts,
       getProducts,
       getProduct,
     }}>{children}</ProductosValoresContext.Provider>

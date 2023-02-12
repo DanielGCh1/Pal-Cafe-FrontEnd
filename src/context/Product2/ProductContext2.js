@@ -14,6 +14,8 @@ const ProductProvider2 = props => {
 
   const [idProduct, setIdProduct] = useState(null);
 
+  
+
   const idProdu = useMemo(() => ({ idProduct, setIdProduct }), [idProduct, setIdProduct]);
 
   // Prueba de useMemo
@@ -26,6 +28,33 @@ const ProductProvider2 = props => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const sendMessageWhatsApp = async () => {
+    let numero = '+50661282136';
+
+    //Definir el contenido del mensaje.
+    let mensaje = 'Hola, ¿cómo estás?';
+
+    console.log("sendMessageWhatsApp");
+
+    // Verificar si el navegador soporta la API de WhatsApp
+  if (!navigator.share) {
+    alert('Tu navegador no soporta la API de WhatsApp');
+    return;
+  }
+
+  // Enviar el mensaje usando la API de WhatsApp
+  navigator.share({
+    title: 'Mensaje',
+    text: mensaje,
+    url: 'https://api.whatsapp.com/send?phone=' + numero + '&text=' + mensaje,
+  })
+
+  .then(() => console.log('Mensaje enviado'))
+
+  .catch((error) => console.log('Error al enviar el mensaje', error));   
+
   };
 
   const getProduct2 = id => {
@@ -48,6 +77,7 @@ const ProductProvider2 = props => {
         selected2,
         setSelected2,
         getProducts2,
+        sendMessageWhatsApp,
         getProduct2,
         idProdu
       }}

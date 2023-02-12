@@ -17,7 +17,7 @@ const ClienteProvider = props => {
   const getClientes = async () => {
     try {
       const res = await API.get('/users/get-all');
-      const data = res.data;
+      const data = res.data.data;
       setClientes(data)
       console.log(clientes)
     } catch (error) {

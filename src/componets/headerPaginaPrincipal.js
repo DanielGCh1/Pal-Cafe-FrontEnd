@@ -47,18 +47,17 @@ const buttonMenu = (name) => {
 export default function HeaderPaginaPrincipal() {
 
     return <>
-        <Container position='relative' width='100%' maxW='container.xl%' h='100px' bg='white' color='black' p='{0}'>
+        <Container position='relative' width='100%' maxW='container.xl%'  bg='black' color="white" p='{0}'>
 
             <Flex
-                h='100px'
+                
                 direction={ ['column','row' ]}
-                color= {['white','black' ]}
                 alignItems='center'
             >
                 <Menu>
                     <Container height="100px" w="140px" maxWidth="25%" minW="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
                         <Link to='/PalCafe/PaginaPrincipal'>
-                            <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
+                            <Image src={require("../assets/Logo.png")} bg="black" minW="100px" minh="100px" w="100px" h="100px"></Image>
                         </Link>
                     </Container>
                 </Menu>
@@ -82,7 +81,7 @@ export default function HeaderPaginaPrincipal() {
                     {buttonMenu('NombreUsuario')}
                     <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
-                            <Link to='/PalCafe/PerfilUsuario'>
+                            <Link to='/PalCafe/PaginaPrincipal'>
                                 Perfil
                             </Link>
                         </MenuItem>

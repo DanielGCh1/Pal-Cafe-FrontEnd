@@ -15,6 +15,7 @@ import {
   VisuallyHidden,
   List,
   ListItem,
+  LinkBox,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
@@ -24,16 +25,22 @@ import useProducts from '../context/Product/UseProduct';
 
 import { useContext, useEffect, useState } from 'react';
 
-import  useProducts2  from '../context/Product2/UseProduct2';
+export default function ProductoPresentacion({ id, imagen }) {
 
-import { Product2Contex } from '../context/Product2/Product2Contex';
+  const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
+    useProducts();
 
-export default function ProductoPresentacion({ nombre, id }) {
-  const { products2, selected2, getProduct2, getProducts2, setSelected2 } =
-  useProducts2();
+  useEffect(() => {
 
-  const {product3, setProduct3} = useContext(Product2Contex);
+    if (typeof products == 'undefined' || products.length <= 0) {
+      getProducts();
+    }
 
+    if (typeof productSelected == 'undefined' || products.length <= 0) {
+      getProduct(id);
+    }
+
+  }, []);
 
   /*
   const errors = validate(
@@ -45,10 +52,8 @@ export default function ProductoPresentacion({ nombre, id }) {
     selected ? selected.first_name : ''
   );*/
 
-  const handleClick = id => {
-    //getProduct2(id);
-    setProduct3("panes");
-    console.log("el product3 es",product3, ".");
+  const SearchProduct = id => {
+    getProduct(id);
   };
 
 
@@ -86,17 +91,20 @@ export default function ProductoPresentacion({ nombre, id }) {
   */
 
   return (
-    <Link to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
-      handleClick(id);
+
+
+    <Link textAlign="center" align={'center'} to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
+      SearchProduct(id);
     }}>
-      <Image
+      <Image textAlign="center"
         rounded={'md'}
         alt={'product image'}
-        src={require('../assets/panDulce.png')}
+        src={imagen}
         fit={'cover'}
         align={'center'}
         w={'10rem'}
         h={'10rem'}
+        m="auto"
       />
     </Link>
   );

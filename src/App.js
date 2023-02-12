@@ -35,13 +35,15 @@ import { Product2Contex } from './context/Product2/Product2Contex';
 
 import PalCafe from './routes/PalCafe';
 
+import PruebasChatGpt from './routes/PruebasChatGpt';
+
 function App() {
 
   const [product3, setProduct3] = useState(null);
 
   const value = useMemo(() => ({ product3, setProduct3 }), [product3, setProduct3]);
 
-  useEffect(() => console.log('product3 del app:', product3), [product3]);
+  //useEffect(() => console.log('product3 del app:', product3), [product3]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -88,7 +90,7 @@ function App() {
                           <Route path="Contacto" element={<Contacto />} />
                         </Route>
 
-
+                        <Route path="PruebasChatGpt" element={<PruebasChatGpt />} />
 
                       </Routes>
                     </PromotionProvider>

@@ -9,18 +9,20 @@ import { SimpleGrid } from '@chakra-ui/react'
 
 import { useContext, useEffect, useState } from 'react';
 
-
-import { ProductContext2 } from '../context/Product2/ProductContext2';
-
-import useProducts2 from '../context/Product2/UseProduct2';
+import useProducts from '../context/Product/UseProduct';
 
 export default function ProductosVentaPaginaPrincipal() {
 
-  const { products2, selected2, getProduct2, getProducts2, setSelected2 } =
-    useProducts2();
+  const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
+    useProducts();
 
-  useEffect(() => {
-    getProducts2();
+    useEffect(() => {
+  
+    if (typeof products == 'undefined' || products.length <= 0) {
+      getProducts();
+    }
+    
+
   }, []);
   /*
     const errors = validate(
@@ -33,8 +35,27 @@ export default function ProductosVentaPaginaPrincipal() {
     );*/
 
   const hola = id => {
-    console.log(products2);
-    console.log(selected2);
+    //setProducts(PRODUCTOS_REPOSTERIA);
+    console.log(products);
+    console.log(productSelected);
+    console.log("Aqui se envia los mensajes de whasapp");
+    /*//Para enviar un mensaje de WhatsApp a un número de Costa Rica, puedes usar la API de WhatsApp para programar el envío. Primero, necesitas obtener un token de acceso para la API. Luego, puedes usar el siguiente código para enviar el mensaje:
+
+    //Definir los parámetros del mensaje
+    const messageParams = {
+      phoneNumber: '+50661282136', //Número al que se enviará el mensaje
+      text: 'Hola! Este es mi mensaje.' //Mensaje que se enviará
+    };
+
+    //Enviar el mensaje utilizando la API de WhatsApp
+    fetch('https://api.whatsapp.com/send', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}` //Token de acceso a la API de WhatsApp
+      },
+      body: JSON.stringify(messageParams) //Parámetros del mensaje a enviar como un objeto JSON codificado como cadena de texto.  
+    })*/
+
   };
 
   return <>
@@ -43,9 +64,9 @@ export default function ProductosVentaPaginaPrincipal() {
     </Button>
 
     <SimpleGrid columns={[1, 2, 3]} spacing='40px'>
-      {products2.length
-        ? products2.map(prod => (
-          <ProductoPresentacion nombre={prod.first_name} id={prod.id} />
+      {((typeof products !== 'undefined') && (products.length > 0))
+        ? products.map(prod => (
+          <ProductoPresentacion textAlign="center" id={prod.pro_id} imagen={prod.pro_imagen} />
         ))
         : null}
 

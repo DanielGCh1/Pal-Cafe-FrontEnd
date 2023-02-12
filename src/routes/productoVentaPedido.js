@@ -11,34 +11,29 @@ import {
   Heading,
   SimpleGrid,
   StackDivider,
-  useColorModeValue,
-  VisuallyHidden,
-  List,
-  ListItem,
+  useColorModeValue
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { MdLocalShipping } from 'react-icons/md';
-import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
+
 
 import { useContext, useEffect, useState } from 'react';
-import ProductosValoresContext from '../context/Product/ProductosValoresContext';
+ import useProducts from '../context/Product/UseProduct';
 
-import useProducts2 from '../context/Product2/UseProduct2';
-
-import { Product2Contex } from '../context/Product2/Product2Contex';
-import { useParams } from 'react-router-dom';
 
 export default function ProductoVentaPedido() {
 
-  const { products2, selected2, getProduct2, getProducts2, setSelected2, idProdu } =
-    useProducts2();
+  const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
+    useProducts();
 
-
-  const { product3 } = useContext(Product2Contex);
-
-  const params = useParams()
   useEffect(() => {
-    console.log("Params", params)
+
+    if (typeof products == 'undefined' || products.length <= 0) {
+      getProducts();
+    }
+
+    if (typeof productSelected == 'undefined') {
+      getProduct(params.id);
+    }
+
   }, []);
 
   /*
@@ -52,14 +47,14 @@ selected ? selected.first_name : ''
 );*/
 
   const handleClick = id => {
-    getProduct2(id);
+    getProduct(params.id);
   };
 
+  const { match: { params } } = this.props;
   const hola = id => {
-    console.log(products2);
-    console.log(selected2);
-    console.log("Lo que imprime idProdu", idProdu, ".")
-    console.log("Valor de product3", product3, ".")
+    console.log(products);
+    console.log(productSelected);
+    console.log("Lo que imprime idProdu", params.id, ".")
   };
 
 
@@ -86,7 +81,7 @@ selected ? selected.first_name : ''
 
           rounded={'md'}
           alt={'product image'}
-          src={require('../assets/panDulce.png')}
+          src={productSelected !== null ? productSelected.pro_imagen : require('../assets/panDulce.png')}
           fit={'cover'}
           align={'center'}
           w={'100%'}

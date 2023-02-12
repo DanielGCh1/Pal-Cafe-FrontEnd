@@ -2,6 +2,7 @@ import Header from '../componets/header';
 import { Container, VStack, StackDivider } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal';
+import Footer from '../componets/Footer'
 
 export default function PalCafe() {
     return (
@@ -16,6 +17,7 @@ export default function PalCafe() {
                     align='stretch'
                 >
                     <Outlet />
+            <Footer/>
                 </VStack>
             </Container>
         </>
