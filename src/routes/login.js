@@ -5,22 +5,44 @@ import Axios from "axios";
 
 export default function Login() {
   const [user, setUser] = useState('')
-  const [passwrod, setPassword] = useState('')
+  const [password, setPassword] = useState('')
   const handleChangeUser = (event) => setUser(event.target.value)
   const handleChangePassword = (event) => setPassword(event.target.value)
+  const [name, setName] = useState();
+
+  const storeCookie = async () => {
+      try{
+          const {data} = Axios.post("/new", {name: user}, {
+            withCredentials:true
+          })
+      }catch (error){
+        console.log(error)        
+      }
+  }
+
+  const getCookie = async () => {
+    try{
+        const {data} = await Axios.get("/name", {
+          withCredentials:true
+        });
+        console.log(data);
+        setName(data.message);
+    }catch (error){
+       console.log(error);
+    }
+  }
 
   const validateLogin = async () => {
     try {
-      const { data } = await Axios.get(
-        "http://localhost:9000/api/user/posts",
+      const { data } = await Axios.post(
+        "http://localhost:9000/api/user",
         {
-          params: {
-            user,
-            passwrod
-          }
+          correo: user,
+          password: password
         }
-      );
-      console.log(data);
+      ).then((res) =>{
+        console.log(res)
+      });
     } catch (error) {
       console.log(error);
     }
@@ -40,8 +62,8 @@ export default function Login() {
 
         <Spacer />
 
-        <HStack spacing='34px'>
-          <Text mb='8px'>Usuario:</Text>
+        <HStack spacing='34px' color="Black">
+          <Text color={"white"}  mb='8px'>Usuario:</Text>
           <Input
             borderColor='grey'
             bg='white'
@@ -49,30 +71,29 @@ export default function Login() {
             variant='outline'
             onChange={handleChangeUser}
             placeholder=''
-            size='sm'
-          />
+            size='sm' />
         </HStack>
-        <HStack>
-          <Text mb='8px'>Contraseña:</Text>
+        <HStack color="Black">
+          <Text  color={"white"} mb='8px'>Contraseña:</Text>
           <Input
             borderColor='grey'
             bg='white'
-            value={passwrod}
+            value={password}
             variant='outline'
             onChange={handleChangePassword}
             placeholder=''
-            size='sm'
-          />
+            size='sm' />
         </HStack>
 
         <Spacer w='50px' />
-
-        <Button colorScheme='red' onClick={() => validateLogin()}>Ingresar</Button>
+        <h1>{name}</h1>
+        <Button colorScheme='red' onClick={() => storeCookie()}>Logiar</Button>
+        <Button colorScheme='red' onClick={() => getCookie()}>ValidarSesion</Button>
 
         <Spacer />
 
         <HStack>
-          <Text>¿Aún no no está registrado/a?</Text>
+          <Text color={"white"}>¿Aún no no está registrado/a?</Text>
           <Link className='linksto' to="/Register">Registrar</Link>
         </HStack>
       </Flex>

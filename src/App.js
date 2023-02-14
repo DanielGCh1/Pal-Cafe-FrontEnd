@@ -16,6 +16,7 @@ import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
 import IngredientContext, { IngredientProvider } from './context/Ingredients/IngredientContext';
 
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
