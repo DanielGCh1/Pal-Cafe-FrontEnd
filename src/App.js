@@ -13,11 +13,8 @@ import PerfilUsuario from './routes/perfilUsuario';
 import { CrearProducto } from './routes/CrearProducto';
 import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
-import CreacionEmpleados from './routes/CreacionEmpleados';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
 import { PromotionProvider } from './context/Promotion/PromotionContext';
-import CreacionPromociones from './routes/CreacionPromociones';
-
 import LoginCliente from './routes/loginCliente';
 import RegistrarCliente from "./routes/registrarCliente";
 import Nosotros from "./routes/nosotros";
@@ -36,6 +33,11 @@ import { Product2Contex } from './context/Product2/Product2Contex';
 import PalCafe from './routes/PalCafe';
 
 import PruebasChatGpt from './routes/PruebasChatGpt';
+
+import AdministracionEmpleados from './routes/AdministracionEmpleados';
+
+import RegistrarEmpleados from './routes/RegistrarEmpleados';
+import CreacionPromociones from './routes/CreacionPromociones';
 
 function App() {
 
@@ -66,8 +68,12 @@ function App() {
                             element={<CreacionProductos />}
                           />
                           <Route
-                            path="CreacionEmpleados"
-                            element={<CreacionEmpleados />}
+                            path="AdministracionEmpleados"
+                            element={<AdministracionEmpleados />}
+                          />
+                          <Route
+                            path="RegistrarEmpleados"
+                            element={<RegistrarEmpleados />}
                           />
                           <Route
                             path="CreacionPromociones"
