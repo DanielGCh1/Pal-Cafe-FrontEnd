@@ -11,19 +11,40 @@ import { useContext, useEffect, useState } from 'react';
 
 import useProducts from '../context/Product/UseProduct';
 
+const isUndefined = obj => {
+  if (obj === "undefined" || typeof obj === "undefined") {
+    return true;
+  }
+  return false;
+};
+
+const isNull = obj => {
+  if (obj === null) {
+    return true;
+  }
+  return false;
+};
+
+const isUndefinedOrNull = obj => {
+  if (isUndefined(obj) || isNull(obj)) {
+    return true;
+  }
+  return false;
+};
+
 export default function ProductosVentaPaginaPrincipal() {
 
   const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
     useProducts();
 
-    useEffect(() => {
-  
-    if (typeof products == 'undefined' || products.length <= 0) {
+  useEffect(() => {
+
+    if (isUndefinedOrNull(products) || products.length <= 0) {
       getProducts();
     }
-    
 
-  }, []);
+
+  }, [products]);
   /*
     const errors = validate(
       selected ? selected.id : '',

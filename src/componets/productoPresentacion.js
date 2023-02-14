@@ -93,10 +93,10 @@ export default function ProductoPresentacion({ id, imagen }) {
   return (
 
 
-    <Link textAlign="center" align={'center'} to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
+    <Link align={'center'} to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
       SearchProduct(id);
     }}>
-      <Image textAlign="center"
+      <Image
         rounded={'md'}
         alt={'product image'}
         src={imagen}

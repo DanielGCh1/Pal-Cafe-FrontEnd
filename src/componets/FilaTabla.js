@@ -53,13 +53,13 @@ export default function FilaTabla({ id, nombre, estado }) {
 
     const [hoverImage, setHoverImege] = useState(false);
     return (
-        <Tr alignItems='center' textAlign="center">
-            <Td textAlign="center" >{nombre}</Td>
-            <Td textAlign="center" >{estado}</Td>
-            <Td textAlign="center">1</Td>
-            <Td textAlign="center">1</Td>
-            <Td textAlign="center">1</Td>
-            <Td textAlign="center">1</Td>
+        <Tr alignItems='center' >
+            <Td  >{nombre}</Td>
+            <Td  >{estado}</Td>
+            <Td >1</Td>
+            <Td >1</Td>
+            <Td >1</Td>
+            <Td >1</Td>
             <Td>
                 <Image src={require("../assets/lapicera.png")} width="35px" height="35px" alt="" m="auto"
                     onClick={() => {

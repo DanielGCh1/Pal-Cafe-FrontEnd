@@ -12,7 +12,7 @@ import {
     Button,
     VStack,
     Image,
-    
+
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
@@ -47,11 +47,11 @@ const buttonMenu = (name) => {
 export default function HeaderPaginaPrincipal() {
 
     return <>
-        <Container position='relative' width='100%' maxW='container.xl%'  bg='black' color="white" p='{0}'>
+        <Container position='relative' width='100%' maxW='container.xl%' bg='black' color="white" p='{0}'>
 
             <Flex
-                
-                direction={ ['column','row' ]}
+
+                direction={['column', 'row']}
                 alignItems='center'
             >
                 <Menu>
@@ -62,11 +62,11 @@ export default function HeaderPaginaPrincipal() {
                     </Container>
                 </Menu>
                 <Spacer />
-                <Menu>
-                    <Link to='/PalCafe/LoginCliente'>
-                        {buttonMenu('Inicio Sesión')}
-                    </Link>
-                </Menu>
+
+                <Link to='/PalCafe/LoginCliente'>
+                    Inicio Sesión
+                </Link>
+
                 <Menu>
                     <Link to='/PalCafe/Nosotros'>
                         {buttonMenu('Nosotros')}
@@ -90,7 +90,7 @@ export default function HeaderPaginaPrincipal() {
                 </Menu>
 
                 <Menu>
-                    {buttonMenu(<SettingsIcon  />)}
+                    {buttonMenu(<SettingsIcon />)}
                     <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
                             <Link to='/PalCafe/PerfilUsuario'>

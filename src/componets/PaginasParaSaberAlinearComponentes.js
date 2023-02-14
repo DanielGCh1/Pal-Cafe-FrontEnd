@@ -12,4 +12,7 @@ https://developer.mozilla.org/es/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_I
   display: flex;
   justify-content: flex-end;
 }
+
+https://desarrolloweb.com/faq/como-saber-si-una-variable-es-null-javascript
+diferencia entre el == y ===
 */

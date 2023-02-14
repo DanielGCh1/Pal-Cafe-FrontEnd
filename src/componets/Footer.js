@@ -13,7 +13,7 @@ export default function Footer() {
             <Flex justifyContent="center" alignItems="center" direction={['column', 'row']}>
                 <Box w={["100%", "30%"]} display="flex" justifyContent={['center', 'start']}>
                     <Link to='/PalCafe/PaginaPrincipal'>
-                        <Image src={require("../assets/Logo.png")} W="100px" h="100px" minW="100px" minh="100px"></Image>
+                        <Image src={require("../assets/Logo.png")} w="100px" h="100px" minW="100px" minh="100px"></Image>
                     </Link>
                 </Box>
 
