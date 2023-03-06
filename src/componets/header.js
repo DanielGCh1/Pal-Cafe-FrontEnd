@@ -58,9 +58,12 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Productos')}
                     <MenuList>
-                        <MenuItem></MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CreacionProductos'>Administrar Producto</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CrearReseta'>Crear Reseta</Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>
@@ -72,12 +75,7 @@ export default function Header() {
                     </MenuList>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Historial de Produccion')}
-                    <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
-                    </MenuList>
+                    <Link to='/Home/HistorialProduccion'>Historial Produccion</Link>
                 </Menu>
                 <Menu>
                     {buttonMenu('Notificaciones')}
@@ -90,9 +88,12 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Empleados')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/AdministracionEmpleados'>Administrar Empleados</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/RegistrarEmpleados'>Registrar Empleados</Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>
@@ -104,11 +105,11 @@ export default function Header() {
                     </MenuList>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Promocionee')}
+                    {buttonMenu('Promociones')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/CreacionPromociones'>Administrar Promociones</Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>

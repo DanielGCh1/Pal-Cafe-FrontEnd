@@ -11,20 +11,18 @@ import {
     Spacer,
     Button,
     VStack,
-    Image
+    Image,
+    Flex,
+    FormLabel
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
-import { Link } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 import { SettingsIcon } from '@chakra-ui/icons'
 
-import { Flex } from '@chakra-ui/react'
+import useCustomer from '../context/Customer/UseCustomer';
+import { useEffect } from 'react';
 
-
-import { Stack, HStack } from '@chakra-ui/react'
-import { Heading } from '@chakra-ui/react'
-import { Text } from '@chakra-ui/react'
-import { Box } from '@chakra-ui/react'
 
 const buttonMenu = (name) => {
     return <>
@@ -42,58 +40,87 @@ const buttonMenu = (name) => {
 }
 
 
+
 export default function HeaderPaginaPrincipal() {
 
+    const { customer, getSectionCustomer, signOff } = useCustomer();
+
+    useEffect(() => {
+        if (customer == null) {
+            getSectionCustomer();
+        }
+    })
+
+    const signOffCustomer = () => {
+        signOff();
+    }
+
     return <>
-        <Container position='relative' width='100%' maxW='container.xl%' h='100px' bg='white' color='black' p='{0}'>
+        <Container position='relative' width='100%' maxW='container.xl%' bg='black' color="white" p='{0}'>
 
             <Flex
-                h='100px'
-                direction={{ base: 'column', md: 'row' }}
+
+                direction={['column', 'row']}
                 alignItems='center'
             >
                 <Menu>
-                    <Container height="100px" w="140px" maxWidth="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
-                        <Link href='/PaginaPrincipal'>
-                            <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
+                    <Container height="100px" w="140px" maxWidth="25%" minW="25%" bg="blackAlpha.900" p="0px" display="flex" justifyContent="center" alignItems="center">
+                        <Link to='/PalCafe/PaginaPrincipal'>
+                            <Image src={require("../assets/Logo.png")} bg="black" minW="100px" minh="100px" w="100px" h="100px"></Image>
                         </Link>
                     </Container>
                 </Menu>
                 <Spacer />
+                {(customer == null) ?
+                    <Link to='/PalCafe/LoginCustomer'>
+                        Inicio Sesión
+                    </Link>
+                    : null}
                 <Menu>
-                    <Link href='/'>
-                        {buttonMenu('Inicio Sesión')}
+                    <Link to='/PalCafe/Nosotros'>
+                        {buttonMenu('Nosotros')}
                     </Link>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Nosotros')}
-
+                    <Link to='/PalCafe/Contacto'>
+                        {buttonMenu('Contacto')}
+                    </Link>
                 </Menu>
+                {(customer != null) ?
+                    <Menu>
+                        {buttonMenu(customer.usu_nombre)}
+                        <MenuList color='#d5ae0f' bg='#56070c'>
+                            <MenuItem>
+                                <Link to='/PalCafe/PerfilUsuario'>
+                                    Perfil
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                        </MenuList>
+                    </Menu>
+                    : null}
+                {(customer != null) ?
+                    <Menu>
+                        {buttonMenu(<SettingsIcon />)}
+                        <MenuList color='#d5ae0f' bg='#56070c'>
+                            <MenuItem>
+                                <Link to='/PalCafe/PerfilUsuario'>
+                                    Perfil
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                        </MenuList>
+                    </Menu>
+                    : null}
                 <Menu>
-                    {buttonMenu('Contacto')}
-
-                </Menu>
-                <Menu>
-                    {buttonMenu('NombreUsuario')}
-                    <MenuList>
+                    {buttonMenu('Carrito')}
+                    <MenuList color='#d5ae0f' bg='#56070c'>
                         <MenuItem>
-                            <Link href='/PerfilUsuario'>
-                                Perfil
+                            <Link to='/PalCafe/PerfilUsuario'>
+                                Carrito
                             </Link>
                         </MenuItem>
-                        <MenuItem>Cerrar Sesión</MenuItem>
-                    </MenuList>
-                </Menu>
-
-                <Menu>
-                    {buttonMenu(<SettingsIcon />)}
-                    <MenuList>
-                        <MenuItem>
-                            <Link href='/PerfilUsuario'>
-                                Perfil
-                            </Link>
-                        </MenuItem>
-                        <MenuItem>Cerrar Sesión</MenuItem>
+                        <MenuItem>Carrito</MenuItem>
                     </MenuList>
                 </Menu>
 

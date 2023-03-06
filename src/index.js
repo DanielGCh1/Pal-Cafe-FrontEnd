@@ -14,6 +14,7 @@ root.render(
 
     <BrowserRouter>
       <ColorModeScript />
+      
       <App />
     </BrowserRouter>
 
