@@ -24,11 +24,6 @@ export default function Contacto() {
 
     return <>
 
-        <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-            justifyContent='center' >
-
-        </Stack>
-
         <Stack spacing={5} alignItems='center'>
             <Text fontSize='6xl'>Contactenos</Text>
             <Text fontSize='2xl' p='50px'>Puede ponerse en contacto con nosotros, por medio de nuestras 3 redes sociales </Text>

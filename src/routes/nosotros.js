@@ -19,11 +19,6 @@ export default function paginaPrincipal() {
 
     return <>
 
-        <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-            justifyContent='center' >
-
-        </Stack>
-
         <Stack spacing={5} alignItems='center'>
             <Text fontSize='6xl'>Sobre Nosotros</Text>
             <Text fontSize='4xl'>Historia</Text>

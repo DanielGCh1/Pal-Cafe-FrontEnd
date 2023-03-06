@@ -12,20 +12,17 @@ import {
     Button,
     VStack,
     Image,
-
+    Flex,
+    FormLabel
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
 import { Link } from 'react-router-dom'
 import { SettingsIcon } from '@chakra-ui/icons'
 
-import { Flex } from '@chakra-ui/react'
+import useCustomer from '../context/Customer/UseCustomer';
+import { useEffect } from 'react';
 
-
-import { Stack, HStack } from '@chakra-ui/react'
-import { Heading } from '@chakra-ui/react'
-import { Text } from '@chakra-ui/react'
-import { Box } from '@chakra-ui/react'
 
 const buttonMenu = (name) => {
     return <>
@@ -46,6 +43,18 @@ const buttonMenu = (name) => {
 
 export default function HeaderPaginaPrincipal() {
 
+    const { customer, getSectionCustomer, signOff } = useCustomer();
+
+    useEffect(() => {
+        if (customer == null) {
+            getSectionCustomer();
+        }
+    })
+
+    const signOffCustomer = () => {
+        signOff();
+    }
+
     return <>
         <Container position='relative' width='100%' maxW='container.xl%' bg='black' color="white" p='{0}'>
 
@@ -62,11 +71,11 @@ export default function HeaderPaginaPrincipal() {
                     </Container>
                 </Menu>
                 <Spacer />
-
-                <Link to='/PalCafe/LoginCliente'>
-                    Inicio Sesión
-                </Link>
-
+                {(customer == null) ?
+                    <Link to='/PalCafe/LoginCustomer'>
+                        Inicio Sesión
+                    </Link>
+                    : null}
                 <Menu>
                     <Link to='/PalCafe/Nosotros'>
                         {buttonMenu('Nosotros')}
@@ -77,30 +86,32 @@ export default function HeaderPaginaPrincipal() {
                         {buttonMenu('Contacto')}
                     </Link>
                 </Menu>
-                <Menu>
-                    {buttonMenu('NombreUsuario')}
-                    <MenuList color='#d5ae0f' bg='#56070c'>
-                        <MenuItem>
-                            <Link to='/PalCafe/PaginaPrincipal'>
-                                Perfil
-                            </Link>
-                        </MenuItem>
-                        <MenuItem>Cerrar Sesión</MenuItem>
-                    </MenuList>
-                </Menu>
-
-                <Menu>
-                    {buttonMenu(<SettingsIcon />)}
-                    <MenuList color='#d5ae0f' bg='#56070c'>
-                        <MenuItem>
-                            <Link to='/PalCafe/PerfilUsuario'>
-                                Perfil
-                            </Link>
-                        </MenuItem>
-                        <MenuItem>Cerrar Sesión</MenuItem>
-                    </MenuList>
-                </Menu>
-
+                {(customer != null) ?
+                    <Menu>
+                        {buttonMenu(customer.usu_nombre)}
+                        <MenuList color='#d5ae0f' bg='#56070c'>
+                            <MenuItem>
+                                <Link to='/PalCafe/PerfilUsuario'>
+                                    Perfil
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                        </MenuList>
+                    </Menu>
+                    : null}
+                {(customer != null) ?
+                    <Menu>
+                        {buttonMenu(<SettingsIcon />)}
+                        <MenuList color='#d5ae0f' bg='#56070c'>
+                            <MenuItem>
+                                <Link to='/PalCafe/PerfilUsuario'>
+                                    Perfil
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                        </MenuList>
+                    </Menu>
+                    : null}
                 <Menu>
                     {buttonMenu('Carrito')}
                     <MenuList color='#d5ae0f' bg='#56070c'>

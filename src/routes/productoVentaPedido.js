@@ -23,8 +23,8 @@ import { Field, Form, Formik } from 'formik';
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import useProducts from '../context/Product/UseProduct';
-import { object } from 'yup';
-
+import NumberInputFormik from '../componets/NumberInputFormik';
+import { useRef } from "react";
 //TODO:  
 const isUndefined = obj => {
   if (obj === "undefined" || typeof obj === "undefined") {
@@ -104,7 +104,12 @@ const getStockText = obj => {
   }
   return 0;
 };
-
+const isNumber = obj => {
+  if (typeof obj === "number") {
+    return true;
+  }
+  return false;
+};
 
 const getDescription = obj => {
   if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_descripcion)) {
@@ -112,26 +117,22 @@ const getDescription = obj => {
   }
   return "No disponible";
 };
+const addCart = obj => {
 
-
-
+  /*if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_descripcion)) {
+    return obj.pro_descripcion;
+  }
+  return "No disponible";*/
+};
 
 export default function ProductoVentaPedido() {
 
-  const addCart = obj => {
-    console.log(valueQuantityOrdered);
-    /*if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_descripcion)) {
-      return obj.pro_descripcion;
-    }
-    return "No disponible";*/
-  };
-  const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
+  const { products, productSelected, getProduct, getProducts } =
     useProducts();
   const params = useParams()
+  const refFormik = useRef(null); // Reference to the formik
 
-  const [valueQuantityOrdered, setValueQuantityOrdered] = useState(1);
-
-  const handleInputChangeQuantityOrdered = (e) => setValueQuantityOrdered(e.target.value);
+  //const handleInputChangeQuantityOrdered = (e) => setValueQuantityOrdered(e.target.value);
 
   useEffect(() => {
     console.log("Params", params)
@@ -183,10 +184,25 @@ selected ? selected.first_name : ''
     console.log(products);
     console.log(productSelected);
     console.log("Lo que imprime idProdu", params.id, ".")
-    console.log(valueQuantityOrdered);
   };
 
-
+  function validateOrderValue(value) {
+    console.log("Valor de props.values.amount " +typeof refFormik.current.values.amount);
+    var order = parseInt(refFormik.current.values.amount)
+    if (!isNumber(order) || !order) {
+      refFormik.current.values.amount = 1
+      return 0
+    }
+    if (order < 1) {
+      refFormik.current.values.amount = 1
+      return 0
+    }
+    if (order > productSelected.pro_existencias) {
+      refFormik.current.values.amount = productSelected.pro_existencias
+      return 0
+    }
+    console.log("order" + order);
+  };
 
 
   return <>
@@ -196,11 +212,6 @@ selected ? selected.first_name : ''
     <Button onClick={hola}>
 
     </Button>
-
-    <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-      justifyContent='center' >
-
-    </Stack>
 
     <SimpleGrid
       columns={{ base: 1, lg: 2 }}
@@ -263,7 +274,8 @@ selected ? selected.first_name : ''
           {(getStock(productSelected) >= 1) ?
 
             <Formik
-              initialValues={{ name: 'Sasuke' }}
+              initialValues={{ amount: 1 }}
+              innerRef={refFormik}
               onSubmit={(values, actions) => {
                 setTimeout(() => {
                   alert(JSON.stringify(values, null, 2))
@@ -271,29 +283,22 @@ selected ? selected.first_name : ''
                 }, 1000)
               }}
             >
-              <Form>
-                <NumberInput min={1} max={getStock(productSelected)}
-                  name={'quantityOrdered'}
-                  defaultValue={valueQuantityOrdered}
-                  value={valueQuantityOrdered}
-                  onChange={handleInputChangeQuantityOrdered}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <Button
-                  mt={4}
-                  colorScheme='red'
-                  onClick={addCart(valueQuantityOrdered)}
-                  type='submit'
-                  marginTop='10'
-                >
-                  Guardar Cambios
-                </Button>
-              </Form>
+              {(props) => (
+                <Form>
+                  <NumberInputFormik value={props} nam={'amount'} val={validateOrderValue} />
+
+                  <Button
+                    mt={4}
+                    colorScheme='red'
+                    isLoading={props.isSubmitting}
+                    onClick={props.isSubmitting}
+                    type='submit'
+                    marginTop='10'
+                  >
+                    Añadir al carro
+                  </Button>
+                </Form>
+              )}
             </Formik>
             : null
           }

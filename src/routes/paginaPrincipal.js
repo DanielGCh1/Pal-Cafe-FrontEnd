@@ -7,12 +7,6 @@ export default function paginaPrincipal() {
 
     return <>
 
-        <Stack backgroundSize='cover' maxW='100%' h='calc(100vh)' p='0'
-            justifyContent='center' >
-
-        </Stack>
-
-
         <Stack spacing={5} alignItems='center'>
             <Text fontSize='5xl'>PAL CAFÉ</Text>
             <Text fontSize='2xl' p='50px'>Contrary to popular belief, Lorem Ipsum is not simply
