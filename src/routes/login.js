@@ -6,31 +6,43 @@ import Axios from "axios";
 export default function Login() {
   const [user, setUser] = useState('')
   const [password, setPassword] = useState('')
+  const [userLogin, setUserLogin] = useState({})
   const handleChangeUser = (event) => setUser(event.target.value)
   const handleChangePassword = (event) => setPassword(event.target.value)
-  const [name, setName] = useState();
 
   const storeCookie = async () => {
-      try{
-          const {data} = Axios.post("/new", {name: user}, {
-            withCredentials:true
-          })
-      }catch (error){
-        console.log(error)        
-      }
+    try {
+      Axios.post("/api/loginSession", { correo: user, password: password }, {
+        withCredentials: true
+      }).then((data => console.log(data.data.message)))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const getCookie = async () => {
-    try{
-        const {data} = await Axios.get("/name", {
-          withCredentials:true
-        });
-        console.log(data);
-        setName(data.message);
-    }catch (error){
-       console.log(error);
+    try {
+      const { data } = await Axios.get("/api/getCookie", {
+        withCredentials: true
+      });
+      console.log(data)
+      setUserLogin(data);
+    } catch (error) {
+      console.log(error);
     }
   }
+
+  const eliminarCookie = async () => {
+    try {
+      const { data } = await Axios.get("/api/logout", {
+        withCredentials: true
+      });
+      console.log(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const validateLogin = async () => {
     try {
@@ -40,7 +52,7 @@ export default function Login() {
           correo: user,
           password: password
         }
-      ).then((res) =>{
+      ).then((res) => {
         console.log(res)
       });
     } catch (error) {
@@ -63,7 +75,7 @@ export default function Login() {
         <Spacer />
 
         <HStack spacing='34px' color="Black">
-          <Text color={"white"}  mb='8px'>Usuario:</Text>
+          <Text color={"white"} mb='8px'>Usuario:</Text>
           <Input
             borderColor='grey'
             bg='white'
@@ -74,7 +86,7 @@ export default function Login() {
             size='sm' />
         </HStack>
         <HStack color="Black">
-          <Text  color={"white"} mb='8px'>Contraseña:</Text>
+          <Text color={"white"} mb='8px'>Contraseña:</Text>
           <Input
             borderColor='grey'
             bg='white'
@@ -86,9 +98,10 @@ export default function Login() {
         </HStack>
 
         <Spacer w='50px' />
-        <h1>{name}</h1>
+        <h1>{userLogin ? userLogin.usu_correo: ""}</h1>
         <Button colorScheme='red' onClick={() => storeCookie()}>Logiar</Button>
         <Button colorScheme='red' onClick={() => getCookie()}>ValidarSesion</Button>
+        <Button colorScheme='red' onClick={() => eliminarCookie()}>eliminarCookie</Button>
 
         <Spacer />
 
