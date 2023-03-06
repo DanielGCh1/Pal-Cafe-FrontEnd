@@ -24,6 +24,39 @@ export default function LoginCustomer() {
 
   const navigate = useNavigate();
 
+  const loginUser = async () => {
+    try {
+      Axios.post("/api/loginSession", { correo: user, password: password }, {
+        withCredentials: true
+      }).then((data => console.log(data.data.message)))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getCookie = async () => {
+    try {
+      const { data } = await Axios.get("/api/getCookie", {
+        withCredentials: true
+      });
+      console.log(data)
+      setUserLogin(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const eliminarCookie = async () => {
+    try {
+      const { data } = await Axios.get("/api/logout", {
+        withCredentials: true
+      });
+      console.log(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function validateMail(value) {
     console.log(value);
     let error
