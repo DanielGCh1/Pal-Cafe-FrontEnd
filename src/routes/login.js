@@ -10,7 +10,7 @@ export default function Login() {
   const handleChangeUser = (event) => setUser(event.target.value)
   const handleChangePassword = (event) => setPassword(event.target.value)
 
-  const storeCookie = async () => {
+  const loginUser = async () => {
     try {
       Axios.post("/api/loginSession", { correo: user, password: password }, {
         withCredentials: true
@@ -99,7 +99,7 @@ export default function Login() {
 
         <Spacer w='50px' />
         <h1>{userLogin ? userLogin.usu_correo: ""}</h1>
-        <Button colorScheme='red' onClick={() => storeCookie()}>Logiar</Button>
+        <Button colorScheme='red' onClick={() => loginUser()}>Logiar</Button>
         <Button colorScheme='red' onClick={() => getCookie()}>ValidarSesion</Button>
         <Button colorScheme='red' onClick={() => eliminarCookie()}>eliminarCookie</Button>
 
