@@ -49,7 +49,7 @@ export default function HeaderPaginaPrincipal() {
         if (customer == null) {
             getSectionCustomer();
         }
-    })
+    }, [customer])
 
     const signOffCustomer = () => {
         signOff();

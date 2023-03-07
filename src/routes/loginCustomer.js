@@ -23,7 +23,7 @@ export default function LoginCustomer() {
   let animationSudmit = true;
 
   const navigate = useNavigate();
-
+/*
   const loginUser = async () => {
     try {
       Axios.post("/api/loginSession", { correo: user, password: password }, {
@@ -56,7 +56,7 @@ export default function LoginCustomer() {
       console.log(error);
     }
   }
-
+*/
   function validateMail(value) {
     console.log(value);
     let error

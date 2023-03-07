@@ -43,7 +43,7 @@ export default function Login() {
     }
   }
 
-
+/*
   const validateLogin = async () => {
     try {
       const { data } = await Axios.post(
@@ -58,7 +58,7 @@ export default function Login() {
     } catch (error) {
       console.log(error);
     }
-  }
+  }*/
 
   return <>
     <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' color='white' display='flex' maxW='100%' h='calc(100vh)'

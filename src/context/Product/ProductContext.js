@@ -10,7 +10,7 @@ const ProductProvider = props => {
   const [products, setProducts] = useState([])
   const [productSelected, setProductSelected] = useState(null)
 
-
+// TODO: el id llega como _id, pro_imagenUrl , pro_unidades = pro_cantidad
   const PRODUCTOS_REPOSTERIA = [
     {
       pro_id: 1,
@@ -42,10 +42,13 @@ const ProductProvider = props => {
 
   const getProducts = async () => {
     try {
-      const res = await axios.get('/productos/get-all');
+      //Obtener todos los productos de la parte del cliente, sin todos los datos
+      const res = await axios.get('/api/productos/get-all-homepage');
       //const res = await axios.get('https://reqres.in/api/users');
-      const data = res.data.data;
-      setProducts(data);
+      const data = res.data;
+      setProducts(PRODUCTOS_REPOSTERIA);
+      console.log(data)
+      //setProducts(data);
       console.log("productos que llegan al contex",products);
     } catch (error) {
       console.log("la consulta fallo, procedo a setear unos datos por defecto");
