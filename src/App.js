@@ -39,7 +39,7 @@ import CreacionPromociones from './routes/CreacionPromociones';
 
 import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
-
+import HistorialProduccion from './routes/HistorialProduccion';
 
 function App() {
 
@@ -75,6 +75,9 @@ function App() {
                           element={<CreacionPromociones />}
                         />
                         <Route path="BuscarCliente" element={<BuscarCliente />} />
+
+                        <Route path="BuscarCliente" element={<BuscarCliente />} />
+                        <Route path="HistorialProduccion" element={<HistorialProduccion />} />
 
                       </Route>
 

@@ -2,7 +2,7 @@ import Header from '../componets/header';
 import NotificationsDrawer from '../componets/NotificationsDrawer';
 import { Container } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
   const [notice, setNotice] = useState(false)

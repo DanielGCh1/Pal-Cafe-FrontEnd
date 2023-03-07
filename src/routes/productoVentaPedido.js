@@ -187,7 +187,7 @@ selected ? selected.first_name : ''
   };
 
   function validateOrderValue(value) {
-    console.log("Valor de props.values.amount " +typeof refFormik.current.values.amount);
+    console.log("Valor de props.values.amount " + typeof refFormik.current.values.amount);
     var order = parseInt(refFormik.current.values.amount)
     if (!isNumber(order) || !order) {
       refFormik.current.values.amount = 1
@@ -300,7 +300,11 @@ selected ? selected.first_name : ''
                 </Form>
               )}
             </Formik>
-            : null
+            : 
+            <Stack spacing={1} alignItems='center'>
+              <Text fontSize='2xl' fontWeight= "bold" p='25px'>Producto no disponible en este momento</Text>
+
+            </Stack>
           }
 
 

@@ -23,7 +23,7 @@ function ComboBox({ options, onChange, searchable }) {
           {searchable && (
               <Input variant='flushed' marginBottom="1" placeholder='Buscar' _placeholder={{ opacity: .4, color: 'white' }} onChange={handleFilterChange}  /> 
           )}
-          <Select style={{fontWeight: "bold"}} size='sm' border="none" hover="none" color="#000" onChange={handleChange} >
+          <Select fontWeight= "bold" size='sm' border="none" hover="none" color="#000" onChange={handleChange} >
               {filteredOptions.map(option => (
               <option value={option.name} key={option.id}>
                   {option.name}
