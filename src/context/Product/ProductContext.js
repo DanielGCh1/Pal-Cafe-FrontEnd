@@ -12,7 +12,7 @@ const ProductProvider = props => {
 
   const getProducts = async () => {
     try {
-      const res = await API.get('/productos/get-all');
+      const res = await API.get('https://reqres.in/api/users');
       const data = res.data;
       setProducts(data)
     } catch (error) {

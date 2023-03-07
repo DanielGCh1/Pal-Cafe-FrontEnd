@@ -2,35 +2,29 @@ import { Card, CardBody, Select, Box, Editable, EditablePreview, EditableInput, 
 import { useState, useEffect} from 'react';
 
 function ComboBox({ options, onChange, searchable }) {
-  const [searchString, setSearchString] = useState('');
-  const [filteredOptions, setFilteredOptions] = useState(options);
-  
-  useEffect(() => {
-    setFilteredOptions(
-      options.filter((option) =>
-        option.name.toLowerCase().includes(searchString.toLowerCase())
-      )
-    );
-  }, [searchString, options])
-  
+  const [filterInput, setFilterInput] = useState('');
 
-  const handleChange = (event) => {
+  const filteredOptions = options.filter(option =>
+    option.name.toLowerCase().includes(filterInput.toLowerCase())
+  );
+
+  const handleChange = event => {
     const selected = options.find(p => (p.name === event.target.value))
-    onChange(selected);
+    onChange(selected)
   };
 
-  const handleSearch = (event) => {
-    setSearchString(event.target.value);
+  const handleFilterChange = event => {
+    setFilterInput(event.target.value);
   };
 
   return (
     <>
-      <Box w="230px" bg="rgba(0,0,0,0.3)" padding="1%" borderRadius="5px">
+      <Box w="230px" bg="rgba(0,0,0,0.3)" padding="1%" borderRadius="5px" >
           {searchable && (
-              <Input value={searchString} onChange={handleSearch} /> 
+              <Input variant='flushed' marginBottom="1" placeholder='Buscar' _placeholder={{ opacity: .4, color: 'white' }} onChange={handleFilterChange}  /> 
           )}
-          <Select style={{fontWeight: "bold"}} color="#fff" onChange={handleChange}>
-              {filteredOptions.map((option) => (
+          <Select style={{fontWeight: "bold"}} size='sm' border="none" hover="none" color="#000" onChange={handleChange} >
+              {filteredOptions.map(option => (
               <option value={option.name} key={option.id}>
                   {option.name}
               </option>

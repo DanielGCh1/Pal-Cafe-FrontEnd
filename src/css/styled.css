@@ -7,8 +7,9 @@
     position: relative;
     top: 0px;
     left: 15%;
-    height: calc(100vh);
+    height: 90%;
 }
+
 .title{
     font-size: 34px;
     font-weight: bolder;

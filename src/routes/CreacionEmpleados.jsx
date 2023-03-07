@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
   VStack,
+  Input
 } from '@chakra-ui/react';
 import { useFormik } from 'formik'
 import * as Yup from "yup"
@@ -67,14 +68,14 @@ const CreacionEmpleados = () => {
           onSubmit={formik.handleSubmit}
         >
           <FormLabel>Nombre</FormLabel>
-          <input
+          <Input
             type="text"
             name="name"
             className="inputsFoms"
             autoComplete="off"
             value={formik.values.name}
             onChange={formik.handleChange}
-          ></input>
+          ></Input>
           <FormLabel>Apellidos</FormLabel>
           <input
             type="text"
@@ -138,7 +139,18 @@ const CreacionEmpleados = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                
+              {employees && employees.map(prod => (
+                      <Tr key={prod._id}>
+                        <Td>{prod.pro_nombre}</Td>
+                        <Td isNumeric>
+                          <Button
+                            onClick={() => {
+                              handleClick(prod._id);
+                            }}
+                          ></Button>
+                        </Td>
+                      </Tr>
+                    ))}
               </Tbody>
             </Table>
           </TableContainer>

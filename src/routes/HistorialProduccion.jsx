@@ -5,6 +5,7 @@ import ComboBox from '../componets/ComboBox'
 const HistorialProduccion = () => {
     const [selected, setSelected] = useState(true)
     const [list, setList] = useState([])
+    const [date, setDate] = useState("")
     //const [productos, setProductos] = useState()
 
     const productos = [
@@ -42,6 +43,9 @@ const HistorialProduccion = () => {
             category: 'Promocion'
         }
     ]
+    const history = [
+
+    ]
 
     const addElement = (element) => {
         setList([...list,
@@ -60,7 +64,6 @@ const HistorialProduccion = () => {
     useEffect(() => {
         //getProductosHistorial()
         //getPromocionesHistorial()
-
     }, [])
     
     const handleChange = (e, i) => {
@@ -71,23 +74,43 @@ const HistorialProduccion = () => {
         console.log(list)
     }
 
+    const searchHistory = (date) => {
+        console.log(date.target.value)
+    }
+
+    const saveData = () => {
+        history.push(list)
+        console.log(history)
+    }
+
     return (
         <VStack>
             <HStack marginBottom="2%" width="100%" padding="2%" bg="rgba(0,0,0,0.1)" alignItems="center" justifyContent="center">
-                    <Button bg="rgba(0,0,0,.2)" color={selected ? '#FFDB58' : '#56070C'} borderColor="" fontSize="20px" variant='outline' 
-                        onClick={() => setSelected(!selected)}>{selected ? "Productos" : "Promociones"}
-                    </Button>
-                    <ComboBox          
-                        options={(selected === true) ? productos : promociones}
-                        onChange={(value) => addElement(value)}
-                        searchable
-                    />
-                    <Input 
-                        justifyContent="left" width="20%"
-                        placeholder="Select Date and Time"
-                        size="md"
-                        type="datetime-local"
-                    />
+                    <HStack>
+                        <Button bg="rgba(0,0,0,.2)" color={selected ? '#FFDB58' : '#56070C'} borderColor="" fontSize="20px" variant='outline' 
+                            onClick={() => setSelected(!selected)}>{selected ? "Productos" : "Promociones"}
+                        </Button>
+                        <ComboBox          
+                            options={(selected === true) ? productos : promociones}
+                            onChange={(value) => addElement(value)}
+                            searchable
+                        />
+                    </HStack>                 
+                    <VStack>
+                        <Input
+                            justifyContent="left" width="20%"
+                            placeholder="Select Date and Time"
+                            size="md"
+                            type="datetime-local"
+                            width="250px"
+                            bg="rgba(0,0,0,.2)"
+                            onChange={searchHistory}
+                        />
+                        <Button width="100%" colorScheme='green' onClick={saveData}>
+                            Guardar
+                        </Button>
+                    </VStack>
+                    
             </HStack>
 
             <TableContainer width="90%">
