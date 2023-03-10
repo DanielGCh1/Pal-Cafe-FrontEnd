@@ -48,10 +48,10 @@ export default function Header() {
                     {buttonMenu('Ingredientes')}
                     <MenuList>
                         <MenuItem>
-                            <Link to='/Home/RegisterMaterial'>Crear Material</Link>
+                            <Link to='/Home/CrearIngrediente'>Crear Ingrediente</Link>
                         </MenuItem>
                         <MenuItem>
-                            <Link to='/Home/BuscarMaterial'>Buscar material</Link>
+                            <Link to='/Home/BuscarIngrediente'>Buscar Ingrediente</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>

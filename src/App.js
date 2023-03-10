@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Register from './routes/register';
 import './css/styled.css';
 import Home from './routes/home';
-import RegisterMaterial from './routes/registerMaterial';
+import CreateIngredient from './routes/CreateIngredient';
 import BuscarMaterial from './routes/buscarMaterial';
 import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
@@ -56,8 +56,11 @@ function App() {
                       <Route path="/" element={<Login />} />
                       <Route path="Register" element={<Register />} />
                       <Route path="/Home" element={<Home />}>
-                        <Route path="RegisterMaterial" element={<RegisterMaterial />} />
-                        <Route path="BuscarMaterial" element={<BuscarMaterial />} />
+
+                        <Route path="CrearIngrediente" element={<CreateIngredient />} />
+                        <Route path="EditarIngrediente/:id" element={<CreateIngredient />} />
+
+                        <Route path="BuscarIngrediente" element={<CreateIngredient />} />
                         <Route
                           path="CreacionProductos"
                           element={<CreacionProductos />}

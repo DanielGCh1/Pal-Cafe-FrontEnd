@@ -1,5 +1,5 @@
 import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
-import { Container, Box, Heading, Image } from '@chakra-ui/react'
+import { Container, Box, Heading, Image, GridItem } from '@chakra-ui/react'
 import { Outlet } from "react-router-dom";
 import ProductosVentaPaginaPrincipal from '../componets/productosVentaPaginaPrincipal'
 
@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import useCustomer from '../context/Customer/UseCustomer';
+import { useRef } from "react";
 
 const Fila = () => {
     const [hoverImage, setHoverImege] = useState(false);
@@ -75,6 +76,23 @@ const imprimirObjeto = obj => {
 };
 export default function PerfilUsuario() {
 
+    const [imagePreviewUrl, setImagePreviewUrl] = useState();
+    const [image, setImage] = useState(null);
+
+    const ref = useRef(null);//hace referencia a los datos del formulario
+
+    const handleImageChange = (event) => {
+        event.preventDefault();
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        setImage(file);
+        ref.current.values.foto = file;
+        reader.onloadend = () => {
+            setImagePreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
     const { customer } = useCustomer();
     /*
         const errors = validate(
@@ -93,6 +111,7 @@ export default function PerfilUsuario() {
         </Box>
         {(customer != null) ?
             <Formik
+                innerRef={ref}
                 initialValues={{
                     nombre: customer.usu_nombre,
                     primerApellido: customer.usu_primer_apellido,
@@ -101,7 +120,7 @@ export default function PerfilUsuario() {
                     numeroUno: customer.usu_numero_telefono1,
                     numeroDos: '',
                     direcciom: customer.usu_direccion,
-                    foto: getImage(customer)
+                    foto: ''
                 }}
 
                 validationSchema={Yup.object({
@@ -126,6 +145,12 @@ export default function PerfilUsuario() {
                         .required('Requerido'),
                     repContra: Yup.string()
                         .required('Requerido'),
+                    /*
+                foto: Yup.mixed().required("Debes subir una imagen").test(
+                    "es-imagen",
+                    "Debes subir un archivo de tipo imagen",
+                    (value) => value && value.type.includes("image")),
+                */
                 })}
 
                 onSubmit={(values, actions) => {
@@ -139,17 +164,32 @@ export default function PerfilUsuario() {
                     <Container bg='blackAlpha.800' p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
                         <Form>
                             <HStack spacing='28'>
-                                <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing='40px' alignItems='center'>
-                                    <Field name='foto'>
-                                        {({ field }) => (
-                                            <Image
-                                                rounded={'md'}
-                                                alt={"Foto de perfil usuario"}
-                                                src={field.value}
-                                                fit={'cover'}
-                                            />
-                                        )}
-                                    </Field>
+                                <SimpleGrid columns={[1, 2, 3]} spacing='40px' alignItems='center'>
+                                    <GridItem rowSpan={2}>
+                                        <Field name="foto">
+                                            {({ field, form }) => (
+                                                <FormControl>
+                                                    <FormLabel htmlFor="foto">Foto</FormLabel>
+                                                    {imagePreviewUrl ? (
+                                                        <Box mb={4}>
+                                                            <Image src={imagePreviewUrl} alt="Preview" />
+                                                        </Box>
+                                                    ) : null}
+                                                    <Input
+                                                        {...''}
+                                                        border='null'
+                                                        placeholder='Debe incluir una imagen'
+                                                        id="image"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={handleImageChange}
+                                                    />
+                                                </FormControl>
+                                            )}
+                                        </Field>
+
+                                    </GridItem>
+
                                     <Field name='nombre'>
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>

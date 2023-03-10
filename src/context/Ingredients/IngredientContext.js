@@ -17,7 +17,15 @@ const IngredientProvider = props => {
       console.error(error);
     }
   };
-
+  const addIngredient = async () => {
+    try {
+      const res = await axios.get('https://reqres.in/api/users');
+      const data = res.data.data;
+      setIngredients(data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const getIngredient = async id => {
     try {
       // const res = axios.get('https://reqres.in/api/users' + id)
