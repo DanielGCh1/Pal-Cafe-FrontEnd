@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import IngredientContext from "./IngredientContext"
 
-const useIngredients = () => {
+const useIngredient = () => {
     return useContext(IngredientContext)
 }
-export default useIngredients
+export default useIngredient

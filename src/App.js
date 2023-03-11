@@ -20,7 +20,7 @@ import RegistrarCliente from "./routes/registrarCliente";
 import Nosotros from "./routes/nosotros";
 import Contacto from "./routes/contacto";
 import BuscarCliente from './routes/buscarCliente';
-import IngredientContext, { IngredientProvider } from './context/Ingredients/IngredientContext';
+import { IngredientProvider } from './context/Ingredient/IngredientContext';
 import { ClienteProvider } from './context/Cliente/ClienteContext';
 import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
 

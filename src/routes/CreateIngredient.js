@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useRef } from "react";
 import Axios from "axios";
 import { FaTimes } from "react-icons/fa";
+import useIngredient from '../context/Ingredient/UseIngredient';
 
 const isNull = obj => {
     if (obj === null) {
@@ -19,16 +20,18 @@ const isNull = obj => {
 
 
 export default function CreateIngredient() {
+    const { ingredient, addIngredient} = useIngredient();
+
     const [imagePreviewUrl, setImagePreviewUrl] = useState();/*esta es la url de la image, para el image */
     const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
 
     const handleImageChange = (event) => {/*Se activa cuando se hace un cambio en la imagen, 
-    normalmente, es cuando se agrega una imagen, y convertirla a url*/ 
+    normalmente, es cuando se agrega una imagen, y convertirla a url*/
         event.preventDefault();
         let reader = new FileReader();
         let file = event.target.files[0];
 
-        ref.current.values.image = file;
+        //ref.current.values.image = file;
         validateImage(ref.current.values.image);
         reader.onloadend = () => {
             setImagePreviewUrl(reader.result);
@@ -37,17 +40,17 @@ export default function CreateIngredient() {
     };
     const handleImageDelete = () => { /*Se activa cuando se elimina la imagen*/
         setImagePreviewUrl(null);
-        ref.current.values.image = null;
+        //ref.current.values.image = null;
     };
     function validateImage(value) { /*Valida si el archivo que se subio, es de tipo imagen*/
-        let error
+        /*let error
         if (isNull(value)) {
-            return error = 'La imagen del producto es requerida'
+            return error = 'La imagen del ingrediente es requerida'
         }
-        if (!value.type.includes("image")) {
+        if (!value.type.includes("image/")) { tengo que limitar por jpg y png
             return error = "Ingrese una imagen válida"
         }
-        return error
+        return error*/
     }
 
     return <>
@@ -60,38 +63,35 @@ export default function CreateIngredient() {
                 /*initialValues= son los datos iniciales, y los que se van modificando
                 mientras se usa el formulario*/
                 initialValues={{
-                    image: null,
                     name: "",
+                    description: "",
                     price: 0,
                     drive_type: 'gramos',
                     amount: 0,
-                    description: "",
+                    /*
+                    image: null,
+                    */
+                    image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
                     stock: 0,
                 }}
 
                 validationSchema={Yup.object({
                     name: Yup.string()
                         .required('El ingrediente requiere un nombre'),
+                    description: Yup.string()
+                        .required('El ingrediente requiere una descripción'),
                     price: Yup.number()
                         .required('El ingrediente requiere un precio'),
                     drive_type: Yup.string()
                         .required('Requerido'),
                     amount: Yup.number()
                         .required('El ingrediente requiere una cantidad'),
-                    description: Yup.string()
-                        .required('El ingrediente requiere una descripción'),
                     stock: Yup.number()
                         .required('Se requiere saber las existencias del producto, aunque sean negativas')
                 })}
                 /*el onSubmit, solo se activa cuando, el formulario no tiene errores*/
                 onSubmit={(values, actions) => {
-                    /*values, son los initialValues, ejemplo values.name, es el nombre del ingrediente*/
-                    console.log(values.image);
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2))
-
-                    }, 1000)
-                    actions.setSubmitting(false)
+                    addIngredient(values, actions);
                 }}
             >
                 {(props) => (
@@ -106,10 +106,10 @@ export default function CreateIngredient() {
                                             <FormLabel htmlFor="foto">Foto</FormLabel>
                                             {imagePreviewUrl ? (
                                                 <Box mt={4} pos="relative">
-                                                    <Image src={imagePreviewUrl} 
-                                                    width='200px'
-                                                    height='200px'
-                                                    alt="Imagen seleccionada" />
+                                                    <Image src={imagePreviewUrl}
+                                                        width='200px'
+                                                        height='200px'
+                                                        alt="Imagen seleccionada" />
                                                     <Button
                                                         pos="absolute"
                                                         top="0"
@@ -121,12 +121,21 @@ export default function CreateIngredient() {
                                                     </Button>
                                                 </Box>
                                             ) : null}
+
+                                            <Button
+                                                colorScheme="green"
+                                                size="sm"
+                                                borderRadius="md"
+                                                onClick={() => document.getElementById('image').click()}
+                                            >
+                                                Buscar
+                                            </Button>
                                             <Input
-                                                border='null'
+                                                style={{ display: 'none' }}
                                                 placeholder='Debe incluir una imagen'
                                                 id="image"
                                                 type="file"
-                                                accept="image/*"
+                                                accept=".jpg, .png"
                                                 onChange={handleImageChange}
                                             />
                                             <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
@@ -138,7 +147,7 @@ export default function CreateIngredient() {
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.name && form.touched.name}>
                                         <FormLabel>Nombre</FormLabel>
-                                        <Input {...field} /> 
+                                        <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.name}</FormErrorMessage>
                                     </FormControl>
                                 )}

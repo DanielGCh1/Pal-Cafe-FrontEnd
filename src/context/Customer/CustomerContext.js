@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import axios from 'axios';
+import Axios from "axios";
 import { useEffect } from 'react';
 import API from '../api';
 

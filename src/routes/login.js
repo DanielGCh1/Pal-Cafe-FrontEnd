@@ -23,7 +23,9 @@ export default function Login() {
   const getCookie = async () => {
     try {
       const { data } = await Axios.get("/api/getCookie", {
-        withCredentials: true
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
       console.log(data)
       setUserLogin(data);
