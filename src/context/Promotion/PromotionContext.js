@@ -4,25 +4,27 @@ import axios from 'axios';
 const PromotionContext = createContext(null)
 
 const PromotionProvider = props => {
-
-  const [promotions, setPromotions] = useState([])
   const [selected, setSelected] = useState(null)
+  const [promotions, setPromociones] = useState([]);
+
+  const addPromocion = async (values, actions) => {
+    try {
+      const response = await axios.post("/api/promociones", values);
+      setPromociones([...promotions, response.data]);
+    } catch (error) {
+      console.log(error);
+    }
+    actions.setSubmitting(false)
+  };
 
   const getPromotions = async () => {
     try {
       const res = await axios.get('https://reqres.in/api/users');
       const data = res.data.data;
-      setPromotions(data)
+      setPromociones(data)
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const getPromotion = id => {
-    try {
-      const promotion = promotions.find((promotion) => {return promotion.id === id})
-       setSelected(promotion)  
-    } catch (error) {}
   };
 
   return (
@@ -30,9 +32,7 @@ const PromotionProvider = props => {
       value={{
         promotions,
         selected,
-        setSelected,
-        getPromotions,
-        getPromotion,
+        addPromocion,
       }}
     >
       {props.children}

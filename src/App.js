@@ -40,6 +40,7 @@ import CreacionPromociones from './routes/CreacionPromociones';
 import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
+import PromotionsForm from './routes/promociones';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
                     <Routes>
                       <Route path="/" element={<Login />} />
                       <Route path="Register" element={<Register />} />
+                      <Route path="Promociones" element={<PromotionsForm />} />
                       <Route path="/Home" element={<Home />}>
                         <Route path="RegisterMaterial" element={<RegisterMaterial />} />
                         <Route path="BuscarMaterial" element={<BuscarMaterial />} />
