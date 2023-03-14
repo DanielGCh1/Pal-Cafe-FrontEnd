@@ -108,7 +108,6 @@ export default function RegistrarProductos() {
             alert(JSON.stringify(values, null, 2))
 
           }, 1000)*/
-          actions.setSubmitting(false)
         }}
       >
         {(props) => (

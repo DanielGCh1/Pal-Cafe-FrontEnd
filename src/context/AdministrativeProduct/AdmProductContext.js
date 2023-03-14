@@ -40,7 +40,7 @@ const AdmProductProvider = props => {
         pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
         pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
         pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
-        pro_imagen: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
+        pro_imagenUrl: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
         pro_ingredientes: values.receta
       }, {
         withCredentials: true
@@ -57,6 +57,7 @@ const AdmProductProvider = props => {
         setAdmProductSelected,
         getAdmProducts,
         getAdmProduct,
+        addAdmProduct
       }}
     >
       {props.children}
