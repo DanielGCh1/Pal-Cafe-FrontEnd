@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useRef } from "react";
 import Axios from "axios";
 import { FaTimes } from "react-icons/fa";
+import useAdmProducts from "../context/AdministrativeProduct/AdmUseProduct";
 
 const isNull = obj => {
   if (obj === null) {
@@ -17,7 +18,9 @@ const isNull = obj => {
 };
 
 
-export default function CreacionProductos() {
+export default function RegistrarProductos() {
+  const { addAdmProduct } = useAdmProducts();
+
   const [imagePreviewUrl, setImagePreviewUrl] = useState();/*Esta es la url de la imagen, para el image */
   const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
 
@@ -27,7 +30,7 @@ export default function CreacionProductos() {
     let reader = new FileReader();
     let file = event.target.files[0];
 
-    ref.current.values.imagen = file;
+    //ref.current.values.imagen = file;
     //validateImage(ref.current.values.imagen);
     reader.onloadend = () => {
       setImagePreviewUrl(reader.result);
@@ -36,7 +39,7 @@ export default function CreacionProductos() {
   };
   const handleImageDelete = () => { /*Se activa cuando se elimina la imagen*/
     setImagePreviewUrl(null);
-    ref.current.values.imagen = null;
+    //ref.current.values.imagen = null;
   };
   function validateImage(value) { /*Valida si el archivo que se subió, es de tipo imagen*/
     /*let error
@@ -67,7 +70,8 @@ export default function CreacionProductos() {
           cantidad: 0,
           precio_mano_obra: 0,
           descripcion: "",
-          imagen: null,
+          /*image: null,*/
+          imagen: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
           existencias: 0,
           valor_total_unidad: 0,
           receta: []
@@ -99,6 +103,7 @@ export default function CreacionProductos() {
         onSubmit={(values, actions) => {
           /*values, son los initialValues, ejemplo values.name, es el nombre del producto*/
           console.log(values);
+          addAdmProduct(values, actions);
           /*setTimeout(() => {
             alert(JSON.stringify(values, null, 2))
 
