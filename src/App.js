@@ -12,7 +12,8 @@ import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
 import { CrearProducto } from './routes/CrearProducto';
 import { ProductProvider } from './context/Product/ProductContext';
-import CreacionProductos from './routes/CreacionProductos';
+import { AdmProductProvider } from './context/AdministrativeProduct/AdmProductContext';
+import RegistrarProductos from './routes/RegistrarProductos';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
 import { PromotionProvider } from './context/Promotion/PromotionContext';
 import LoginCustomer from './routes/loginCustomer';
@@ -47,6 +48,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <CustomerProvider>
         <ProductProvider>
+          <AdmProductProvider>
             <ClienteProvider>
               <IngredientProvider>
                 <EmployeeProvider>
@@ -60,8 +62,8 @@ function App() {
 
                         <Route path="BuscarIngrediente" element={<ManageIngredient />} />
                         <Route
-                          path="CreacionProductos"
-                          element={<CreacionProductos />}
+                          path="RegistrarProductos"
+                          element={<RegistrarProductos />}
                         />
                         <Route
                           path="AdministracionEmpleados"
@@ -102,6 +104,7 @@ function App() {
                 </EmployeeProvider>
               </IngredientProvider>
             </ClienteProvider>
+          </AdmProductProvider>
         </ProductProvider>
       </CustomerProvider>
     </ChakraProvider>

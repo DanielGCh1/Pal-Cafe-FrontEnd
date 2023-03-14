@@ -59,7 +59,7 @@ export default function Header() {
                     {buttonMenu('Productos')}
                     <MenuList>
                         <MenuItem>
-                            <Link to='/Home/CreacionProductos'>Administrar Producto</Link>
+                            <Link to='/Home/RegistrarProductos'>Registrar Producto</Link>
                         </MenuItem>
                         <MenuItem>
                             <Link to='/Home/CrearReseta'>Crear Reseta</Link>
