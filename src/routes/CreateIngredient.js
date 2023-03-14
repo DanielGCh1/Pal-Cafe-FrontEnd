@@ -91,6 +91,7 @@ export default function CreateIngredient() {
                 })}
                 /*el onSubmit, solo se activa cuando, el formulario no tiene errores*/
                 onSubmit={(values, actions) => {
+                    console.log(values);
                     addIngredient(values, actions);
                 }}
             >

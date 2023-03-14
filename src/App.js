@@ -6,7 +6,7 @@ import Register from './routes/register';
 import './css/styled.css';
 import Home from './routes/home';
 import CreateIngredient from './routes/CreateIngredient';
-import BuscarMaterial from './routes/buscarMaterial';
+import ManageIngredient from './routes/manageIngredient';
 import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
@@ -22,7 +22,7 @@ import Contacto from "./routes/contacto";
 import BuscarCliente from './routes/buscarCliente';
 import { IngredientProvider } from './context/Ingredient/IngredientContext';
 import { ClienteProvider } from './context/Cliente/ClienteContext';
-import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
+//import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
 
 
 import { useState, useMemo, useEffect } from "react";
@@ -47,7 +47,6 @@ function App() {
     <ChakraProvider theme={theme}>
       <CustomerProvider>
         <ProductProvider>
-          <ProductosValoresProvider>
             <ClienteProvider>
               <IngredientProvider>
                 <EmployeeProvider>
@@ -56,11 +55,10 @@ function App() {
                       <Route path="/" element={<Login />} />
                       <Route path="Register" element={<Register />} />
                       <Route path="/Home" element={<Home />}>
-
                         <Route path="CrearIngrediente" element={<CreateIngredient />} />
                         <Route path="EditarIngrediente/:id" element={<CreateIngredient />} />
 
-                        <Route path="BuscarIngrediente" element={<CreateIngredient />} />
+                        <Route path="BuscarIngrediente" element={<ManageIngredient />} />
                         <Route
                           path="CreacionProductos"
                           element={<CreacionProductos />}
@@ -99,13 +97,11 @@ function App() {
                       </Route>
 
                       <Route path="PruebasChatGpt" element={<PruebasChatGpt />} />
-
                     </Routes>
                   </PromotionProvider>
                 </EmployeeProvider>
               </IngredientProvider>
             </ClienteProvider>
-          </ProductosValoresProvider>
         </ProductProvider>
       </CustomerProvider>
     </ChakraProvider>
