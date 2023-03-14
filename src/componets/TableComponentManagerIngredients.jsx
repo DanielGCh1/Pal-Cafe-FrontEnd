@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
 const TableComponent = ({ data, onEdit, onDelete }) => {
   return (
 
-    <TableContainer width="90%">
+    <TableContainer width="100%" overflowY="scroll" maxHeight="25rem">
       <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
         <TableCaption color='white'>Administrar Ingredientes</TableCaption>
         <Thead>
