@@ -7,7 +7,7 @@ const IngredientContext = createContext(null)
 const IngredientProvider = props => {
 
   const [ingredients, setIngredients] = useState([])
-  const [ingredientsfilter, setIngredientsfilter] = useState([])
+  const [ingredientsAux, setIngredientsAux] = useState([])
   const [ingredient, setIngredient] = useState(null)
 
   const getIngredients = async () => {
@@ -21,9 +21,27 @@ const IngredientProvider = props => {
       console.log("La consulta de optener ingredientes, fallo");
     }
   };
-
+  const getIngredientsAux = async () => {
+    try {
+      const res = await Axios.get('/api/ingredientes/get-all');
+      const data = res.data;
+      setIngredientsAux(data);
+      console.log(data)
+      console.log("los ingredientes aux llegan al contex");
+    } catch (error) {
+      console.log("La consulta de optener ingredientes aux, fallo");
+    }
+  };
   const getIngredient = async id => {
-
+    try {
+      const res = await Axios.get(`/api/ingredientes/${id}`);
+      const data = res.data;
+      setIngredient(data);
+      console.log(data)
+      console.log("Se busco el ingrediente");
+    } catch (error) {
+      console.log("La consulta de optener el ingrediente fallo");
+    }
   };
   const getIngredientFilter = async name => {
     /*try {
@@ -49,30 +67,48 @@ const IngredientProvider = props => {
       actions.setSubmitting(false)
     } catch (error) { }
   };
-  const deliteIngredient = async id => {
+  const deliteIngredient = async (id) => {
+    console.log(id);
+    try {
+      // TODO: no se como terminar eliminar
+      Axios.delete(`/api/ingredientes/delete/${id}`).then((data => console.log(data)));
+      //TODO: tengo que eliminar el ingrediente de aux he ingredients
+      setIngredientsAux((current) => current.filter((ingredientsAux) => ingredientsAux._id != id))
+      setIngredients((current) => current.filter((ingredients) => ingredients._id != id))
+    } catch (error) { }
 
   };
-  const editIngredient = async (values) => {
-    /*try {
-      Axios.post('/api/ingredientes/add', {
+  const editIngredient = async (values, actions) => {
+    try {
+      // TODO: no se como terminar el edit
+      console.log(values);
+      const val = {
         ing_nombre: values.name, ing_descripcion: values.description,
         ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
         ing_imagen: values.image, ing_existencias: values.stock
-      }, {
-        withCredentials: true
-      }).then((data => console.log(data)))
-    } catch (error) { }*/
+      };
+      Axios.put(`/api/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+    } catch (error) { }
+    actions.setSubmitting(false);
+  };
+  const editIngredientList = async (values, ingAux) => {
+    try {
+      // TODO: no se como terminar el edit
+      console.log(values);
+      Axios.put(`/api/ingredientes/edit/${values._id}`, values).then((data => console.log(data)))
+      ingAux.ing_existencias = values.ing_existencias;
+    } catch (error) { }
   };
   const editIngredients = async (listIngredients, editIngredientsFilter) => {
     try {
       if (!editIngredientsFilter) {
-        if (listIngredients.length == ingredients.length) {
+        if (listIngredients.length == ingredientsAux.length) {
           for (let i = 0; i < listIngredients.length; i++) {
-            if (listIngredients[i] != ingredients[i]) {
+            if (listIngredients[i].ing_existencias != ingredientsAux[i].ing_existencias) {
               console.log("el ingrediente ");
-              console.log(listIngredients[i]);
+              console.log(listIngredients[i].ing_existencias);
               console.log("cambio");
-              editIngredient(listIngredients[i]);
+              editIngredientList(listIngredients[i], ingredientsAux[i]);
             }
           }
         }
@@ -83,7 +119,7 @@ const IngredientProvider = props => {
           }, 1000)
         }
       }
-      else {
+      /*else {
         if (listIngredients.length == ingredientsfilter.length) {
           for (let i = 0; i < listIngredients.length; i++) {
             if (ingredientsfilter[i] != listIngredients[i]) {
@@ -100,7 +136,7 @@ const IngredientProvider = props => {
 
           }, 1000)
         }
-      }
+      }*/
 
     } catch (error) { }
   };
@@ -110,12 +146,14 @@ const IngredientProvider = props => {
         ingredients,
         ingredient,
         getIngredients,
-        ingredientsfilter,
         getIngredient,
         setIngredient,
         addIngredient,
         deliteIngredient,
         editIngredients,
+        getIngredientsAux,
+        setIngredient,
+        editIngredient
       }}
     >
       {props.children}
