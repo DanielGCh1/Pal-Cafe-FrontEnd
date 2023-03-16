@@ -62,7 +62,7 @@ export default function Header() {
                             <Link to='/Home/RegistrarProductos'>Registrar Producto</Link>
                         </MenuItem>
                         <MenuItem>
-                            <Link to='/Home/CrearReseta'>Crear Reseta</Link>
+                            <Link to='/Home/AdministracionProductos'>Administrar Productos</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>

@@ -19,7 +19,7 @@ const isNull = obj => {
 
 
 export default function RegistrarProductos() {
-  const { addAdmProduct } = useAdmProducts();
+  const { addAdmProduct, getAdmProduct } = useAdmProducts();
 
   const [imagePreviewUrl, setImagePreviewUrl] = useState();/*Esta es la url de la imagen, para el image */
   const ref = useRef(null); /*Esta es una referencia a los valores del formulario */

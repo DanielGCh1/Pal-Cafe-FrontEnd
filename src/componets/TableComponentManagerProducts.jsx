@@ -13,7 +13,7 @@ const TableComponent = ({ data, onEdit, onDelete }) => {
 
     <TableContainer width="100%" overflowY="scroll" maxHeight="25rem" minHeight="10rem">
       <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
-        <TableCaption color='white'>Administrar Ingredientes</TableCaption>
+        <TableCaption color='white'>Administrar Productos</TableCaption>
         <Thead>
           <Tr>
             <Th color='white'>Nombre</Th>
@@ -26,11 +26,11 @@ const TableComponent = ({ data, onEdit, onDelete }) => {
           {data.map((item) => (
             <Tr key={item._id}>
               <Td>
-                <Text color="white" >{item.ing_nombre}</Text>
+                <Text color="white" >{item.pro_nombre}</Text>
               </Td>
               <Td>
                 <Formik
-                  initialValues={{ existencias: item.ing_existencias }}
+                  initialValues={{ existencias: item.pro_existencias }}
                   validationSchema={validationSchema}
                   onSubmit={() => { }}
                 >
