@@ -82,7 +82,7 @@ const IngredientProvider = props => {
     try {
       // TODO: no se como terminar el edit
       console.log(values);
-      const val = {
+      const val = {_id: values._id,
         ing_nombre: values.name, ing_descripcion: values.description,
         ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
         ing_imagen: values.image, ing_existencias: values.stock
