@@ -24,7 +24,7 @@ export default function AdministracionProductos() {
     const [deletedItemId, setDeletedItemId] = useState(null);
 
     const handleEdit = (id) => {
-        console.log(`Editar ${id}`);
+        console.log(id);
         setEditedItemId(id);
     };
 
@@ -41,9 +41,6 @@ export default function AdministracionProductos() {
 
             <VStack maxWidth="600px" margin="0 auto" display="flex" flexDirection='column'>
                 <TableComponent data={list} onEdit={handleEdit} onDelete={handleDelete} />
-                <Button marginTop="20px" bg="red" color="white" onClick={() => console.log('Guardar')}>
-                    Guardar cambios
-                </Button>
             </VStack>
         </VStack>
 

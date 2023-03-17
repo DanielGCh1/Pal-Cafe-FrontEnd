@@ -61,13 +61,13 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
                 <Td>
                   <Formik
                     innerRef={ref}
-                    initialValues={{ existencias: item.pro_existencias }}
+                    initialValues={{ existencias: item.pro_existencias}}
                     validationSchema={validationSchema}
                     onSubmit={() => { }}
                   >
                     {(props) => (
                       <Form>
-                        <Field name="stock" validate={() => validate(item._id)}>
+                        <Field name="existencias" validate={() => validate(item._id)}>
                           {({ field, form }) => (
                             <FormControl isInvalid={form.errors.stock && form.touched.stock}>
                               <Input
