@@ -8,6 +8,7 @@ const AdmProductContext = createContext(null)
 const AdmProductProvider = props => {
 
   const [admProducts, setAdmProducts] = useState([])
+  const [admProductsfilter, setAdmProductsfilter] = useState([])
   const [admProductSelected, setAdmProductSelected] = useState(null)
 
   const getAdmProducts = async () => {
@@ -29,9 +30,12 @@ const AdmProductProvider = props => {
 
   const getAdmProduct = id => { //Trae un producto por medio del id
     try {
-      const admProduct = admProducts.find((AdmProduct) => { return admProduct.pro_id == id })
+      const admProduct = admProducts.find((admProduct) => { return admProduct.pro_id == id })
       setAdmProductSelected(admProduct)
     } catch (error) { }
+  };
+
+  const getAdmProductsfilter = async nombre => {
   };
 
   const addAdmProduct = async (values, actions) => {
@@ -52,7 +56,9 @@ const AdmProductProvider = props => {
   return (
     <AdmProductContext.Provider
       value={{
+        admProducts,
         admProductSelected,
+        admProductsfilter,
         setAdmProducts,
         setAdmProductSelected,
         getAdmProducts,

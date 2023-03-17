@@ -34,6 +34,7 @@ import PalCafe from './routes/PalCafe';
 import PruebasChatGpt from './routes/PruebasChatGpt';
 
 import AdministracionEmpleados from './routes/AdministracionEmpleados';
+import AdministracionProductos from './routes/AdministracionProductos';
 
 import RegistrarEmpleados from './routes/RegistrarEmpleados';
 import CreacionPromociones from './routes/CreacionPromociones';
@@ -65,6 +66,10 @@ function App() {
                         <Route
                           path="RegistrarProductos"
                           element={<RegistrarProductos />}
+                        />
+                        <Route
+                          path="AdministracionProductos"
+                          element={<AdministracionProductos />}
                         />
                         <Route
                           path="AdministracionEmpleados"
