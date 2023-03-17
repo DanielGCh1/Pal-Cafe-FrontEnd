@@ -41,6 +41,7 @@ import CreacionPromociones from './routes/CreacionPromociones';
 import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
+import EditIngredient from './routes/EditIngredient';
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
                       <Route path="Register" element={<Register />} />
                       <Route path="/Home" element={<Home />}>
                         <Route path="CrearIngrediente" element={<CreateIngredient />} />
-                        <Route path="EditarIngrediente/:id" element={<CreateIngredient />} />
+                        <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
 
                         <Route path="BuscarIngrediente" element={<ManageIngredient />} />
                         <Route

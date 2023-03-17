@@ -2,6 +2,27 @@ import React, { createContext, useState } from 'react';
 import Axios from "axios";
 import API from '../api';
 
+const isUndefined = obj => {
+  if (obj === "undefined" || typeof obj === "undefined") {
+    return true;
+  }
+  return false;
+};
+
+const isNull = obj => {
+  if (obj === null) {
+    return true;
+  }
+  return false;
+};
+
+const isUndefinedOrNull = obj => {
+  if (isUndefined(obj) || isNull(obj)) {
+    return true;
+  }
+  return false;
+};
+
 const IngredientContext = createContext(null)
 
 const IngredientProvider = props => {
@@ -22,6 +43,19 @@ const IngredientProvider = props => {
     }
   };
   const getIngredientsAux = async () => {
+    if (!isUndefinedOrNull(ingredients)) {
+      ingredients.map(values => {
+        const ing = {
+          _id: values._id,
+          ing_nombre: values.name, ing_descripcion: values.description,
+          ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
+          ing_imagen: values.image, ing_existencias: values.stock
+        }
+        ingredientsAux.push(ing);
+      }
+      )
+    }
+    /*
     try {
       const res = await Axios.get('/api/ingredientes/get-all');
       const data = res.data;
@@ -30,7 +64,7 @@ const IngredientProvider = props => {
       console.log("los ingredientes aux llegan al contex");
     } catch (error) {
       console.log("La consulta de optener ingredientes aux, fallo");
-    }
+    }*/
   };
   const getIngredient = async id => {
     try {
@@ -82,7 +116,8 @@ const IngredientProvider = props => {
     try {
       // TODO: no se como terminar el edit
       console.log(values);
-      const val = {_id: values._id,
+      const val = {
+        _id: values._id,
         ing_nombre: values.name, ing_descripcion: values.description,
         ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
         ing_imagen: values.image, ing_existencias: values.stock
