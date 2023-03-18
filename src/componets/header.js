@@ -108,7 +108,10 @@ export default function Header() {
                     {buttonMenu('Promociones')}
                     <MenuList>
                         <MenuItem>
-                            <Link to='/Home/CreacionPromociones'>Administrar Promociones</Link>
+                            <Link to='/Home/CrearPromociones'>Crear Promociones</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/BuscarPromociones'>Administrar Promociones</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>
