@@ -28,7 +28,7 @@ const IngredientContext = createContext(null)
 const IngredientProvider = props => {
 
   const [ingredients, setIngredients] = useState([])
-  const [ingredientsAux, setIngredientsAux] = useState([])
+  const [ingredientsAux, setIngredientsAux] = useState([])//TODO:
   const [ingredient, setIngredient] = useState(null)
 
   const getIngredients = async () => {
@@ -36,35 +36,27 @@ const IngredientProvider = props => {
       const res = await Axios.get('/api/ingredientes/get-all');
       const data = res.data;
       setIngredients(data);
-      console.log(data)
+      addIngredientsAux(data);//TODO:
       console.log("los ingredientes llegan al contex");
     } catch (error) {
       console.log("La consulta de optener ingredientes, fallo");
     }
   };
-  const getIngredientsAux = async () => {
-    if (!isUndefinedOrNull(ingredients)) {
-      ingredients.map(values => {
-        const ing = {
-          _id: values._id,
-          ing_nombre: values.name, ing_descripcion: values.description,
-          ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
-          ing_imagen: values.image, ing_existencias: values.stock
+  const addIngredientsAux = async (data) => {//TODO:
+    if (!isUndefinedOrNull(data) && data.length > 0) {
+      const list = [];
+      data.map((element) => {
+          const ing = {
+            _id: element._id,
+            ing_nombre: element.ing_nombre, ing_descripcion: element.ing_descripcion,
+            ing_precio: element.ing_precio, ing_tipo_unidad: element.ing_tipo_unidad, ing_cantidad: element.ing_cantidad,
+            ing_imagen: element.ing_imagenURL, ing_existencias: element.ing_existencias
+          }
+          list.push(ing);
         }
-        ingredientsAux.push(ing);
-      }
       )
+      setIngredientsAux(list);
     }
-    /*
-    try {
-      const res = await Axios.get('/api/ingredientes/get-all');
-      const data = res.data;
-      setIngredientsAux(data);
-      console.log(data)
-      console.log("los ingredientes aux llegan al contex");
-    } catch (error) {
-      console.log("La consulta de optener ingredientes aux, fallo");
-    }*/
   };
   const getIngredient = async id => {
     try {
@@ -104,13 +96,11 @@ const IngredientProvider = props => {
   const deliteIngredient = async (id) => {
     console.log(id);
     try {
-      // TODO: no se como terminar eliminar
+      // TODO: 
       Axios.delete(`/api/ingredientes/delete/${id}`).then((data => console.log(data)));
-      //TODO: tengo que eliminar el ingrediente de aux he ingredients
       setIngredientsAux((current) => current.filter((ingredientsAux) => ingredientsAux._id != id))
       setIngredients((current) => current.filter((ingredients) => ingredients._id != id))
     } catch (error) { }
-
   };
   const editIngredient = async (values, actions) => {
     try {
@@ -126,24 +116,23 @@ const IngredientProvider = props => {
     } catch (error) { }
     actions.setSubmitting(false);
   };
-  const editIngredientList = async (values, ingAux) => {
+  const editIngredientList = async (values, ingAux) => { //TODO:
     try {
-      // TODO: no se como terminar el edit
+      // TODO: 
       console.log(values);
       Axios.put(`/api/ingredientes/edit/${values._id}`, values).then((data => console.log(data)))
       ingAux.ing_existencias = values.ing_existencias;
     } catch (error) { }
   };
-  const editIngredients = async (listIngredients, editIngredientsFilter) => {
+  const editIngredients = async () => {//TODO:
     try {
-      if (!editIngredientsFilter) {
-        if (listIngredients.length == ingredientsAux.length) {
-          for (let i = 0; i < listIngredients.length; i++) {
-            if (listIngredients[i].ing_existencias != ingredientsAux[i].ing_existencias) {
+        if (ingredients.length == ingredientsAux.length) {
+          for (let i = 0; i < ingredients.length; i++) {
+            if (ingredients[i].ing_existencias !== ingredientsAux[i].ing_existencias) {
               console.log("el ingrediente ");
-              console.log(listIngredients[i].ing_existencias);
+              console.log(ingredients[i].ing_existencias);
               console.log("cambio");
-              editIngredientList(listIngredients[i], ingredientsAux[i]);
+              editIngredientList(ingredients[i], ingredientsAux[i]);
             }
           }
         }
@@ -153,31 +142,11 @@ const IngredientProvider = props => {
 
           }, 1000)
         }
-      }
-      /*else {
-        if (listIngredients.length == ingredientsfilter.length) {
-          for (let i = 0; i < listIngredients.length; i++) {
-            if (ingredientsfilter[i] != listIngredients[i]) {
-              console.log("el ingrediente ");
-              console.log(listIngredients[i]);
-              console.log("cambio");
-              editIngredient(listIngredients[i]);
-            }
-          }
-        }
-        else {
-          setTimeout(() => {
-            alert(JSON.stringify("Las listas de ingredientes no son el mismo tamaño", null, 2))
-
-          }, 1000)
-        }
-      }*/
-
     } catch (error) { }
   };
   return (
     <IngredientContext.Provider
-      value={{
+      value={{//TODO:
         ingredients,
         ingredient,
         getIngredients,
@@ -186,7 +155,6 @@ const IngredientProvider = props => {
         addIngredient,
         deliteIngredient,
         editIngredients,
-        getIngredientsAux,
         setIngredient,
         editIngredient
       }}

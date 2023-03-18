@@ -20,17 +20,18 @@ export default function AdministracionProductos() {
         }
     }, [admProducts])
 
-    const [editedItemId, setEditedItemId] = useState(null);
-    const [deletedItemId, setDeletedItemId] = useState(null);
-
     const handleEdit = (id) => {
         console.log(id);
-        setEditedItemId(id);
+
     };
 
     const handleDelete = (id) => {
         console.log(`Eliminar ${id}`);
-        setDeletedItemId(id);
+
+    };
+    //TODO: editar esto a productos
+    const handleEditProducts = () => { 
+        //editIngredients();
     };
     return <>
         <VStack h='100vh' alignItems='center'>
@@ -40,7 +41,7 @@ export default function AdministracionProductos() {
             </Box>
 
             <VStack maxWidth="600px" margin="0 auto" display="flex" flexDirection='column'>
-                <TableComponent data={list} onEdit={handleEdit} onDelete={handleDelete} />
+                <TableComponent data={list} onEdit={handleEdit} onDelete={handleDelete} saveChangesProducts={handleEditProducts}/>
             </VStack>
         </VStack>
 

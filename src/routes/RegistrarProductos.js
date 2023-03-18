@@ -137,12 +137,20 @@ export default function RegistrarProductos() {
                           </Button>
                         </Box>
                       ) : null}
+                      <Button
+                        colorScheme="green"
+                        size="sm"
+                        borderRadius="md"
+                        onClick={() => document.getElementById('image').click()}
+                      >
+                        Buscar
+                      </Button>
                       <Input
-                        border='null'
+                        style={{ display: 'none' }}
                         placeholder='Debe incluir una imagen'
                         id="image"
                         type="file"
-                        accept="image/*"
+                        accept=".jpg, .png"
                         onChange={handleImageChange}
                       />
                       <FormErrorMessage fontWeight="bold">{form.errors.imagen}</FormErrorMessage>

@@ -10,13 +10,15 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
+const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
 
   const ref = useRef(null);
 
   const saveChanges = () => {
-    if (ref.current.errors.stock != 'Existencias requeridas') {
-      saveChangesIngredients(data);
+    if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
+      if (ref.current.errors.stock != 'Existencias requeridas') {
+        saveChangesProducts();
+      }
     }
   };
 
@@ -56,12 +58,12 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
             {data.map((item) => (
               <Tr key={item._id}>
                 <Td>
-                <Text color="white" >{item.pro_nombre}</Text>
+                  <Text color="white" >{item.pro_nombre}</Text>
                 </Td>
                 <Td>
                   <Formik
                     innerRef={ref}
-                    initialValues={{ existencias: item.pro_existencias}}
+                    initialValues={{ existencias: item.pro_existencias }}
                     validationSchema={validationSchema}
                     onSubmit={() => { }}
                   >
