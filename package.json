@@ -2,7 +2,7 @@
   "name": "palcafefe",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:3001/api/",
   "dependencies": {
     "@chakra-ui/card": "^2.1.6",
     "@chakra-ui/icons": "^2.0.11",

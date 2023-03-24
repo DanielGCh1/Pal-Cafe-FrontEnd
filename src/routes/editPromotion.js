@@ -16,7 +16,7 @@ export default function EditPromocion() {
     const promotion = findPromotionById(id);
     const [imagePreviewUrl, setImagePreviewUrl] = useState();/*esta es la url de la image, para el image */
     const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
-    const { addPromocion, editPromocion } = UsePromotion();
+    const {  editPromocion } = UsePromotion();
 
     const handleImageChange = (event) => {
         event.preventDefault();
@@ -80,7 +80,7 @@ export default function EditPromocion() {
                     // }
                 }, 1000)}
                 onSubmit={(values, actions) => {
-                    addPromocion(values, actions);
+                    editPromocion(values, actions, id);
                 }}
             >
                 {(props) => (

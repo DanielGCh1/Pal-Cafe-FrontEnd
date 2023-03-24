@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import axios from '../api';
-import { useEffect } from "react";
+
 
 const PromotionContext = createContext(null)
 
@@ -18,17 +18,29 @@ const PromotionProvider = props => {
     actions.setSubmitting(false)
   };
 
-  const editPromocion = async (values, actions) => {
+  const editPromocion = async (values, actions, _id) => {
     try {
-      const response = await axios.post("/promociones/edit/:id", values);
-      setPromociones([...promotions, response.data]);
-      console.log(promotions)
+      const response = await axios.put(`/promociones/edit/${_id}`, values);
+
+      if(response.status == 200){
+        // Find the index of the edited promotion in the promotions array
+        const editedPromotionIndex = promotions.findIndex(promotion => promotion._id === _id);
+    
+        console.log(editedPromotionIndex)
+        // Replace the edited promotion with the updated promotionif 
+        const updatedPromotions = [...promotions];
+        updatedPromotions[editedPromotionIndex] = { ...promotions[editedPromotionIndex], ...values };
+        
+        console.log(updatedPromotions)
+        setPromociones(updatedPromotions);
+    }else{
+      console.log("Errror al ingresar la promocion");
+    }
     } catch (error) {
       console.log(error);
     }
-    actions.setSubmitting(false)
+    actions.setSubmitting(false);
   };
-
 
   const getPromotions = async () => {
     try {
@@ -50,7 +62,7 @@ const PromotionProvider = props => {
       if (response.status === 200) {
         setPromociones((promotions) => promotions.filter((promocion) => promocion._id !== id));
       } else {
-        console.error('Ocurrió un error al eliminar la promoción');
+        console.log('Ocurrió un error al eliminar la promoción');
       }
     } catch (error) {
       console.error('Ocurrió un error al eliminar la promoción', error);

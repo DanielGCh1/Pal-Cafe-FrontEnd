@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Checkbox } from "@chakra-ui/react";
 import { createBrowserHistory } from "history";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,8 @@ import UsePromotion from '../context/Promotion/UsePromotion';
 const LookPromotions = () => {
   const { promotions, deletePromotions, getPromotions } = UsePromotion();
   const [filteredPromotions, setPromotionFilters] = useState([]);
+  const [isChecked, setisChecked] = useState(false);
+  const promocionesModificadas = [];
   const history = createBrowserHistory();
   const [filters, setFilters] = useState({
     name: "",
@@ -15,6 +17,7 @@ const LookPromotions = () => {
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedPromotion, setSelectedPromotion] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
     if (promotions.length > 0) {
@@ -25,17 +28,33 @@ const LookPromotions = () => {
   useEffect(() => {
     getPromotions();
   }, []);
+  const [editStockPromotions, setEditStockPromotions] = useState([]);
 
+  function handleAddPromotion(promotion) {
+    // Verificar si la promoción ya existe en el array
+    const existingPromotionIndex = editStockPromotions.findIndex(
+      (p) => p.id === promotion.id
+    );
+
+    // Si la promoción ya existe, actualizarla en el array
+    if (existingPromotionIndex !== -1) {
+      const updatedPromotions = [...editStockPromotions];
+      updatedPromotions[existingPromotionIndex] = promotion;
+      setEditStockPromotions(updatedPromotions);
+    } else {
+      // Si la promoción no existe, agregarla al array
+      setEditStockPromotions([...editStockPromotions, promotion]);
+    }
+  }
 
   useEffect(() => {
     const nameFilter = filters.name.toLowerCase();
     const priceOrder = filters.priceOrder === "asc" ? 1 : -1;
+
     const activeFilter = filters.active;
-    console.log(nameFilter)
 
     const filteredPromotions = [...promotions]
       .filter((promotion) => {
-        console.log(promotion.name)
         return (
           promotion.name.toLowerCase().includes(nameFilter) &&
           (activeFilter === "" || promotion.active === (activeFilter === "true"))
@@ -67,6 +86,15 @@ const LookPromotions = () => {
     onClose();
   };
 
+  const handleButtonClick = () => {
+
+  };
+
+
+  const handleCheck = () => {
+    setisChecked(!isChecked)
+  }
+
   return (
     <>
       <form>
@@ -95,6 +123,12 @@ const LookPromotions = () => {
           <option value="false">Inactivo</option>
         </select>
       </form>
+      <Checkbox isChecked={isChecked} onChange={handleCheck}>
+        Desbloquear existencias
+      </Checkbox>
+      <Button onClick={handleButtonClick} disabled={isButtonDisabled}>
+        Guardar cambios en existencias
+      </Button>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -107,7 +141,25 @@ const LookPromotions = () => {
           {filteredPromotions?.map((promocion) => (
             <Tr key={promocion._id}>
               <Td>{promocion.name}</Td>
-              <Td>{promocion.stock}</Td>
+              <Td>
+                {isChecked ?
+                  <input
+                    type="number"
+                    placeholder={promocion.stock}
+                    onChange={(e) => {
+                      const newStock = parseInt(e.target.value);
+                      if (!isNaN(newStock)) {
+                        setIsButtonDisabled(false);
+                        promocion.stock = newStock;
+                        setPromotionFilters([...filteredPromotions]);
+                      } else {
+                        e.target.value = 0
+                      }
+                    }}></input>
+                  :
+                  promocion.stock
+                }
+              </Td>
               <Td>
                 <Button
                   colorScheme="red"
@@ -120,7 +172,6 @@ const LookPromotions = () => {
                     Editar
                   </Button>
                 </Link>
-
               </Td>
             </Tr>
           ))}
