@@ -24,7 +24,7 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
 
   function validate(value) {
     const edit = data.find(element => element._id === value);
-    edit.ing_existencias = ref.current.values.stock;
+    edit.pro_existencias = ref.current.values.stock;
   }
 
   return (

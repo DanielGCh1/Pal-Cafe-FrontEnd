@@ -43,6 +43,7 @@ import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
 import EditIngredient from './routes/EditIngredient';
+import EditProduct from './routes/EditProduct';
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
                       <Route path="/Home" element={<Home />}>
                         <Route path="CrearIngrediente" element={<CreateIngredient />} />
                         <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
+                        <Route path="EditarProducto/:id" element={<EditProduct />} />
 
                         <Route path="BuscarIngrediente" element={<ManageIngredient />} />
                         <Route
