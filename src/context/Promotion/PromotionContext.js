@@ -69,6 +69,16 @@ const PromotionProvider = props => {
     }
   };
 
+  const modifitedPromotions = async (promotions) => {
+    axios.put('/promociones/edit-all-stock/', promotions)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
+
   return (
     <PromotionContext.Provider
       value={{
@@ -79,6 +89,7 @@ const PromotionProvider = props => {
         addPromocion,
         deletePromotions,
         findPromotionById,
+        modifitedPromotions
       }}
     >
       {props.children}

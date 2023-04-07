@@ -1,24 +1,30 @@
-.linksto:hover{
-    color:red
+.linksto:hover {
+    color: red
 }
 
-#divCenter{
+#divCenter {
     width: 85%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../assets/fondoLogin.jpg');
+    background-size: cover;
+    overflow-y: scroll;
     top: 0px;
     left: 15%;
-    height: 90%;
+    height: 100%;
 }
 
-.title{
+.title {
     font-size: 34px;
     font-weight: bolder;
     margin-bottom: 29px;
 }
-.formProducto{
+
+.formProducto {
     width: 100%;
 }
 
-.inputsFoms{
+.inputsFoms {
     color: black;
 }
