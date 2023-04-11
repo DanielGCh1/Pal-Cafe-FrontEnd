@@ -20,13 +20,12 @@ export default function Home() {
         p="0"
         display="flex"
       >
-        
         <Header />
         <div id="divCenter">
           <NotificationsDrawer />
           <Outlet />
         </div>
-      
+
       </Container>
     </>
   );
