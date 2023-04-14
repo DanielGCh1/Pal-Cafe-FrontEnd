@@ -1,5 +1,5 @@
 import Header from '../componets/header';
-import NotificationsDrawer from '../componets/NotificationsDrawer';
+import Notificaciones from './Notificaciones';
 import { Container } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react'
@@ -25,7 +25,7 @@ export default function Home() {
         
         <Header />
         <div id="divCenter">
-          <NotificationsDrawer />
+        <Notificaciones /> 
           <Outlet />
         </div>
       
