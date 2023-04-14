@@ -69,13 +69,26 @@ export default function EditIngredient() {
         return error*/
     }
     useEffect(() => {
-        if(!isUndefinedOrNull(params.id) && isUndefinedOrNull(ingredient)) {
+        if (!isUndefinedOrNull(params.id) && isUndefinedOrNull(ingredient)) {
             console.log("Si encontro el id del ingrediente");
             getIngredient(params.id);
         }
     }, []);
     return <>
-        <VStack bg="rgba(0,0,0,.4)" h='100vh'>
+        <VStack bg="rgba(0,0,0,.4)" h='100vh' overflowY="scroll" maxHeight="37rem" sx={{
+            "&::-webkit-scrollbar": {
+                width: "7px",
+                backgroundColor: "transparent",
+            },
+            "&::-webkit-scrollbar-thumb": {
+                bg: "gray.400",
+                borderRadius: "full",
+                opacity: "0.4",
+                "&:hover": {
+                    opacity: "0.7",
+                },
+            },
+        }}>
             <Box p='4' display="flex" justifyContent={'center'}>
                 <Heading color="white" fontWeight="bold" size='2xl'>Editar Ingrediente</Heading>
             </Box>
@@ -96,7 +109,7 @@ export default function EditIngredient() {
                         image: ingredient.ing_imagen,
                         */
                         image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
-                        stock: ingredient.ing_existencias,
+                        stock: ingredient.ing_existencias
                     }}
 
                     validationSchema={Yup.object({

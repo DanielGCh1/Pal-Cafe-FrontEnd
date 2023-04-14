@@ -41,7 +41,7 @@ export default function Header() {
             <VStack>
                 <Menu>
                     <Container height="120px" w="100%" maxWidth="100%" bg="black" p="0px" display="flex" justifyContent="center" alignItems="center">
-                        <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>               
+                        <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>
                     </Container>
                 </Menu>
                 <Menu m="0">
@@ -51,7 +51,7 @@ export default function Header() {
                             <Link to='/Home/CrearIngrediente'>Crear Ingrediente</Link>
                         </MenuItem>
                         <MenuItem>
-                            <Link to='/Home/BuscarIngrediente'>Buscar Ingrediente</Link>
+                            <Link to='/Home/AdministrarIngredientes'>Administrar Ingredientes</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>
@@ -69,9 +69,9 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Pedidos')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/AdministrarOrdenes'>Administrar Pedidos</Link>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>

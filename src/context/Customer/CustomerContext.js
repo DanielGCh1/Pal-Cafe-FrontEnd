@@ -3,6 +3,20 @@ import Axios from "axios";
 import { useEffect } from 'react';
 import API from '../api';
 
+const isEmptyString = obj => {
+    if (obj === "" || obj.trim() === "") {//Trim: remove blank spaces
+        return true;
+    }
+    return false;
+};
+
+const isObj = obj => {
+    if (typeof obj === "object") {//Trim: remove blank spaces
+        return true;
+    }
+    return false;
+};
+
 const CustomerContext = createContext(null)
 
 const CustomerProvider = props => {
@@ -28,12 +42,29 @@ const CustomerProvider = props => {
         //  console.log(clienteSelecionado)
     }, [customer])
 */
+    const getCookie = async () => {
+        try {
+            const { data } = await Axios.get("/api/getCookie", {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (isObj(data)) {
+                setCustomer(data);
+                console.log(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const getSectionCustomer = async () => {
+        getCookie();
+        /*
         try {
             const res = await API.get('/use/login/:correo/:password');
             const data = res.data.data;
             setCustomer(data)
-        } catch (error) { 
+        } catch (error) {
             console.log("Obtener la seccion fallo, proceso a setear una seccion")
             const customId = localStorage.getItem("usu_id_usuario");
             console.log("el id de la seccion del cliente es");
@@ -41,29 +72,57 @@ const CustomerProvider = props => {
             if (customId != null) {
                 setCustomer(pal_usuario)
             }
-        }
+        }*/
     };
-    const loginCustomer = async (correo, password, actions) => {
+    const loginUser = async (user, password, actions) => {
         try {
-            const res = await API.get('/use/login/:correo/:password');
-            const data = res.data.data;
-            setCustomer(data)
+            Axios.post("/api/loginSession", { correo: user, password: password }, {
+                withCredentials: true
+            }).then((data => setCustomer(data.data.user)))
+            console.log("El usuario fue");
         } catch (error) {
-            //console.error(error);
-            console.log("Fallo buscar usuario a la bd, procedo a buscarlo de forma interna");
-            if (pal_usuario.usu_correo == correo && pal_usuario.usu_contrasenna == password) {
-                setCustomer(pal_usuario)
-                localStorage.setItem("usu_id_usuario", pal_usuario.usu_id_usuario)
-            }
-            else {
-                setTimeout(() => {
-                    alert("Correo o contraseña incorrecta.")
-                }, 1000)
-            }
+            console.log(error)
         }
         actions.setSubmitting(false)
     };
+    const loginCustomer = async (correo, password, actions) => {
+        loginUser(correo, password, actions);
+        /*try {
+             const res = await API.get('/use/login/:correo/:password');
+             const data = res.data.data;
+             setCustomer(data)
+         } catch (error) {
+             //console.error(error);
+             console.log("Fallo buscar usuario a la bd, procedo a buscarlo de forma interna");
+             if (pal_usuario.usu_correo == correo && pal_usuario.usu_contrasenna == password) {
+                 setCustomer(pal_usuario)
+                 localStorage.setItem("usu_id_usuario", pal_usuario.usu_id_usuario)
+             }
+             else {
+                 setTimeout(() => {
+                     alert("Correo o contraseña incorrecta.")
+                 }, 1000)
+             }
+         }
+         actions.setSubmitting(false)
+         */
+    };
+    const eliminarCookie = async () => {
+        console.log("hola");
+        try {
+            console.log("hola");
+            const { data } = await Axios.get("/api/logout", {
+                withCredentials: true
+            });
+            setCustomer(null);
+            console.log(data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const signOff = async () => {
+        eliminarCookie();
+        /*
         try {
             const custom = localStorage.getItem("usu_id_usuario");
             if (custom !== null) {
@@ -71,8 +130,9 @@ const CustomerProvider = props => {
                 setCustomer(null)
             }
         } catch (error) { }
+        */
     };
-  
+
 
     return (
         <CustomerContext.Provider

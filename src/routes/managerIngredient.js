@@ -12,7 +12,7 @@ export default function ManageIngredient() {
         if (typeof ingredients == 'undefined' || ingredients.length <= 0) {
             getIngredients();//TODO:
         }
-    }, [ingredients])
+    }, )
 
     const handleEdit = (value) => {//TODO:
         if (window.confirm("¿Estás seguro de que quieres habandonar esta pagina, para cargar la ventana de editar este ingrediente?")) {

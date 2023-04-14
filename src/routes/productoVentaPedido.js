@@ -25,6 +25,9 @@ import { useContext, useEffect, useState } from 'react';
 import useProducts from '../context/Product/UseProduct';
 import NumberInputFormik from '../componets/NumberInputFormik';
 import { useRef } from "react";
+import useOrders from '../context/Orders/UseOrders';
+
+import useCustomer from '../context/Customer/UseCustomer';
 
 const isUndefined = obj => {
   if (obj === "undefined" || typeof obj === "undefined") {
@@ -55,40 +58,40 @@ const isEmptyString = obj => {
 };
 
 const getImage = obj => {
-  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_imagen)) {//Trim: remove blank spaces
-    return obj.pro_imagen;
+  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.image)) {//Trim: remove blank spaces
+    return obj.image;
   }
   return require('../assets/ImagenNoEncontrada.png');
 };
 
 const getName = obj => {
-  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_nombre)) {
-    return obj.pro_nombre;
+  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.name)) {
+    return obj.name;
   }
   return "No disponible";
 };
 
 const getUnits = obj => {
   if (!isUndefinedOrNull(obj)) {
-    if (obj.pro_unidades == 1) {
-      return obj.pro_unidades + " Unidad";
+    if (obj.amount == 1) {
+      return obj.amount + " Unidad";
     }
     else {
-      return obj.pro_unidades + " Unidades";
+      return obj.amount + " Unidades";
     }
   }
   return "No disponible";
 };
 const getPrice = obj => {
   if (!isUndefinedOrNull(obj)) {
-    return "₡ " + obj.pro_valor_venta;
+    return "₡ " + obj.price;
   }
   return "No disponible";
 
 };
 const getStock = obj => {
   if (!isUndefinedOrNull(obj)) {
-    return obj.pro_existencias;
+    return obj.stock;
   }
   return 0;
 };
@@ -96,10 +99,10 @@ const getStock = obj => {
 const getStockText = obj => {
   if (!isUndefinedOrNull(obj)) {
     if (getStock(obj) == 1) {
-      return obj.pro_existencias + " Existencia";
+      return obj.stock + " Existencia";
     }
     else {
-      return obj.pro_existencias + " Existencias";
+      return obj.stock + " Existencias";
     }
   }
   return 0;
@@ -112,8 +115,8 @@ const isNumber = obj => {
 };
 
 const getDescription = obj => {
-  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.pro_descripcion)) {
-    return obj.pro_descripcion;
+  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.description)) {
+    return obj.description;
   }
   return "No disponible";
 };
@@ -129,30 +132,14 @@ export default function ProductoVentaPedido() {
 
   const { products, productSelected, getProduct, getProducts } =
     useProducts();
+  const { customer, getSectionCustomer, signOff } = useCustomer();
+  const {addProductList} = useOrders();
   const params = useParams()
   const refFormik = useRef(null); // Reference to the formik
 
   //const handleInputChangeQuantityOrdered = (e) => setValueQuantityOrdered(e.target.value);
 
   useEffect(() => {
-    console.log("Params", params)
-
-    var hola = "undefined";
-
-    if (isUndefinedOrNull(hola)) {
-      console.log("El valor  indefinido o nulo");
-    }
-
-
-    var nulo = "";
-    if (isNull(nulo)) {
-      console.log("El valor si es nulo");
-    }
-
-    var espacios = "";
-    if (isEmptyString(espacios)) {
-      console.log("El string si esta vacio");
-    }
 
     if (isUndefinedOrNull(products) || products.length <= 0) {
       getProducts();
@@ -175,7 +162,7 @@ selected ? selected.first_name : ''
 );*/
 
   const handleClick = id => {
-    getProduct(params.id);
+    getProduct(params._id);
   };
 
   //const { match: { params } } = this.props;
@@ -183,7 +170,7 @@ selected ? selected.first_name : ''
 
     console.log(products);
     console.log(productSelected);
-    console.log("Lo que imprime idProdu", params.id, ".")
+    console.log("Lo que imprime idProdu", params._id, ".")
   };
 
   function validateOrderValue(value) {
@@ -197,8 +184,8 @@ selected ? selected.first_name : ''
       refFormik.current.values.amount = 1
       return 0
     }
-    if (order > productSelected.pro_existencias) {
-      refFormik.current.values.amount = productSelected.pro_existencias
+    if (order > productSelected.stock) {
+      refFormik.current.values.amount = productSelected.stock
       return 0
     }
     console.log("order" + order);
@@ -271,16 +258,18 @@ selected ? selected.first_name : ''
               {getDescription(productSelected)}
             </Text>
           </VStack>
-          {(getStock(productSelected) >= 1) ?
+          {(getStock(productSelected) >= 1 && (customer != null)) ?
 
             <Formik
-              initialValues={{ amount: 1 }}
+              initialValues={{ amount: 1}}
               innerRef={refFormik}
               onSubmit={(values, actions) => {
+                /*
                 setTimeout(() => {
                   alert(JSON.stringify(values, null, 2))
                   actions.setSubmitting(false)
-                }, 1000)
+                }, 1000)*/
+                addProductList(productSelected , values.amount, actions);
               }}
             >
               {(props) => (
@@ -291,7 +280,6 @@ selected ? selected.first_name : ''
                     mt={4}
                     colorScheme='red'
                     isLoading={props.isSubmitting}
-                    onClick={props.isSubmitting}
                     type='submit'
                     marginTop='10'
                   >
@@ -300,11 +288,16 @@ selected ? selected.first_name : ''
                 </Form>
               )}
             </Formik>
-            : 
-            <Stack spacing={1} alignItems='center'>
-              <Text fontSize='2xl' fontWeight= "bold" p='25px'>Producto no disponible en este momento</Text>
+            :
+            (customer != null) ?
+              <Stack spacing={1} alignItems='center'>
+                <Text fontSize='2xl' fontWeight="bold" p='25px'>Producto no disponible en este momento</Text>
 
-            </Stack>
+              </Stack>
+              : <Stack spacing={1} alignItems='center'>
+                <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sección y estar aprobado, para registrar productos al carrito de compra</Text>
+
+              </Stack>
           }
 
 

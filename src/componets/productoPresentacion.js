@@ -25,7 +25,7 @@ import useProducts from '../context/Product/UseProduct';
 
 import { useContext, useEffect, useState } from 'react';
 
-export default function ProductoPresentacion({ id, imagen }) {
+export default function ProductoPresentacion({ _id, image }) {
 
   const { products, productSelected, setProducts, getProduct, getProducts, setProductSelected } =
     useProducts();
@@ -37,7 +37,7 @@ export default function ProductoPresentacion({ id, imagen }) {
     }
 
     if (typeof productSelected == 'undefined' || products.length <= 0) {
-      getProduct(id);
+      getProduct(_id);
     }
 
   }, []);
@@ -93,13 +93,13 @@ export default function ProductoPresentacion({ id, imagen }) {
   return (
 
 
-    <Link align={'center'} to={`/PalCafe/ProductoVentaPedido/${id}`} onClick={() => {
-      SearchProduct(id);
+    <Link align={'center'} to={`/PalCafe/ProductoVentaPedido/${_id}`} onClick={() => {
+      SearchProduct(_id);
     }}>
       <Image
         rounded={'md'}
         alt={'product image'}
-        src={imagen}
+        src={image}
         fit={'cover'}
         align={'center'}
         w={'10rem'}

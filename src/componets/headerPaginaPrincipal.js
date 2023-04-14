@@ -21,7 +21,15 @@ import { Link } from 'react-router-dom'
 import { SettingsIcon } from '@chakra-ui/icons'
 
 import useCustomer from '../context/Customer/UseCustomer';
+import useOrders from '../context/Orders/UseOrders';
+
 import { useEffect } from 'react';
+
+import { FaShoppingCart } from "react-icons/fa";
+import { useState } from "react";
+import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure } from "@chakra-ui/react";
+import ShoppingCartProductList from './shoppingCartProductList'
+import {useNavigate } from "react-router-dom";
 
 
 const buttonMenu = (name) => {
@@ -44,6 +52,10 @@ const buttonMenu = (name) => {
 export default function HeaderPaginaPrincipal() {
 
     const { customer, getSectionCustomer, signOff } = useCustomer();
+    const { orders, listProductsOrder } = useOrders();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (customer == null) {
@@ -112,18 +124,37 @@ export default function HeaderPaginaPrincipal() {
                         </MenuList>
                     </Menu>
                     : null}
-                <Menu>
-                    {buttonMenu('Carrito')}
-                    <MenuList color='#d5ae0f' bg='#56070c'>
-                        <MenuItem>
-                            <Link to='/PalCafe/PerfilUsuario'>
-                                Carrito
-                            </Link>
-                        </MenuItem>
-                        <MenuItem>Carrito</MenuItem>
-                    </MenuList>
-                </Menu>
+                {(customer != null && customer.usu_estado === "Aceptado") ?
+                    <Button leftIcon={<FaShoppingCart />} backgroundColor="black" onClick={onOpen}>
+                    </Button>
 
+                    : null}
+                {(customer != null && customer.usu_estado === "Aceptado") ?
+                    <Drawer isOpen={isOpen} onClose={onClose} >
+                        <DrawerOverlay>
+                            <DrawerContent>
+                                <DrawerCloseButton />
+                                <DrawerHeader>Tu carrito de compras</DrawerHeader>
+                                <DrawerBody>
+                                    <ShoppingCartProductList idCurtomer={customer._id} />
+                                    {((typeof listProductsOrder !== 'undefined') && (listProductsOrder.length > 0))
+                                        ?
+                                        <Button
+                                            mt={4}
+                                            colorScheme='red'
+                                            onClick={() => navigate(`/PalCafe/HacerPedido/${customer._id}`)}
+                                            marginTop='10'
+                                        >
+                                            Hacer Pedido
+                                        </Button>
+                                        : null}
+
+                                </DrawerBody>
+                            </DrawerContent>
+                        </DrawerOverlay>
+                    </Drawer>
+
+                    : null}
             </Flex>
 
         </Container>

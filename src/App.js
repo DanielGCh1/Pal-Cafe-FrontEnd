@@ -6,7 +6,7 @@ import Register from './routes/register';
 import './css/styled.css';
 import Home from './routes/home';
 import CreateIngredient from './routes/CreateIngredient';
-import ManageIngredient from './routes/manageIngredient';
+import ManagerIngredient from './routes/managerIngredient';
 import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
@@ -43,6 +43,10 @@ import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
 import EditIngredient from './routes/EditIngredient';
+import { OrderProvider } from './context/Orders/OrderContext';
+import MakeOrder from './routes/makeOrder';
+import ManagerOrders from './routes/managerOrders';
+import EditOrder from './routes/EditOrder';
 
 function App() {
 
@@ -55,57 +59,65 @@ function App() {
               <IngredientProvider>
                 <EmployeeProvider>
                   <PromotionProvider>
-                    <Routes>
-                      <Route path="/" element={<Login />} />
-                      <Route path="Register" element={<Register />} />
-                      <Route path="/Home" element={<Home />}>
-                        <Route path="CrearIngrediente" element={<CreateIngredient />} />
-                        <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
+                    <OrderProvider>
+                      <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="Register" element={<Register />} />
+                        <Route path="/Home" element={<Home />}>
+                          <Route path="CrearIngrediente" element={<CreateIngredient />} />
+                          <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
 
-                        <Route path="BuscarIngrediente" element={<ManageIngredient />} />
-                        <Route
-                          path="RegistrarProductos"
-                          element={<RegistrarProductos />}
-                        />
-                        <Route
-                          path="AdministracionProductos"
-                          element={<AdministracionProductos />}
-                        />
-                        <Route
-                          path="AdministracionEmpleados"
-                          element={<AdministracionEmpleados />}
-                        />
-                        <Route
-                          path="RegistrarEmpleados"
-                          element={<RegistrarEmpleados />}
-                        />
-                        <Route
-                          path="CreacionPromociones"
-                          element={<CreacionPromociones />}
-                        />
-                        <Route path="BuscarCliente" element={<BuscarCliente />} />
+                          <Route path="AdministrarIngredientes" element={<ManagerIngredient/>} />
+                          <Route path="AdministrarOrdenes" element={<ManagerOrders/>} />
+                          <Route path="EditarOrden/:id" element={<EditOrder />} />
+                          <Route
+                            path="RegistrarProductos"
+                            element={<RegistrarProductos />}
+                          />
+                          <Route
+                            path="AdministracionProductos"
+                            element={<AdministracionProductos />}
+                          />
+                          <Route
+                            path="AdministracionEmpleados"
+                            element={<AdministracionEmpleados />}
+                          />
+                          <Route
+                            path="RegistrarEmpleados"
+                            element={<RegistrarEmpleados />}
+                          />
+                          <Route
+                            path="CreacionPromociones"
+                            element={<CreacionPromociones />}
+                          />
+                          <Route path="BuscarCliente" element={<BuscarCliente />} />
 
-                        <Route path="BuscarCliente" element={<BuscarCliente />} />
-                        <Route path="HistorialProduccion" element={<HistorialProduccion />} />
+                          <Route path="BuscarCliente" element={<BuscarCliente />} />
+                          <Route path="HistorialProduccion" element={<HistorialProduccion />} />
 
-                      </Route>
+                        </Route>
 
-                      <Route path="/PalCafe" element={<PalCafe />} >
-                        <Route path="PaginaPrincipal" element={<PaginaPrincipal />} />
-                        <Route
-                          path="ProductoVentaPedido/:id"
-                          element={<ProductoVentaPedido />}
-                        />
-                        <Route path="LoginCustomer" element={<LoginCustomer />} />
-                        <Route path="PerfilUsuario" element={<PerfilUsuario />} />
-                        <Route path="RegistrarCliente" element={<RegistrarCliente />} />
-                        <Route path="Nosotros" element={<Nosotros />} />
-                        <Route path="Contacto" element={<Contacto />} />
-                        <Route path="CarritoDeCompra" element={<CarritoDeCompra />} />
-                      </Route>
+                        <Route path="/PalCafe" element={<PalCafe />} >
+                          <Route path="PaginaPrincipal" element={<PaginaPrincipal />} />
+                          <Route
+                            path="ProductoVentaPedido/:id"
+                            element={<ProductoVentaPedido />}
+                          />
+                          <Route
+                            path="HacerPedido/:id"
+                            element={<MakeOrder />}
+                          />
+                          <Route path="LoginCustomer" element={<LoginCustomer />} />
+                          <Route path="PerfilUsuario" element={<PerfilUsuario />} />
+                          <Route path="RegistrarCliente" element={<RegistrarCliente />} />
+                          <Route path="Nosotros" element={<Nosotros />} />
+                          <Route path="Contacto" element={<Contacto />} />
+                          <Route path="CarritoDeCompra" element={<CarritoDeCompra />} />
+                        </Route>
 
-                      <Route path="PruebasChatGpt" element={<PruebasChatGpt />} />
-                    </Routes>
+                        <Route path="PruebasChatGpt" element={<PruebasChatGpt />} />
+                      </Routes>
+                    </OrderProvider>
                   </PromotionProvider>
                 </EmployeeProvider>
               </IngredientProvider>

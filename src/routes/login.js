@@ -12,9 +12,10 @@ export default function Login() {
 
   const loginUser = async () => {
     try {
-      Axios.post("/api/loginSession", { correo: user, password: password }, {
+        Axios.post("/api/loginSession", { correo: user, password: password }, {
         withCredentials: true
-      }).then((data => console.log(data.data.message)))
+      }).then((data => console.log(data.data.user)))
+      console.log("El usuario fue");
     } catch (error) {
       console.log(error)
     }

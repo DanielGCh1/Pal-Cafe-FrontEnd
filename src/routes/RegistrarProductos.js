@@ -53,7 +53,20 @@ export default function RegistrarProductos() {
   }
 
   return <>
-    <VStack bg="rgba(0,0,0,.4)" h='100vh'>
+    <VStack bg="rgba(0,0,0,.4)" h='100vh' overflowY="scroll" maxHeight="37rem" sx={{
+      "&::-webkit-scrollbar": {
+        width: "7px",
+        backgroundColor: "transparent",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        bg: "gray.400",
+        borderRadius: "full",
+        opacity: "0.4",
+        "&:hover": {
+          opacity: "0.7",
+        },
+      },
+    }}>
       <Box p='4' display="flex" justifyContent={'center'}>
         <Heading color="white" fontWeight="bold" size='2xl'>Registrar Producto</Heading>
       </Box>

@@ -35,8 +35,10 @@ const IngredientProvider = props => {
     try {
       const res = await Axios.get('/api/ingredientes/get-all');
       const data = res.data;
-      setIngredients(data);
-      addIngredientsAux(data);//TODO:
+      if (data.length > 0) {
+        setIngredients(data);
+        addIngredientsAux(data);
+      }
       console.log("los ingredientes llegan al contex");
     } catch (error) {
       console.log("La consulta de optener ingredientes, fallo");
@@ -62,7 +64,7 @@ const IngredientProvider = props => {
     try {
       const res = await Axios.get(`/api/ingredientes/${id}`);
       const data = res.data;
-      setIngredient(data);
+      setIngredient(data[0]);
       console.log(data)
       console.log("Se busco el ingrediente");
     } catch (error) {
@@ -104,7 +106,6 @@ const IngredientProvider = props => {
   };
   const editIngredient = async (values, actions) => {
     try {
-      // TODO: no se como terminar el edit
       console.log(values);
       const val = {
         _id: values._id,
