@@ -148,7 +148,7 @@ const LookPromotions = () => {
       <Text fontWeight={"bold"} color={"white"} fontSize={"48px"}>
         Buscar promociones
       </Text>
-      <HStack  alignSelf={"flex-start"}>
+      <HStack alignSelf={"flex-start"}>
         <form>
           <Text fontWeight={"bold"} color={"white"} fontSize={"18px"}>
             Filtros:
@@ -190,7 +190,20 @@ const LookPromotions = () => {
           </select>
         </form>
       </HStack>
-      <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" >
+      <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" maxHeight="37rem" sx={{
+        "&::-webkit-scrollbar": {
+          width: "7px",
+          backgroundColor: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          bg: "gray.400",
+          borderRadius: "full",
+          opacity: "0.4",
+          "&:hover": {
+            opacity: "0.7",
+          },
+        },
+      }} >
         <Table variant="simple" width="100%" bg="rgba(0,0,0,0.5)" bgOpacity="25%">
           <Thead color="white">
             <Tr>

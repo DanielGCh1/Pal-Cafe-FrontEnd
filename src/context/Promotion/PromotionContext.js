@@ -44,7 +44,9 @@ const PromotionProvider = props => {
 
   const getPromotions = async () => {
     try {
-      const res = await axios.get('/promociones/get-all');
+      const res = await axios.get('/promociones/get-all', {
+        withCredentials: true
+      });
       const data = res.data;
       setPromociones(data)
     } catch (error) {
