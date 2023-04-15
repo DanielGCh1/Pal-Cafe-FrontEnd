@@ -25,7 +25,7 @@ export default function Home() {
         
         <Header />
         <div id="divCenter">
-          <NotificationsDrawer />
+  
           <Outlet />
         </div>
       
