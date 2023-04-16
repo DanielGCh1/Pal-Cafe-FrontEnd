@@ -1,12 +1,12 @@
 import { Button, Box, Heading, VStack, Spacer } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
-import useProduct from '../context/AdministrativeProduct/AdmUseProduct';
+import useAdmProduct from '../context/AdministrativeProduct/AdmUseProduct';
 import TableComponent from '../componets/TableComponentManagerProducts';
 import { Link, useNavigate } from "react-router-dom";
 
 export default function AdministracionProductos() {
 
-    const { amdProduct, admProducts, deliteProduct, editProduct, getAdmProducts, setProduct, getProductsAux } = useProduct();
+    const { admProduct, admProducts, deleteAdmProduct, editAdmProduct, getAdmProducts, setAdmProduct, getProductsAux } = useAdmProduct();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,7 +17,7 @@ export default function AdministracionProductos() {
 
     const handleEdit = (value) => {
         if (window.confirm("¿Estás seguro de que quieres abandonar esta página para cargar la ventana de editar este ingrediente?")) {
-            setProduct(null);
+            setAdmProduct(null);
             navigate(`/home/EditarProducto/${value._id}`)
         }
     };
@@ -25,12 +25,12 @@ export default function AdministracionProductos() {
     const handleDelete = (id) => {
         if (window.confirm("¿Estás seguro de que quieres eliminar este elemento?")) {
             console.log(`Eliminar ${id}`);
-            deliteProduct(id);
+            deleteAdmProduct(id);
         }
     };
     //TODO: editar esto a productos
     const handleEditProducts = () => {
-        editProduct();
+        editAdmProduct();
     };
     return <>
         <VStack h='100vh' alignItems='center'>

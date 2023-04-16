@@ -1,46 +1,98 @@
 import React, { createContext, useState } from 'react';
-import Axios from 'axios';
+import Axios from "axios";
 import API from '../api';
-import { string } from 'yup';
 
 const AdmProductContext = createContext(null)
+
+const isUndefined = obj => {
+  if (obj === "undefined" || typeof obj === "undefined") {
+    return true;
+  }
+  return false;
+};
+
+const isNull = obj => {
+  if (obj === null) {
+    return true;
+  }
+  return false;
+};
+
+const isUndefinedOrNull = obj => {
+  if (isUndefined(obj) || isNull(obj)) {
+    return true;
+  }
+  return false;
+};
+
+const deliteItemList = (data, itemId) => {
+  var list = [];
+  if (!isUndefinedOrNull(data) && data.length > 0) {
+    list = data.filter((element) => element._id != itemId);
+  }
+  return list;
+};
+
+const searchItemList = (data, itemId) => {
+  var itemSearch = null;
+  if (!isUndefinedOrNull(data) && data.length > 0) {
+    itemSearch = data.find((element) => { return element._id == itemId })
+  }
+  return itemSearch;
+};
 
 const AdmProductProvider = props => {
 
   const [admProducts, setAdmProducts] = useState([])
-  const [admProductsfilter, setAdmProductsfilter] = useState([])
-  const [admProductSelected, setAdmProductSelected] = useState(null)
+  const [admProductsAux, setAdmProductsAux] = useState([])
+  const [admProduct, setAdmProduct] = useState(null)
 
   const getAdmProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
       const res = await Axios.get('/api/productos/get-all');
-      //const res = await axios.get('https://reqres.in/api/users');
       const data = res.data;
       setAdmProducts(data);
-      console.log(data)
-      //setAdmProducts(data);
-      console.log("productos que llegan al contex", admProducts);
+      addAdmProductsAux(data);
+      console.log("los productos llegan al contex")
     } catch (error) {
-      console.log("la consulta fallo, procedo a setear unos datos por defecto");
-      //setAdmProducts(data);
-      //console.error(error);
+      console.log("La consulta de optener productos falló");
     }
   };
 
-  const getAdmProduct = id => { //Trae un producto por medio del id
+  const getAdmProduct = async id => {
     try {
-      const admProduct = admProducts.find((admProduct) => { return admProduct.pro_id == id })
-      setAdmProductSelected(admProduct)
-    } catch (error) { }
+      const res = await Axios.get(`/api/producto/${id}`);
+      const data = res.data;
+      setAdmProduct(data[0]);
+      console.log(data)
+      console.log("Se buscó el producto");
+    } catch (error) {
+      console.log("La consulta de obtener el producto falló");
+    }
   };
 
-  const getAdmProductsfilter = async nombre => {
+  const addAdmProductsAux = async (data) => {//TODO:
+    if (!isUndefinedOrNull(data) && data.length > 0) {
+      const list = [];
+      data.map((element) => {
+        const pro = {
+          _id: element._id,
+          pro_nombre: element.pro_nombre, pro_valor_venta: element.pro_valor_venta, pro_duracion: element.pro_duracion,
+          pro_valor_tiempo: element.pro_valor_tiempo, pro_valor_unidad: element.pro_valor_unidad, pro_cantidad: element.pro_cantidad,
+          pro_precio_mano_obra: element.pro_precio_mano_obra, pro_descripcion: element.pro_descripcion, pro_imagen: element.pro_imagen,
+          pro_existencias: element.pro_existencias, pro_valor_total_unidad: element.pro_valor_total_unidad
+        }
+        list.push(pro);
+      }
+      )
+      setAdmProductsAux(list);
+    }
   };
 
   const addAdmProduct = async (values, actions) => {
     try {
-      Axios.post('/api/productos/add', {
+      Axios.post('/api/products/add', {
         pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
         pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
         pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
@@ -53,17 +105,106 @@ const AdmProductProvider = props => {
     } catch (error) { }
   };
 
+  const deleteAdmProduct = async (id) => {
+    console.log(id);
+    try {
+      // TODO: 
+      Axios.delete(`/api/productos/delete/${id}`).then((data => console.log(data)));
+      setAdmProductsAux((current) => current.filter((admProductsAux) => admProductsAux._id != id))
+      setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
+    } catch (error) { }
+  };
+
+  const editAdmProduct = async (values, actions) => {
+    try {
+      // TODO:
+      console.log(values);
+      const val = {
+        _id: values._id,
+        pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
+        pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
+        pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
+        pro_imagenUrl: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
+        pro_ingredientes: values.receta
+      };
+      Axios.put(`/api/productos/edit/${values._id}`, val).then((data => console.log(data)))
+    } catch (error) { }
+    actions.setSubmitting(false);
+  };
+
+  const editAdmProductList = async (values, proAux) => { //TODO:
+    try {
+      // TODO: 
+      console.log(values);
+      Axios.put(`/api/productos/edit/${values._id}`, values).then((data => console.log(data)))
+      proAux.pro_existencias = values.pro_existencias;
+    } catch (error) { }
+  };
+
+  const editAdmProducts = async () => {//TODO:
+    try {
+      if (admProducts.length == admProductsAux.length) {
+        for (let i = 0; i < admProducts.length; i++) {
+          if (admProducts[i].pro_existencias !== admProductsAux[i].pro_existencias) {
+            console.log("el producto ");
+            console.log(admProducts[i].pro_existencias);
+            console.log("cambio");
+            editAdmProductList(admProducts[i], admProductsAux[i]);
+          }
+        }
+      }
+      else {
+        setTimeout(() => {
+          alert(JSON.stringify("Las listas de productos no son el mismo tamaño", null, 2))
+
+        }, 1000)
+      }
+    } catch (error) { }
+  };
+
+  const getAdmProductsfilter = async nombre => {
+  };
+
+  const addIngredientList = (ingredient) => {
+    var ingredientPro = null;
+    var list = [];
+    var ing = null;
+    if (!isUndefinedOrNull(ingredient)) {
+      ing = searchItemList(admProduct.pro_ingredientes, ingredient._id);
+      if (isUndefinedOrNull(ing)) {
+        ingredientPro = {
+          _id: ingredient._id,
+          nombre_ingrediente: ingredient.ing_nombre,
+          cantidad_original_ingrediente: ingredient.ing_cantidad,
+          cantidad_ingrediente: 0,
+          precio_original_ingrediente: ingredient.ing_precio
+        }
+        list = admProduct.pro_ingredientes;
+        list.push(ingredientPro);
+        admProduct.pro_ingredientes = list;
+        window.alert("Se agregó el ingrediente");
+      }
+    }
+    else {
+      window.alert("El ingrediente no existe")
+    }
+    console.log(admProduct.pro_ingredientes);
+  };
+
   return (
     <AdmProductContext.Provider
       value={{
+        admProduct,
         admProducts,
-        admProductSelected,
-        admProductsfilter,
+        setAdmProduct,
         setAdmProducts,
-        setAdmProductSelected,
         getAdmProducts,
         getAdmProduct,
-        addAdmProduct
+        addAdmProduct,
+        deleteAdmProduct,
+        editAdmProducts,
+        editAdmProduct,
+        addIngredientList
       }}
     >
       {props.children}

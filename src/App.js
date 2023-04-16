@@ -44,6 +44,7 @@ import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
 import EditIngredient from './routes/EditIngredient';
 import EditProduct from './routes/EditProduct';
+import EditRecipe from './routes/EditRecipe';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
                         <Route path="CrearIngrediente" element={<CreateIngredient />} />
                         <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
                         <Route path="EditarProducto/:id" element={<EditProduct />} />
+                        <Route path="EditarReceta/:id" element={<EditRecipe />} />
 
                         <Route path="BuscarIngrediente" element={<ManageIngredient />} />
                         <Route
