@@ -1,37 +1,36 @@
 import { Button, Box, Heading, VStack, Spacer } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
-import useProduct from '../context/AdministrativeProduct/AdmUseProduct';
+import useAdmProduct from '../context/AdministrativeProduct/AdmUseProduct';
 import TableComponent from '../componets/TableComponentManagerProducts';
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdministracionProductos() {
 
-    const { amdProduct, admProducts, deliteProduct, editProduct, getAdmProducts } = useProduct();
-    let editProductsFilter = false;
-
-    const [list, setList] = useState([]);
+    const { admProduct, admProducts, deleteAdmProduct, editAdmProduct, getAdmProducts, setAdmProduct, getProductsAux } = useAdmProduct();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (typeof admProducts == 'undefined' || admProducts.length <= 0) {
             getAdmProducts();
         }
-        if (admProducts != null) {
-            //addElements();
-            setList(admProducts);
-        }
     }, [admProducts])
 
-    const handleEdit = (id) => {
-        console.log(id);
-
+    const handleEdit = (value) => {
+        if (window.confirm("¿Estás seguro de que quieres abandonar esta página para cargar la ventana de editar este ingrediente?")) {
+            setAdmProduct(null);
+            navigate(`/home/EditarProducto/${value._id}`)
+        }
     };
 
     const handleDelete = (id) => {
-        console.log(`Eliminar ${id}`);
-
+        if (window.confirm("¿Estás seguro de que quieres eliminar este elemento?")) {
+            console.log(`Eliminar ${id}`);
+            deleteAdmProduct(id);
+        }
     };
     //TODO: editar esto a productos
-    const handleEditProducts = () => { 
-        //editIngredients();
+    const handleEditProducts = () => {
+        editAdmProduct();
     };
     return <>
         <VStack h='100vh' alignItems='center'>
@@ -41,7 +40,7 @@ export default function AdministracionProductos() {
             </Box>
 
             <VStack maxWidth="600px" margin="0 auto" display="flex" flexDirection='column'>
-                <TableComponent data={list} onEdit={handleEdit} onDelete={handleDelete} saveChangesProducts={handleEditProducts}/>
+                <TableComponent data={admProducts} onEdit={handleEdit} onDelete={handleDelete} saveChangesProducts={handleEditProducts} />
             </VStack>
         </VStack>
 

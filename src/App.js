@@ -47,6 +47,8 @@ import { OrderProvider } from './context/Orders/OrderContext';
 import MakeOrder from './routes/makeOrder';
 import ManagerOrders from './routes/managerOrders';
 import EditOrder from './routes/EditOrder';
+import EditProduct from './routes/EditProduct';
+import EditRecipe from './routes/EditRecipe';
 
 function App() {
 
@@ -66,9 +68,11 @@ function App() {
                         <Route path="/Home" element={<Home />}>
                           <Route path="CrearIngrediente" element={<CreateIngredient />} />
                           <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
+                          <Route path="EditarProducto/:id" element={<EditProduct />} />
+                          <Route path="EditarReceta/:id" element={<EditRecipe />} />
 
-                          <Route path="AdministrarIngredientes" element={<ManagerIngredient/>} />
-                          <Route path="AdministrarOrdenes" element={<ManagerOrders/>} />
+                          <Route path="AdministrarIngredientes" element={<ManagerIngredient />} />
+                          <Route path="AdministrarOrdenes" element={<ManagerOrders />} />
                           <Route path="EditarOrden/:id" element={<EditOrder />} />
                           <Route
                             path="RegistrarProductos"

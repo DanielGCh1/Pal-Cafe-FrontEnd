@@ -10,21 +10,21 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
+const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
 
   const ref = useRef(null);
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
       if (ref.current.errors.stock != 'Existencias requeridas') {
-        saveChangesProducts();
+        saveChangesIngredients();
       }
     }
   };
 
   function validate(value) {
     const edit = data.find(element => element._id === value);
-    edit.pro_existencias = ref.current.values.stock;
+    edit.ing_existencias = ref.current.values.stock;
   }
 
   return (
@@ -45,7 +45,7 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
         },
       }}>
         <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
-          <TableCaption color='white'>Administrar Productos</TableCaption>
+          <TableCaption color='white'>Administrar Ingredientes</TableCaption>
           <Thead>
             <Tr>
               <Th color='white'>Nombre</Th>
@@ -58,18 +58,18 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
             {data.map((item) => (
               <Tr key={item._id}>
                 <Td>
-                  <Text color="white" >{item.pro_nombre}</Text>
+                  <Text color="white" >{item.ing_nombre}</Text>
                 </Td>
                 <Td>
                   <Formik
                     innerRef={ref}
-                    initialValues={{ existencias: item.pro_existencias }}
+                    initialValues={{ stock: item.ing_existencias }}
                     validationSchema={validationSchema}
                     onSubmit={() => { }}
                   >
                     {(props) => (
                       <Form>
-                        <Field name="existencias" validate={() => validate(item._id)}>
+                        <Field name="stock" validate={() => validate(item._id)}>
                           {({ field, form }) => (
                             <FormControl isInvalid={form.errors.stock && form.touched.stock}>
                               <Input
