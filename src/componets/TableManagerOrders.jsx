@@ -60,12 +60,12 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesOrders, getListProd
                 </Td>
                 <Td>
                   <Box maxH="400px" overflow="auto">
-                    <Textarea isReadOnly={true}  color="white" value={getListProductsOrder(item)}></Textarea>
+                    <Textarea isReadOnly={true} color="white" value={getListProductsOrder(item)}></Textarea>
                   </Box>
                 </Td>
                 <Td>
                   <Box maxH="400px" overflow="auto">
-                    <Textarea isReadOnly={true}  color="white" value={item.customerNote}></Textarea>
+                    <Textarea isReadOnly={true} color="white" value={item.customerNote}></Textarea>
                   </Box>
                 </Td>
                 <Td>
@@ -117,7 +117,9 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesOrders, getListProd
           </Tbody>
           <Tfoot>
             <Tr>
-              <Th color='white'>Nombre</Th>
+              <Th color='white'>Cliente</Th>
+              <Th color='white'>Lista Pedido</Th>
+              <Th color='white'>Nota Cliente</Th>
               <Th color='white'>Estado</Th>
               <Th color='white'>Editar</Th>
               <Th color='white'>Eliminar</Th>

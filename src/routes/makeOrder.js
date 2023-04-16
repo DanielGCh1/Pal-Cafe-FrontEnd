@@ -29,6 +29,29 @@ import { useRef } from "react";
 import ShoppingCartMekeOrder from '../componets/shoppingCartMekeOrder'
 import useOrders from '../context/Orders/UseOrders';
 
+const getMinor = (val) => {
+    if (val == 0) {
+        val++;
+    }
+    if (val < 10) {
+        var value = '0';
+        value = value + `${val}`
+        return value;
+    }
+    return val;
+}
+
+const getDate = () => {
+    let fechaObj = new Date();
+    let dia = fechaObj.getDay();
+    let mes = fechaObj.getMonth();
+    let anio = fechaObj.getFullYear();
+    let hora = fechaObj.getHours();
+    let minutos = fechaObj.getMinutes();
+    return `${anio}-${getMinor(mes)}-${getMinor(dia)}T${getMinor(hora)}:${getMinor(minutos)}`;
+}
+
+
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
         return true;
@@ -63,14 +86,14 @@ const getImage = obj => {
 const imprimirObjeto = obj => {
     console.log("Inicio de objeto");
     console.log(obj);
-    console.log("Fin de objeto");
+
 };
 export default function MakeOrder() {
 
     const [imagePreviewUrl, setImagePreviewUrl] = useState();
     const [image, setImage] = useState(null);
     const { customer } = useCustomer();
-    const { addOrder } = useOrders();
+    const { addOrder, calculateOrderCost, listProductsOrder } = useOrders();
 
     const ref = useRef(null);//hace referencia a los datos del formulario
 
@@ -90,7 +113,8 @@ export default function MakeOrder() {
                     phoneNumber2: customer.usu_numero_telefono2,
                     customerNote: "",
                     customer_id: customer._id,
-                    dateHour: ''
+                    dateHour: getDate(),
+                    cost: calculateOrderCost()
                 }}
 
                 validationSchema={Yup.object({
@@ -98,7 +122,7 @@ export default function MakeOrder() {
                         .required('Requerido'),
                     address: Yup.string()
                         .required('Requerido'),
-                    phoneNumber1: Yup.string()
+                    phoneNumber1: Yup.number()
                         .required('Requerido'),
                     dateHour: Yup.date().required('Este campo es obligatorio')
 
@@ -112,6 +136,7 @@ export default function MakeOrder() {
 
                 onSubmit={(values, actions) => {
                     console.log(values);
+                    console.log(getDate());
                     addOrder(values, actions);
                 }}
             >
@@ -124,7 +149,7 @@ export default function MakeOrder() {
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.name && form.touched.name}>
                                                 <FormLabel>Nombre Cliente</FormLabel>
-                                                <Input {...field} />
+                                                <Input isReadOnly={true} {...field} />
                                                 <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                                             </FormControl>
                                         )}
@@ -166,12 +191,23 @@ export default function MakeOrder() {
                                             </FormControl>
                                         )}
                                     </Field>
-                                    <Field name="dateHour">
+                                    <HStack minW='13.2rem'>
+                                        <Field name="dateHour">
+                                            {({ field, form }) => (
+                                                <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
+                                                    <FormLabel>Fecha y hora del pedido</FormLabel>
+                                                    <Input type="datetime-local" {...field} />
+                                                    <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+                                    </HStack>
+                                    <Field name='cost'>
                                         {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
-                                                <FormLabel>Fecha y hora del pedido</FormLabel>
-                                                <Input type="datetime-local" {...field} />
-                                                <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
+                                            <FormControl isInvalid={form.errors.cost && form.touched.cost}>
+                                                <FormLabel>Precio Total:</FormLabel>
+                                                <Input isReadOnly={true} {...field} type='number' />
+                                                <FormErrorMessage>{form.errors.cost}</FormErrorMessage>
                                             </FormControl>
                                         )}
                                     </Field>

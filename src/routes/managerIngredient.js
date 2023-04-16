@@ -2,7 +2,7 @@ import { Button, Box, Heading, VStack, Spacer } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import useIngredient from '../context/Ingredient/UseIngredient';
 import TableComponent from '../componets/TableComponentManagerIngredients';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ManageIngredient() {
     const { ingredient, ingredients, deliteIngredient, editIngredients, setIngredient, getIngredients, getIngredientsAux } = useIngredient();

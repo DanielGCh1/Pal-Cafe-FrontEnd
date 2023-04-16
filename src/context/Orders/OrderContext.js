@@ -26,7 +26,15 @@ const isUndefinedOrNull = obj => {
   }
   return false;
 };
-
+const calculateOrderCost = (data) => { //TODO: como se enviar la lista de productos
+  var cost = 0;
+  if (!isUndefinedOrNull(data)) {
+    data.map((element) => {
+      cost = cost + (element.amountProduct * element.price);
+    })
+  }
+  return cost;
+};
 const deliteItemList = (data, itemId) => {
   var list = [];
   if (!isUndefinedOrNull(data) && data.length > 0) {
@@ -50,6 +58,19 @@ const OrderProvider = props => {
   const [order, setOrder] = useState(null)
   const [listProductsOrder, setListProductsOrder] = useState([])
 
+  const formatoListaProductosRecibir = (data) => { //TODO: como se enviar la lista de productos
+    const list = [];
+    data.map((element) => {
+      const prodOrder = {
+        _id: element.id_producto,
+        amountProduct: element.producto_cantidad,
+        name: element.producto_nombre,
+        price: element.producto_costo
+      }
+      list.push(prodOrder);
+    })
+    return list;
+  };
   const formatoOrdenRecibir = (data) => {
     const order = {
       _id: data._id,
@@ -59,11 +80,11 @@ const OrderProvider = props => {
       reasonRejection: data.ped_motivo_rechazo,
       phoneNumber1: data.ped_numero_telefono1,
       phoneNumber2: data.ped_numero_telefono2,
-      cost: data.ped_costo,
+      cost: calculateOrderCost(data.ped_productos),
       customerNote: data.ped_nota_cliente,
       customer_id: data.ped_fk_usuario,
       specialOrder: data.ped_especial,
-      listProductsOrder: data.ped_productos,
+      listProductsOrder: formatoListaProductosRecibir(data.ped_productos),
       state: data.ped_estado
     }
     console.log(order);
@@ -80,11 +101,11 @@ const OrderProvider = props => {
     try {
       const res = await Axios.get('/api/pedidos/get-all');
       const data = res.data;
+      console.log(data);
       if (data.length > 0) {
         setOrders(darFormatoLista(data));
         setOrdersAux(darFormatoLista(data));
       }
-      console.log(orders)
     } catch (error) {
       console.log(error);
     }
@@ -123,7 +144,8 @@ const OrderProvider = props => {
           amountProduct: amount,
           name: product.name,
           image: product.image,
-          stock: product.stock
+          stock: product.stock,
+          price: product.price
         }
         list = listProductsOrder;
         list.push(prodOrder);
@@ -140,13 +162,14 @@ const OrderProvider = props => {
     }
     console.log(listProductsOrder);
   };
-  const productShippingListFormat = () => { //TODO: como se enviar la lista de productos
+  const productShippingListFormat = (data) => { //TODO: como se enviar la lista de productos
     const list = [];
-    listProductsOrder.map((element) => {
+    data.map((element) => {
       const prodOrder = {
         id_producto: element._id,
         producto_cantidad: element.amountProduct,
-        producto_nombre: element.name
+        producto_nombre: element.name,
+        producto_costo: element.price
       }
       list.push(prodOrder);
     })
@@ -163,7 +186,7 @@ const OrderProvider = props => {
       ped_nota_cliente: values.customerNote,
       ped_fk_usuario: values.customer_id,
       ped_especial: false,
-      ped_productos: productShippingListFormat()
+      ped_productos: productShippingListFormat(listProductsOrder)
     }
     return order;
   };
@@ -206,7 +229,7 @@ const OrderProvider = props => {
       ped_nota_cliente: values.customerNote,
       ped_fk_usuario: values.customer_id,
       ped_especial: false,
-      ped_productos: values.listProductsOrder,
+      ped_productos: productShippingListFormat(values.listProductsOrder),
       ped_estado: values.state,
       ped_motivo_rechazo: values.reasonRejection
     }
@@ -238,12 +261,12 @@ const OrderProvider = props => {
       })
     } catch (error) { }
   };
-  const getListProductsOrder = (item) => {
+  const getListProductsOrder = (item) => {// Convierto la lista de productos pedidos, en un string
     console.log(item);
     var list = "";
     try {
       item.listProductsOrder.map((product) => {
-        list = list + product.producto_nombre + " " + product.producto_cantidad + ". ";
+        list = list + product.name + " " + product.amountProduct + ". ";
       })
     } catch (error) { }
     return list;
@@ -265,7 +288,9 @@ const OrderProvider = props => {
         getOrders,
         editOrder,
         getListProductsOrder,
-        getOrder
+        getOrder,
+        calculateOrderCost,
+        listProductsOrder
       }}
     >
       {props.children}

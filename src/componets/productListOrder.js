@@ -2,9 +2,9 @@ import { Stack, Image, Text, IconButton, Button } from "@chakra-ui/react";
 import { MinusIcon, AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import useOrders from '../context/Orders/UseOrders';
 import { useNavigate } from "react-router-dom";
-import ItemCart from "./itemCart";
+import ItemOrder from "./itemOrder";
 
-export default function ProductListOrder(listProductsOrder) {
+export default function ProductListOrder({listProductsOrder}) {
     const { deliteProductList } = useOrders();
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function ProductListOrder(listProductsOrder) {
             <Stack spacing={4}>
 
                 {listProductsOrder.map((productCart) => (
-                    <ItemCart itemCart={productCart} color="white" 
+                    <ItemOrder itemCart={productCart} color="white" 
                     deliteProductList={deliteProductList} />
                 ))}
             </Stack>
