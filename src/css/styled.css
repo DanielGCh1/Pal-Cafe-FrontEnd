@@ -28,3 +28,139 @@
 .inputsFoms {
     color: black;
 }
+
+
+.inputStyle {
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid #39c;
+    padding: 0px 2px 0px 8px;
+    outline: none;
+}
+
+
+
+.inputStyle:focus-visible {
+    border-color: #b31b1b;
+}
+
+.inputTableStyle {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.imgLoading {
+    background-image: url("../assets/Logo.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    padding-top: 100%;
+    z-index: 2;
+}
+
+.divLoading::after {
+    content: "";
+    background: linear-gradient(to bottom, rgba(179,27,27,1) 0%, rgba(179,27,27,0) 100%);
+    position: absolute;
+    bottom: 0px;
+    left: -60%;
+    width: 110%;
+    height: 50%;
+    z-index: 0;
+    animation: spin 2s linear infinite;
+    transform-origin: 100% 0;
+}
+
+.divLoading::before {
+    content: "";
+    background: linear-gradient(to top, rgba(179,27,27,1) 0%, rgba(179,27,27,0) 100%);
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    width: 110%;
+    height: 50%;
+    z-index: 0;
+    animation: spin 2s linear infinite;
+    transform-origin: 0% 100%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.content-select select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* .content-select select::-ms-expand {
+    display: none;
+} */
+
+.content-select {
+    width: 100%;
+    position: relative;
+    color: black;
+}
+
+
+.content-select select {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    /* padding: 4px 57px 4px 9px; */
+    height: auto;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.content-select select:hover {
+    background: #B1E8CD;
+}
+
+/*  
+.content-select i{
+	position: absolute;
+	right: 20px;
+	top: calc(50% - 13px);
+	width: 2%;
+	height: 12px;
+	display: block;
+	border-left:4px solid #2AC176;
+	border-bottom:4px solid #2AC176;
+	transform: rotate(-45deg); /* Giramos el cuadrado */
+/* transition: all 0.25s ease;
+} */
+
+
+/* .content-select:hover i{
+	margin-top: 3px;
+} */
+
+.optionStyle {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+}
+
+.formFiltros {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+}

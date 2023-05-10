@@ -22,7 +22,7 @@ export default function Home() {
       >
         <Header />
         <div id="divCenter">
-          <NotificationsDrawer />
+          {/* <NotificationsDrawer /> */}
           <Outlet />
         </div>
 

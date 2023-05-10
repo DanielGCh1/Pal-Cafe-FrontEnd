@@ -2,23 +2,10 @@ import { Table, Thead, Tbody, Tr, Th, Td, Button, Modal, ModalOverlay, ModalCont
 import { createBrowserHistory } from "history";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import UsePromotion from '../context/Promotion/UsePromotion';
+import useEmployees from "../context/Employee/UseEmployees";
 
 const LookPromotions = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const { promotions, deletePromotions, getPromotions, modifitedPromotions } = UsePromotion();
-  const [filteredPromotions, setPromotionFilters] = useState([]);
-  const [isChecked, setisChecked] = useState(false);
-  const history = createBrowserHistory();
-  const [filters, setFilters] = useState({
-    name: "",
-    priceOrder: "asc",
-    active: "",
-  });
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedPromotion, setSelectedPromotion] = useState(null);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [editStockPromotions, setEditStockPromotions] = useState([]);
 
   // Sitios
   const inputStyle = {
@@ -50,6 +37,16 @@ const LookPromotions = () => {
     padding: "5px",
   };
 
+  const { employees,
+    getEmployee,
+    deleteEmpleado } = useEmployees();
+  const [filteredEmployees, setEmployeesFilters] = useState([]);
+  const history = createBrowserHistory();
+  const [filters, setFilters] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedEmployees, setSelectedEmployees] = useState(null);
+  const [editStockPromotions, setEditStockPromotions] = useState([]);
+
 
   const handleMouseOver = () => {
     setIsHovered(true);
@@ -60,13 +57,13 @@ const LookPromotions = () => {
   };
 
   useEffect(() => {
-    if (promotions.length > 0) {
-      setPromotionFilters(promotions);
+    if (employees.length > 0) {
+      setEmployeesFilters(employees);
     }
-  }, [promotions]);
+  }, [employees]);
 
   useEffect(() => {
-    getPromotions();
+    getEmployee();
   }, []);
 
   function handleAddPromotion(promotion) {
@@ -87,51 +84,49 @@ const LookPromotions = () => {
   }
 
   useEffect(() => {
-    const nameFilter = filters.name.toLowerCase();
-    const priceOrder = filters.priceOrder === "asc" ? 1 : -1;
-    const activeFilter = filters.active;
 
-    const filteredPromotions = [...promotions]
-      .filter((promotion) => {
+    const nameFilter = filters.toLowerCase();
+
+    const filteredEmployees = [...employees]
+      .filter((employees) => {
         return (
-          promotion.name.toLowerCase().includes(nameFilter) &&
-          (activeFilter === "" || promotion.active === (activeFilter === "true"))
+          employees.usu_nombre.toLowerCase().includes(nameFilter)
         );
       })
-      .sort((a, b) =>
-        (parseFloat(a.price.$numberDecimal) - parseFloat(b.price.$numberDecimal)) * priceOrder
-      );
-
-    setPromotionFilters(filteredPromotions);
-  }, [filters, promotions]);
+      setEmployeesFilters(filteredEmployees);
+  }, [filters, employees]);
 
   function handleFilterChange(event) {
-    const { name, value } = event.target;
+    const { value } = event.target;
 
-    setFilters((filters) => ({ ...filters, [name]: value }));
+    setFilters(value);
   }
 
   const handleEdit = (id) => {
     history.push(`/EditarPromociones/${id}`);
   };
 
-  const handleDelete = (promocion) => {
-    setSelectedPromotion(promocion);
+  const handleDelete = (employee) => {
+    setSelectedEmployees(employee);
     onOpen();
   };
 
   const confirmDelete = () => {
-    deletePromotions(selectedPromotion);
+    deleteEmpleado(selectedEmployees);
     onClose();
   };
 
-  const handleButtonClick = () => {
-    modifitedPromotions(editStockPromotions)
-  };
 
+  const getDate = (fechaISO) => {
+    let fechaObj = new Date(fechaISO);
+    let dia = fechaObj.getDate();
+    let mes = fechaObj.getMonth() + 1;
+    let anio = fechaObj.getFullYear();
+    let hora = fechaObj.getHours();
+    let minutos = fechaObj.getMinutes();
+    let segundos = fechaObj.getSeconds();
 
-  const handleCheck = () => {
-    setisChecked(!isChecked)
+    return `${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`;
   }
 
   return (
@@ -146,39 +141,14 @@ const LookPromotions = () => {
           </Text>
           <input
             type="text"
-            placeholder="Nombre de la promoción"
+            placeholder="Nombre de el empleado"
             name="name"
-            value={filters.name}
+            value={filters}
             onChange={handleFilterChange}
             style={inputStyle}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
           />
-          {/* <select
-            name="priceOrder"
-            value={filters.priceOrder}
-            style={selectStyle}
-            onChange={handleFilterChange}
-          >
-            <option value="asc" style={optionStyle}>Precio ascendente</option>
-            <option value="desc" style={optionStyle}>Precio descendente</option>
-          </select>
-          <select
-            name="active"
-            value={filters.active}
-            style={selectStyle}
-            onChange={handleFilterChange}
-          >
-            <option value="" style={optionStyle}>
-              Todos los estados
-            </option>
-            <option value="true" style={optionStyle}>
-              Activo
-            </option>
-            <option value="false" style={optionStyle}>
-              Inactivo
-            </option>
-          </select> */}
         </form>
       </HStack>
       <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" maxHeight="37rem" sx={{
@@ -207,37 +177,15 @@ const LookPromotions = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {filteredPromotions?.map((promocion) => (
-              <Tr key={promocion._id}>
-                <Td color="white">{promocion.name}</Td>
-                <Td color="white">
-                  {isChecked ?
-                    <NumberInput defaultValue={promocion.stock} clampValueOnBlur={false}
-                      placeholder="Existencias"
-                      onChange={(value) => {
-                        const newStock = parseInt(value);
-                        if (!isNaN(newStock)) {
-                          setIsButtonDisabled(false);
-                          promocion.stock = newStock;
-                          setPromotionFilters([...filteredPromotions]);
-                          handleAddPromotion(promocion)
-                        }
-                      }}
-                      _focus={{ borderColor: "red !important", outline: 'none' }}
-                    >
-                      <NumberInputField _focus={{ borderColor: 'red !important', boxShadow: '0 0 0 2px rgba(255, 0, 0, 0.5)' }} style={inputTableStyle} />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                    :
-                    promocion.stock
-                  }
-                </Td>
+            {filteredEmployees?.map((emp) => (
+              <Tr key={emp._id}>
+                <Td color="white">{emp.usu_nombre}</Td>
+                <Td color="white">{emp.usu_primer_apellido}</Td>
+                <Td color="white">{emp.usu_segundo_apellido}</Td>
+                <Td color="white">{getDate(emp.usu_fecha_registro)}</Td>
                 <Td>
-                  <Link to={`/Home/EditarPromociones/${promocion._id}`}>
-                    <Button onClick={() => handleEdit(promocion._id)}>
+                  <Link to={`/Home/EditarEmpleados/${emp._id}`}>
+                    <Button onClick={() => handleEdit(emp._id)}>
                       Editar
                     </Button>
                   </Link>
@@ -245,7 +193,7 @@ const LookPromotions = () => {
                 <Td>
                   <Button
                     colorScheme="red"
-                    onClick={() => handleDelete(promocion._id)}
+                    onClick={() => handleDelete(emp)}
                   >
                     Eliminar
                   </Button>
@@ -270,8 +218,8 @@ const LookPromotions = () => {
         <ModalContent>
           <ModalHeader>Eliminar promoción</ModalHeader>
           <ModalBody>
-            ¿Está seguro que desea eliminar la promoción{" "}
-            {selectedPromotion?.name}?
+            ¿Está seguro que desea eliminar el empleado{" "}
+            {selectedEmployees?.usu_nombre}?
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="red" mr={3} onClick={confirmDelete}>

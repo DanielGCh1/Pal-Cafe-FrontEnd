@@ -26,12 +26,10 @@ const PromotionProvider = props => {
         // Find the index of the edited promotion in the promotions array
         const editedPromotionIndex = promotions.findIndex(promotion => promotion._id === _id);
     
-        console.log(editedPromotionIndex)
         // Replace the edited promotion with the updated promotionif 
         const updatedPromotions = [...promotions];
         updatedPromotions[editedPromotionIndex] = { ...promotions[editedPromotionIndex], ...values };
         
-        console.log(updatedPromotions)
         setPromociones(updatedPromotions);
     }else{
       console.log("Errror al ingresar la promocion");
@@ -53,6 +51,7 @@ const PromotionProvider = props => {
       console.error(error);
     }
   };
+  
   const findPromotionById = (id) => {
     const promotion = promotions.find(promo => promo._id === id);
     return promotion;

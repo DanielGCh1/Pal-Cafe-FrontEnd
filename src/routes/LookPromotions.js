@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import UsePromotion from '../context/Promotion/UsePromotion';
 
 const LookPromotions = () => {
-  const [isHovered, setIsHovered] = useState(false);
   const { promotions, deletePromotions, getPromotions, modifitedPromotions } = UsePromotion();
   const [filteredPromotions, setPromotionFilters] = useState([]);
   const [isChecked, setisChecked] = useState(false);
@@ -21,45 +20,6 @@ const LookPromotions = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [editStockPromotions, setEditStockPromotions] = useState([]);
 
-  // Stilos
-
-  const inputStyle = {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "#fff",
-    border: "2px solid #fff",
-    borderRadius: "5px",
-    padding: "2px",
-    borderColor: isHovered ? "red" : "#fff" // Cambiar el borde a rojo si el input está en hover
-  };
-
-  const inputTableStyle = {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "#fff",
-    border: "2px solid #fff",
-    borderRadius: "5px",
-    padding: "2px",
-  };
-
-  const selectStyle = {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "#fff",
-    padding: "5px",
-  };
-
-  const optionStyle = {
-    color: "#fff",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    padding: "5px",
-  };
-
-
-  const handleMouseOver = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovered(false);
-  };
 
   useEffect(() => {
     if (promotions.length > 0) {
@@ -149,7 +109,7 @@ const LookPromotions = () => {
         Buscar promociones
       </Text>
       <HStack alignSelf={"flex-start"}>
-        <form>
+        <form className="formFiltros">
           <Text fontWeight={"bold"} color={"white"} fontSize={"18px"}>
             Filtros:
           </Text>
@@ -159,35 +119,39 @@ const LookPromotions = () => {
             name="name"
             value={filters.name}
             onChange={handleFilterChange}
-            style={inputStyle}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
+            className={"inputStyle"}
           />
-          <select
-            name="priceOrder"
-            value={filters.priceOrder}
-            style={selectStyle}
-            onChange={handleFilterChange}
-          >
-            <option value="asc" style={optionStyle}>Precio ascendente</option>
-            <option value="desc" style={optionStyle}>Precio descendente</option>
-          </select>
-          <select
-            name="active"
-            value={filters.active}
-            style={selectStyle}
-            onChange={handleFilterChange}
-          >
-            <option value="" style={optionStyle}>
-              Todos los estados
-            </option>
-            <option value="true" style={optionStyle}>
-              Activo
-            </option>
-            <option value="false" style={optionStyle}>
-              Inactivo
-            </option>
-          </select>
+          <div className="content-select">
+            <select
+              name="priceOrder"
+              value={filters.priceOrder}
+              classname={"selectStyle"}
+              onChange={handleFilterChange}
+            >
+              <option value="asc" classname={"optionStyle"}>Precio ascendente</option>
+              <option value="desc" classname={"optionStyle"}>Precio descendente</option>
+            </select>
+            {/* <i></i> */}
+          </div>
+          <div className="content-select">
+            <select
+              name="active"
+              value={filters.active}
+              classname={"selectStyle"}
+              onChange={handleFilterChange}
+            >
+              <option value="" classname={"optionStyle"}>
+                Todos los estados
+              </option>
+              <option value="true" classname={"optionStyle"}>
+                Activo
+              </option>
+              <option value="false" classname={"optionStyle"}>
+                Inactivo
+              </option>
+            </select>
+            {/* <i></i> */}
+          </div>
         </form>
       </HStack>
       <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" maxHeight="37rem" sx={{
@@ -232,7 +196,7 @@ const LookPromotions = () => {
                       }}
                       _focus={{ borderColor: "red !important", outline: 'none' }}
                     >
-                      <NumberInputField _focus={{ borderColor: 'red !important', boxShadow: '0 0 0 2px rgba(255, 0, 0, 0.5)' }} style={inputTableStyle} />
+                      <NumberInputField _focus={{ borderColor: 'red !important', boxShadow: '0 0 0 2px rgba(255, 0, 0, 0.5)' }} classname={"inputTableStyle"} />
                       <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />

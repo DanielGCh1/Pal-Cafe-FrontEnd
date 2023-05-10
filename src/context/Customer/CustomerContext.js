@@ -27,7 +27,8 @@ const CustomerProvider = props => {
     useEffect(() => {
         //  console.log(clienteSelecionado)
     }, [customer])
-*/
+    */
+   
     const getSectionCustomer = async () => {
         try {
             const res = await API.get('/use/login/:correo/:password');
@@ -63,6 +64,7 @@ const CustomerProvider = props => {
         }
         actions.setSubmitting(false)
     };
+
     const signOff = async () => {
         try {
             const custom = localStorage.getItem("usu_id_usuario");

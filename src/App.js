@@ -10,7 +10,6 @@ import BuscarMaterial from './routes/buscarMaterial';
 import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
-import { CrearProducto } from './routes/CrearProducto';
 import { ProductProvider } from './context/Product/ProductContext';
 import CreacionProductos from './routes/CreacionProductos';
 import { EmployeeProvider } from './context/Employee/EmployeeContext';
@@ -19,30 +18,23 @@ import LoginCustomer from './routes/loginCustomer';
 import RegistrarCliente from "./routes/registrarCliente";
 import Nosotros from "./routes/nosotros";
 import Contacto from "./routes/contacto";
-import BuscarCliente from './routes/buscarCliente';
-import IngredientContext, { IngredientProvider } from './context/Ingredients/IngredientContext';
+import { IngredientProvider } from './context/Ingredients/IngredientContext';
 import { ClienteProvider } from './context/Cliente/ClienteContext';
 import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
-
-
-import { useState, useMemo, useEffect } from "react";
-
-
 import PalCafe from './routes/PalCafe';
-
 import PruebasChatGpt from './routes/PruebasChatGpt';
-
 import AdministracionEmpleados from './routes/AdministracionEmpleados';
-
 import RegistrarEmpleados from './routes/RegistrarEmpleados';
 import CreacionPromociones from './routes/CreacionPromociones';
-
 import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
 import PromotionsForm from './routes/promociones';
 import LookPromotions from './routes/LookPromotions';
 import EditPromocion from './routes/editPromotion';
+import EditEmployee from './routes/editarEmpleado';
+import LookClientes from './routes/LookClientes';
+import EditClient from './routes/EditClient';
 
 function App() {
 
@@ -70,6 +62,10 @@ function App() {
                           element={<AdministracionEmpleados />}
                         />
                         <Route
+                          path="EditarEmpleados/:id"
+                          element={<EditEmployee />}
+                        />
+                        <Route
                           path="RegistrarEmpleados"
                           element={<RegistrarEmpleados />}
                         />
@@ -77,9 +73,8 @@ function App() {
                           path="CreacionPromociones"
                           element={<CreacionPromociones />}
                         />
-                        <Route path="BuscarCliente" element={<BuscarCliente />} />
-
-                        <Route path="BuscarCliente" element={<BuscarCliente />} />
+                        <Route path="BuscarClientes" element={<LookClientes />} />
+                        <Route path="EditarClientes/:id" element={<EditClient />} />
                         <Route path="HistorialProduccion" element={<HistorialProduccion />} />
                         <Route path="CrearPromociones" element={<PromotionsForm />} />
                         <Route path="BuscarPromociones" element={<LookPromotions />} />
