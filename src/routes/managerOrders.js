@@ -32,14 +32,14 @@ export default function ManargeOrders() {
         editOrders();
     };
     return <>
-        <VStack h='100vh' alignItems='center'>
+        <VStack  alignItems='center' h='100vh' maxHeight="55rem">
 
             <Box p='6' display="flex" justifyContent={'center'}>
                 <Heading color="white" fontWeight="bold" size='2xl'>Administrar Pedidos</Heading>
             </Box>
 
-            <VStack maxWidth="100rem" margin="0 auto" display="flex" flexDirection='column'>
-                <TableComponent data={orders} onEdit={handleEdit} onDelete={handleDelete} saveChangesOrders={handleEditOrders} getListProductsOrder={getListProductsOrder} />
+            <VStack maxWidth="100rem" margin="0 auto" display="flex" flexDirection='column' h='100vh' maxHeight="55rem">
+                <TableComponent data={orders} onEdit={handleEdit} onDelete={handleDelete} saveChangesOrders={handleEditOrders} getListProductsOrder={getListProductsOrder}/>
             </VStack>
         </VStack>
 

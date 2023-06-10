@@ -3,12 +3,74 @@ import Axios from "axios";
 import { useEffect } from 'react';
 import API from '../api';
 
-const isEmptyString = obj => {
-    if (obj === "" || obj.trim() === "") {//Trim: remove blank spaces
+const isUndefined = obj => {
+    if (obj === "undefined" || typeof obj === "undefined") {
         return true;
     }
     return false;
 };
+
+const isNull = obj => {
+    if (obj === null) {
+        return true;
+    }
+    return false;
+};
+
+const isUndefinedOrNull = obj => {
+    if (isUndefined(obj) || isNull(obj)) {
+        return true;
+    }
+    return false;
+};
+const calculateOrderCost = (data) => { //TODO: como se enviar la lista de productos
+    var cost = 0;
+    if (!isUndefinedOrNull(data)) {
+        data.map((element) => {
+            cost = cost + (element.amountProduct * element.price);
+        })
+    }
+    return cost;
+};
+const deliteItemList = (data, itemId) => {
+    var list = [];
+    if (!isUndefinedOrNull(data) && data.length > 0) {
+        list = data.filter((element) => element._id != itemId);
+    }
+    return list;
+};
+const getMinorDayMonth = (val) => {
+    if (val == 0) {
+        val++;
+    }
+    if (val < 10) {
+        var value = '0';
+        value = value + `${val}`
+        return value;
+    }
+    return val;
+}
+const getMinor = (val) => {
+    if (val < 10) {
+        var value = '0';
+        value = value + `${val}`
+        return value;
+    }
+    return val;
+}
+
+const getDate = (date) => {
+    console.log(date);
+    let fechaObj = new Date(date);
+    let dia = fechaObj.getDate();
+    console.log(dia);
+    let mes = fechaObj.getMonth() + 1;
+    console.log(mes);
+    let anio = fechaObj.getFullYear();
+    let hora = fechaObj.getHours();
+    let minutos = fechaObj.getMinutes();
+    return `${anio}-${getMinorDayMonth(mes)}-${getMinorDayMonth(dia)}T${getMinor(hora)}:${getMinor(minutos)}`;
+}
 
 const isObj = obj => {
     if (typeof obj === "object") {//Trim: remove blank spaces
@@ -23,25 +85,6 @@ const CustomerProvider = props => {
 
     const [customer, setCustomer] = useState(null)
 
-    const pal_usuario = {
-        usu_id_usuario: 1,
-        usu_nombre: 'Daniel',
-        usu_primer_apellido: 'Gómez',
-        usu_segundo_apellido: 'Chacón',
-        usu_fecha_registro: null,
-        usu_numero_telefono1: 61282136,
-        usu_numero_telefono2: null,
-        usu_direccion: '35 mts oeste',
-        usu_estado: "pendiente",
-        usu_correo: 'dgchaarturo@',
-        usu_url_foto: '',
-        usu_contrasenna: "1234"
-    }
-    /*
-    useEffect(() => {
-        //  console.log(clienteSelecionado)
-    }, [customer])
-*/
     const getCookie = async () => {
         try {
             const { data } = await Axios.get("/api/getCookie", {
@@ -133,14 +176,28 @@ const CustomerProvider = props => {
         */
     };
 
-
+    const editCustomer = async (values, actions) => {
+        try {
+          console.log(values);
+          const val = {
+            _id: values._id,
+            ing_nombre: values.name, ing_descripcion: values.description,
+            ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
+            ing_imagen: values.image, ing_existencias: values.stock
+          };
+          Axios.put(`/api/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+        } catch (error) { }
+        actions.setSubmitting(false);
+      };
     return (
         <CustomerContext.Provider
             value={{
                 customer,
                 getSectionCustomer,
                 loginCustomer,
-                signOff
+                signOff,
+                getDate,
+                editCustomer
             }}
         >
             {props.children}

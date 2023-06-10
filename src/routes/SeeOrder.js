@@ -35,10 +35,10 @@ const isUndefinedOrNull = obj => {
     return false;
 };
 
-export default function EditOrder() {
+export default function SeeOrder() {
     const { order, getOrder, editOrder } = useOrders();
     const params = useParams();
-    const ref = useRef(null);
+    const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
 
     useEffect(() => {
         if (!isUndefinedOrNull(params.id) && isUndefinedOrNull(order)) {
@@ -46,9 +46,8 @@ export default function EditOrder() {
             getOrder(params.id);
         }
     }, []);
-
     return <>
-        <VStack bgColor="rgba(0,0,0,.2)" h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
+        <VStack  h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
             "&::-webkit-scrollbar": {
                 width: "7px",
                 backgroundColor: "transparent",
@@ -63,7 +62,7 @@ export default function EditOrder() {
             },
         }}>
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="white" fontWeight="bold" size='2xl'>Editar Orden</Heading>
+                <Heading color="black" fontWeight="bold" size='2xl'>Pedido</Heading>
             </Box>
             {(order != null) ?
                 <Formik
@@ -102,7 +101,7 @@ export default function EditOrder() {
                     }}
                 >
                     {(props) => (
-                        <Container p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
+                        <Container bg='blackAlpha.800' p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
                             <Form>
                                 <HStack spacing='28'>
                                     <SimpleGrid columns={[1, 2, 3]} spacing='30px' alignItems='center' w="100%">
@@ -110,7 +109,7 @@ export default function EditOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.name && form.touched.name}>
                                                     <FormLabel>Nombre Cliente</FormLabel>
-                                                    <Input isReadOnly={true} {...field} />
+                                                    <Input {...field} />
                                                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -128,7 +127,7 @@ export default function EditOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.phoneNumber1 && form.touched.phoneNumber1}>
                                                     <FormLabel>Numero 1</FormLabel>
-                                                    <Input isReadOnly={true} {...field} type='number' />
+                                                    <Input {...field} type='number' />
                                                     <FormErrorMessage>{form.errors.phoneNumber1}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -137,7 +136,7 @@ export default function EditOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.phoneNumber2 && form.touched.phoneNumber2}>
                                                     <FormLabel>Numero 2</FormLabel>
-                                                    <Input isReadOnly={true} {...field} type='number' />
+                                                    <Input {...field} type='number' />
                                                     <FormErrorMessage>{form.errors.phoneNumber2}</FormErrorMessage>
                                                 </FormControl>
                                             )}
@@ -146,20 +145,17 @@ export default function EditOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.customerNote && form.touched.customerNote}>
                                                     <FormLabel>Nota Cliente</FormLabel>
-                                                    <Textarea isReadOnly={true} {...field} />
+                                                    <Textarea {...field} />
                                                     <FormErrorMessage>{form.errors.customerNote}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
                                         <Field name='state'>
                                             {({ field, form }) => (
-                                                <FormControl>
+                                                <FormControl isInvalid={form.errors.customerNote && form.touched.customerNote}>
                                                     <FormLabel>Estado</FormLabel>
-                                                    <Select {...field} color='black'>
-                                                        <option value="Pendiente">Pendiente</option>
-                                                        <option value="Aceptado">Aceptado</option>
-                                                        <option value="Rechazado">Rechazado</option>
-                                                    </Select>
+                                                    <Input {...field} />
+                                                    <FormErrorMessage>{form.errors.customerNote}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
@@ -187,7 +183,7 @@ export default function EditOrder() {
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
                                                         <FormLabel>Fecha y hora del pedido</FormLabel>
-                                                        <Input isReadOnly={true} type="datetime-local" {...field} />
+                                                        <Input type="datetime-local" {...field} />
                                                         <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
                                                     </FormControl>
                                                 )}
@@ -208,16 +204,7 @@ export default function EditOrder() {
                                     <Heading size='md'>Lista de articulos:</Heading>
                                 </Box>
 
-                                <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' edit={true} />
-                                <Button
-                                    mt={4}
-                                    colorScheme='red'
-                                    isLoading={props.isSubmitting}
-                                    type='submit'
-                                    marginTop='10'
-                                >
-                                    Guardar Cambios
-                                </Button>
+                                <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' />
                             </Form>
 
                         </Container>

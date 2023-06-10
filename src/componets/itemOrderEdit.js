@@ -2,26 +2,30 @@ import { Stack, Image, Text, IconButton } from "@chakra-ui/react";
 import { MinusIcon, AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { useState } from "react";
 import { useEffect } from 'react';
+import useOrders from '../context/Orders/UseOrders';
 
-export default function ItemCart({ itemCart, color, deliteProductList }) {
+export default function ItemOrderEdit({ itemCart, color, deliteProductList, updateCost }) {
     const [amount, setAmount] = useState(1)
-    
+
     useEffect(() => {
         setAmount(itemCart.amount);
-    }, [itemCart.amount])
-    const increaseAmountItem = () => {
+    }, [itemCart.amount]);
+
+    function increaseAmountItem () {
         if (itemCart.amountProduct < itemCart.stock) {
             itemCart.amountProduct++;
-            setAmount(itemCart.amount);
+            updateCost();
         }
-      }
-      
-      const decreaseAmountItem = () => {
+        return itemCart.amountProduct;
+    }
+
+    function decreaseAmountItem() {
         if (itemCart.amountProduct > 1) {
             itemCart.amountProduct--;
-            setAmount(itemCart.amount);
+            updateCost();
         }
-      }
+        return itemCart.amountProduct;
+    }
     return <>
         <Stack direction="row" key={itemCart._id}>
             <Image src={itemCart.image} boxSize="50px" />
@@ -33,17 +37,17 @@ export default function ItemCart({ itemCart, color, deliteProductList }) {
                 <IconButton color={color}
                     aria-label="incrementar cantidad"
                     icon={<AddIcon />}
-                    onClick={increaseAmountItem }
+                    onClick={() => setAmount(increaseAmountItem())}
                 />
                 <IconButton color={color}
                     aria-label="decrementar cantidad"
                     icon={<MinusIcon />}
-                    onClick={ decreaseAmountItem }
+                    onClick={() => setAmount(decreaseAmountItem())}
                 />
-                <DeleteIcon
+                <IconButton color={color}
                     aria-label="decrementar cantidad"
-                    icon={<MinusIcon />}
-                    onClick={() => {deliteProductList(itemCart._id) }}
+                    icon={<DeleteIcon />}
+                    onClick={() => { deliteProductList(itemCart._id) }}
                 />
             </Stack>
         </Stack>

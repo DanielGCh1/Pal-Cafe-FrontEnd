@@ -42,6 +42,38 @@ const deliteItemList = (data, itemId) => {
   }
   return list;
 };
+const getMinorDayMonth = (val) => {
+  if (val == 0) {
+      val++;
+  }
+  if (val < 10) {
+      var value = '0';
+      value = value + `${val}`
+      return value;
+  }
+  return val;
+}
+const getMinor = (val) => {
+  if (val < 10) {
+      var value = '0';
+      value = value + `${val}`
+      return value;
+  }
+  return val;
+}
+
+const getDate = (date) => {
+  console.log(date);
+  let fechaObj = new Date(date);
+  let dia = fechaObj.getDate();
+  console.log(dia);
+  let mes = fechaObj.getMonth() + 1;
+  console.log(mes);
+  let anio = fechaObj.getFullYear();
+  let hora = fechaObj.getHours();
+  let minutos = fechaObj.getMinutes();
+  return `${anio}-${getMinorDayMonth(mes)}-${getMinorDayMonth(dia)}T${getMinor(hora)}:${getMinor(minutos)}`;
+}
 
 const searchItemList = (data, itemId) => {
   var itemSearch = null;
@@ -57,6 +89,22 @@ const OrderProvider = props => {
   const [ordersAux, setOrdersAux] = useState([])
   const [order, setOrder] = useState(null)
   const [listProductsOrder, setListProductsOrder] = useState([])
+  const [imagesOrder, setImagesOrder] = useState([])
+  const [ordersCustomer, setOrdersCustomer] = useState([])
+
+
+  const getOrdersCustomer = async (id) => {
+    try {
+      const res = await Axios.get(`/api/pedidos/get_pedios_cliente/${id}`);
+      const data = res.data;
+      console.log(data);
+      if (data.length > 0) {
+        setOrdersCustomer(darFormatoLista(data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const formatoListaProductosRecibir = (data) => { //TODO: como se enviar la lista de productos
     const list = [];
@@ -65,7 +113,8 @@ const OrderProvider = props => {
         _id: element.id_producto,
         amountProduct: element.producto_cantidad,
         name: element.producto_nombre,
-        price: element.producto_costo
+        price: element.producto_costo,
+        //image: getImage(_id)
       }
       list.push(prodOrder);
     })
@@ -76,16 +125,18 @@ const OrderProvider = props => {
       _id: data._id,
       name_customer: data.ped_nombre_cliente,
       address: data.ped_direccion,
-      dateHour: data.ped_fecha_pedido,
+      dateHour: getDate(data.ped_fecha_pedido),
       reasonRejection: data.ped_motivo_rechazo,
       phoneNumber1: data.ped_numero_telefono1,
       phoneNumber2: data.ped_numero_telefono2,
-      cost: calculateOrderCost(data.ped_productos),
       customerNote: data.ped_nota_cliente,
       customer_id: data.ped_fk_usuario,
       specialOrder: data.ped_especial,
       listProductsOrder: formatoListaProductosRecibir(data.ped_productos),
-      state: data.ped_estado
+      cost: calculateOrderCost(formatoListaProductosRecibir(data.ped_productos)),
+      state: data.ped_estado,
+      imagesOrder: data.ped_imagenes_pedido,
+      sendeOrder: data.ped_enviar_pedido
     }
     console.log(order);
     return order;
@@ -124,6 +175,9 @@ const OrderProvider = props => {
 
   const deliteProductList = productId => {
     setListProductsOrder(deliteItemList(listProductsOrder, productId));
+  };
+  const deliteProductOrederList = productId => {
+    order.listProductsOrder = (deliteItemList(order.listProductsOrder, productId));
   };
 
   const editProductList = (prod, amount, actions) => {
@@ -185,12 +239,15 @@ const OrderProvider = props => {
       ped_fecha_pedido: values.dateHour,
       ped_nota_cliente: values.customerNote,
       ped_fk_usuario: values.customer_id,
-      ped_especial: false,
-      ped_productos: productShippingListFormat(listProductsOrder)
+      ped_especial: values.specialOrder,
+      ped_productos: productShippingListFormat(listProductsOrder),
+      ped_imagenes_pedido: imagesOrder,
+      ped_enviar_pedido: values.sendOrder,
     }
     return order;
   };
   const addOrder = async (values, actions) => {
+    console.log(formatoOrdenEnviar(values));
     try {
       const res = await Axios.post('/api/pedido/add',
         formatoOrdenEnviar(values)
@@ -231,7 +288,8 @@ const OrderProvider = props => {
       ped_especial: false,
       ped_productos: productShippingListFormat(values.listProductsOrder),
       ped_estado: values.state,
-      ped_motivo_rechazo: values.reasonRejection
+      ped_motivo_rechazo: values.reasonRejection,
+      ped_enviar_pedido: values.sendOrder,
     }
     return order;
   };
@@ -290,7 +348,12 @@ const OrderProvider = props => {
         getListProductsOrder,
         getOrder,
         calculateOrderCost,
-        listProductsOrder
+        listProductsOrder,
+        getOrdersCustomer,
+        ordersCustomer,
+        setOrdersCustomer,
+        setListProductsOrder,
+        deliteProductOrederList
       }}
     >
       {props.children}

@@ -1,33 +1,14 @@
-import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
 import { Container, Box, Heading, Image, GridItem, Textarea, Checkbox } from '@chakra-ui/react'
-import { Outlet } from "react-router-dom";
-import ProductosVentaPaginaPrincipal from '../componets/productosVentaPaginaPrincipal'
-
 import { SimpleGrid } from '@chakra-ui/react'
-
-import { Divider } from '@chakra-ui/react'
-
-import {
-    Stack, HStack, VStack, StackDivider, Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer, Table,
-    Thead,
-    Tbody,
-} from '@chakra-ui/react'
+import { HStack } from '@chakra-ui/react'
 import { Flex, Spacer } from '@chakra-ui/react'
 import { FormControl, FormLabel, FormErrorMessage, Button, Input } from '@chakra-ui/react'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-
-import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-
 import useCustomer from '../context/Customer/UseCustomer';
 import { useRef } from "react";
-import ShoppingCartMekeOrder from '../componets/shoppingCartMekeOrder'
 import useOrders from '../context/Orders/UseOrders';
+import { useEffect, useState } from 'react';
 
 const getMinor = (val) => {
     if (val == 0) {
@@ -88,32 +69,20 @@ const imprimirObjeto = obj => {
     console.log(obj);
 
 };
-export default function MakeOrder() {
+export default function MakeOrderSpecial() {
 
     const [imagePreviewUrl, setImagePreviewUrl] = useState();
     const [image, setImage] = useState(null);
     const { customer } = useCustomer();
     const { addOrder, calculateOrderCost, listProductsOrder } = useOrders();
-    const [cost, setCost] = useState(null);
 
-    const ref = useRef(null);
-
-    useEffect(() => {
-        console.log("si cambio la lista");
-        if (!isUndefinedOrNull(ref.current)) {
-            ref.current.values.cost = calculateOrderCost(listProductsOrder);
-        }
-        setCost(calculateOrderCost(listProductsOrder));
-    }, [cost, listProductsOrder]);
+    const ref = useRef(null);//hace referencia a los datos del formulario
 
 
-    const updateCost = () => {
-        setCost(calculateOrderCost(listProductsOrder))
-    }
     return <>
 
         <Box p='4' display="flex" justifyContent={'center'}>
-            <Heading size='2xl'>Hacer Pedido</Heading>
+            <Heading size='2xl'>Hacer Pedido Especial</Heading>
         </Box>
         {(customer != null) ?
             <Formik
@@ -125,9 +94,8 @@ export default function MakeOrder() {
                     phoneNumber2: customer.usu_numero_telefono2,
                     customerNote: "",
                     customer_id: customer._id,
-                    specialOrder: false,
+                    specialOrder: true,
                     dateHour: getDate(),
-                    cost: calculateOrderCost(listProductsOrder),
                     sendOrder: false
                 }}
 
@@ -151,17 +119,11 @@ export default function MakeOrder() {
                 onSubmit={(values, actions) => {
                     console.log(values);
                     console.log(getDate());
-                    if (listProductsOrder.length > 0) {
-                        if (window.confirm("¿Estás seguro de que quieres hacer este pedido?")) {
-                            addOrder(values, actions);
-                        }
-                        else {
-                            actions.setSubmitting(false)
-                        }
+                    if (window.confirm("¿Estás seguro de que quieres hacer este pedido especial?")) {
+                        addOrder(values, actions);
                     }
                     else {
-                        window.alert("La lista de productos, debe tener al menos, un articulo.");
-                        actions.setSubmitting(false);
+                        actions.setSubmitting(false)
                     }
                 }}
             >
@@ -192,7 +154,7 @@ export default function MakeOrder() {
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.phoneNumber1 && form.touched.phoneNumber1}>
                                                 <FormLabel>Numero 1</FormLabel>
-                                                <Input  {...field} type='number' />
+                                                <Input {...field} type='number' />
                                                 <FormErrorMessage>{form.errors.phoneNumber1}</FormErrorMessage>
                                             </FormControl>
                                         )}
@@ -201,7 +163,7 @@ export default function MakeOrder() {
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.phoneNumber2 && form.touched.phoneNumber2}>
                                                 <FormLabel>Numero 2</FormLabel>
-                                                <Input  {...field} type='number' />
+                                                <Input {...field} type='number' />
                                                 <FormErrorMessage>{form.errors.phoneNumber2}</FormErrorMessage>
                                             </FormControl>
                                         )}
@@ -211,7 +173,7 @@ export default function MakeOrder() {
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.customerNote && form.touched.customerNote}>
                                                 <FormLabel>Nota Cliente</FormLabel>
-                                                <Textarea  {...field} />
+                                                <Textarea {...field} />
                                                 <FormErrorMessage>{form.errors.customerNote}</FormErrorMessage>
                                             </FormControl>
                                         )}
@@ -221,21 +183,12 @@ export default function MakeOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
                                                     <FormLabel>Fecha y hora del pedido</FormLabel>
-                                                    <Input isReadOnly={true} type="datetime-local" {...field} />
+                                                    <Input type="datetime-local" {...field} />
                                                     <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
                                     </HStack>
-                                    <Field name="cost">
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.cost && form.touched.cost}>
-                                                <FormLabel>Precio Total:</FormLabel>
-                                                <Input isReadOnly={true} value={cost} type='number' />
-                                                <FormErrorMessage>{form.errors.cost}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
                                     <Field name="sendOrder">
                                         {({ field }) => (
                                             <FormControl>
@@ -247,11 +200,10 @@ export default function MakeOrder() {
                                     </Field>
                                 </SimpleGrid>
                             </HStack>
-                            <Box p='5'>
-                                <Heading size='md'>Lista de articulos:</Heading>
-                            </Box>
 
-                            <ShoppingCartMekeOrder idCurtomer={customer._id} updateCost={updateCost} />
+                            <Box p='4' display="flex" justifyContent={'center'}>
+                                <Heading size='md'>Imagenes del pedido</Heading>
+                            </Box>
 
                             <Button
                                 mt={4}

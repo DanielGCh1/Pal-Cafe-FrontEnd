@@ -16,7 +16,8 @@ import {
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper
+  NumberDecrementStepper,
+  IconButton
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 
@@ -28,6 +29,7 @@ import { useRef } from "react";
 import useOrders from '../context/Orders/UseOrders';
 
 import useCustomer from '../context/Customer/UseCustomer';
+import { MinusIcon, AddIcon, DeleteIcon } from '@chakra-ui/icons'
 
 const isUndefined = obj => {
   if (obj === "undefined" || typeof obj === "undefined") {
@@ -133,9 +135,11 @@ export default function ProductoVentaPedido() {
   const { products, productSelected, getProduct, getProducts } =
     useProducts();
   const { customer, getSectionCustomer, signOff } = useCustomer();
-  const {addProductList} = useOrders();
+  const { addProductList } = useOrders();
   const params = useParams()
   const refFormik = useRef(null); // Reference to the formik
+  const [amount, setAmount] = useState(1);
+
 
   //const handleInputChangeQuantityOrdered = (e) => setValueQuantityOrdered(e.target.value);
 
@@ -161,17 +165,8 @@ selected ? selected.first_name : '',
 selected ? selected.first_name : ''
 );*/
 
-  const handleClick = id => {
-    getProduct(params._id);
-  };
 
   //const { match: { params } } = this.props;
-  const hola = id => {
-
-    console.log(products);
-    console.log(productSelected);
-    console.log("Lo que imprime idProdu", params._id, ".")
-  };
 
   function validateOrderValue(value) {
     console.log("Valor de props.values.amount " + typeof refFormik.current.values.amount);
@@ -191,15 +186,22 @@ selected ? selected.first_name : ''
     console.log("order" + order);
   };
 
+  function increaseAmountItem() {
+    if (refFormik.current.values.amount < productSelected.stock) {
+      refFormik.current.values.amount++;
+    }
+    return refFormik.current.values.amount;
+  }
+
+  function decreaseAmountItem() {
+    if (refFormik.current.values.amount > 1) {
+      refFormik.current.values.amount--;
+    }
+    return refFormik.current.values.amount;
+  }
+
 
   return <>
-
-
-
-    <Button onClick={hola}>
-
-    </Button>
-
     <SimpleGrid
       columns={{ base: 1, lg: 2 }}
       spacing={{ base: 8, md: 10 }}
@@ -258,10 +260,10 @@ selected ? selected.first_name : ''
               {getDescription(productSelected)}
             </Text>
           </VStack>
-          {(getStock(productSelected) >= 1 && (customer != null)) ?
+          {(getStock(productSelected) >= 1 && (customer != null) && customer.usu_estado === "Aceptado") ?
 
             <Formik
-              initialValues={{ amount: 1}}
+              initialValues={{ amount: amount }}
               innerRef={refFormik}
               onSubmit={(values, actions) => {
                 /*
@@ -269,12 +271,35 @@ selected ? selected.first_name : ''
                   alert(JSON.stringify(values, null, 2))
                   actions.setSubmitting(false)
                 }, 1000)*/
-                addProductList(productSelected , values.amount, actions);
+                addProductList(productSelected, values.amount, actions);
               }}
             >
               {(props) => (
                 <Form>
-                  <NumberInputFormik value={props} nam={'amount'} val={validateOrderValue} />
+                  {/*
+                  <NumberInputFormik item={productSelected} value={props.values.amount} nam={'amount'} val={validateOrderValue} />
+
+                  */}
+
+                  <Field name={'amount'}>
+                    {({ field, form }) => (
+                      <Stack direction="row" alignItems="center">
+
+                        <Text>Cantidad: {amount}</Text>
+
+                        <IconButton color={'black'}
+                          aria-label="incrementar cantidad"
+                          icon={<AddIcon />}
+                          onClick={() => setAmount(increaseAmountItem())}
+                        />
+                        <IconButton color={'black'}
+                          aria-label="decrementar cantidad"
+                          icon={<MinusIcon />}
+                          onClick={() => setAmount(decreaseAmountItem())}
+                        />
+                      </Stack>
+                    )}
+                  </Field>
 
                   <Button
                     mt={4}
@@ -289,15 +314,21 @@ selected ? selected.first_name : ''
               )}
             </Formik>
             :
-            (customer != null) ?
+            (getStock(productSelected) <= 0) ?
               <Stack spacing={1} alignItems='center'>
                 <Text fontSize='2xl' fontWeight="bold" p='25px'>Producto no disponible en este momento</Text>
 
               </Stack>
-              : <Stack spacing={1} alignItems='center'>
-                <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sección y estar aprobado, para registrar productos al carrito de compra</Text>
+              : (!isUndefinedOrNull(customer) && customer.usu_estado !== "Aceptado") ?
+                <Stack spacing={1} alignItems='center'>
+                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sección y estar aprobado, para registrar productos al carrito de compra</Text>
 
-              </Stack>
+                </Stack>
+                :
+                <Stack spacing={1} alignItems='center'>
+                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe estar aprobado, para registrar productos al carrito de compra</Text>
+
+                </Stack>
           }
 
 

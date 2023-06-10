@@ -85,7 +85,7 @@ export default function EditProduct() {
         }
     }, []);
     return <>
-        <VStack bg="rgba(0,0,0,.4)" h='100vh' overflowY="scroll" maxHeight="37rem" sx={{
+        <VStack /*bg="rgba(0,0,0,.4)"*/ h='100vh' overflowY="scroll" maxHeight="55.4rem" sx={{
             "&::-webkit-scrollbar": {
                 width: "7px",
                 backgroundColor: "transparent",
@@ -155,8 +155,8 @@ export default function EditProduct() {
                         }}
                     >
                         {(props) => (
-                            <Form>
-                                <SimpleGrid columns={[1, 2, 3]} spacing='5%' alignItems='center' color='white'>
+                            <Form >
+                                <SimpleGrid columns={[1, 2, 3]} spacing='5%' alignItems='center' color='white'  >
                                     <GridItem rowSpan={2}>
                                         {/* Este fiel, es el de imagen, aquí es donde se busca la imagen*/}
                                         <Field name="image" validate={validateImage} h='calc(100vh)'>
@@ -308,7 +308,7 @@ export default function EditProduct() {
                                         colorScheme='orange'
                                         onClick={() => handleEdit()}
                                     >
-                                        Editar la receta de este producto
+                                        Editar Receta
                                     </Button>
                                 </SimpleGrid>
                             </Form>

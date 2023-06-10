@@ -4,27 +4,65 @@ import * as Yup from 'yup';
 import { Table, Tbody, Tr, Td, Button, IconButton, Text, FormControl, FormErrorMessage, TableContainer, TableCaption, Thead, Th, Input, Tfoot, Box } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useRef } from "react";
+import { useState } from 'react';
 
 const validationSchema = Yup.object().shape({
-  stock: Yup.number().required('Existencias requeridas'),
+  amount: Yup.number().required('Existencias requeridas'),
 });
 
+const isUndefined = obj => {
+  if (obj === "undefined" || typeof obj === "undefined") {
+    return true;
+  }
+  return false;
+};
 
-const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
+const isNull = obj => {
+  if (obj === null) {
+    return true;
+  }
+  return false;
+};
+
+const isUndefinedOrNull = obj => {
+  if (isUndefined(obj) || isNull(obj)) {
+    return true;
+  }
+  return false;
+};
+
+const TableComponentEditRecipe = ({ data, onDelete, saveChangesRecipe, ingredients }) => {
 
   const ref = useRef(null);
+  const refCost = useRef(null);
+  const [cost, setCost] = useState(null);
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
-      if (ref.current.errors.stock != 'Existencias requeridas') {
-        saveChangesIngredients();
+      if (ref.current.errors.amount != 'Existencias requeridas') {
+        saveChangesRecipe();
       }
     }
   };
 
+  const searchItemList = (data, itemId) => {
+    if (!isUndefinedOrNull(data) && data.length > 0) {
+      return data.find((element) => { return element._id == itemId });
+    }
+    return null;
+  };
+
+  const getCost = (itemId, amount) => {
+    const ingredient = searchItemList(ingredients, itemId);
+    return (ingredient.ing_precio / ingredient.ing_cantidad) * amount;
+  }
+
   function validate(value) {
     const edit = data.find(element => element._id === value);
-    edit.ing_existencias = ref.current.values.stock;
+    edit.cantidad_ingrediente = ref.current.values.amount;
+    refCost.current.values.cost = getCost(value, edit.cantidad_ingrediente);
+    console.log(refCost.current.values.cost);
+    setCost(refCost.current.values.cost);
   }
 
   return (
@@ -49,8 +87,9 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
           <Thead>
             <Tr>
               <Th color='white'>Nombre</Th>
-              <Th color='white'>Existencias</Th>
-              <Th color='white'>Editar</Th>
+              <Th color='white'>Unidad</Th>
+              <Th color='white'>Cantidad</Th>
+              <Th color='white'>Costo Total</Th>
               <Th color='white'>Eliminar</Th>
             </Tr>
           </Thead>
@@ -58,35 +97,37 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
             {data.map((item) => (
               <Tr key={item._id}>
                 <Td>
-                  <Text color="white" >{item.ing_nombre}</Text>
+                  <Text color="white" >{item.nombre_ingrediente}</Text>
+                </Td>
+                <Td>
+                  <Text color="white" >{item.unidad}</Text>
                 </Td>
                 <Td>
                   <Formik
                     innerRef={ref}
-                    initialValues={{ stock: item.ing_existencias }}
+                    initialValues={{ amount: item.cantidad_ingrediente }}
                     validationSchema={validationSchema}
                     onSubmit={() => { }}
                   >
                     {(props) => (
                       <Form>
-                        <Field name="stock" validate={() => validate(item._id)}>
+                        <Field name="amount" validate={() => validate(item._id)}>
                           {({ field, form }) => (
-                            <FormControl isInvalid={form.errors.stock && form.touched.stock}>
+                            <FormControl isInvalid={form.errors.amount && form.touched.amount}>
                               <Input
                                 {...field}
                                 type="number"
                                 color='white'
                                 style={{
                                   border:
-                                    props.stock && props.stock
+                                    props.amount && props.amount
                                       ? '1px solid red'
                                       : '',
                                 }}
                               /*onChange={() => editElement(item._id)}*/
                               />
-                              <FormErrorMessage fontWeight="bold">{form.errors.stock}</FormErrorMessage>
+                              <FormErrorMessage fontWeight="bold">{form.errors.amount}</FormErrorMessage>
                             </FormControl>
-
                           )}
                         </Field>
                       </Form>
@@ -94,11 +135,37 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
                   </Formik>
                 </Td>
                 <Td>
-                  <IconButton
-                    aria-label="Editar"
-                    icon={<EditIcon />}
-                    onClick={() => onEdit(item)}
-                  />
+                  <Formik
+                    innerRef={refCost}
+                    initialValues={{ cost: getCost(item._id, item.cantidad_ingrediente) }}
+                    validationSchema={validationSchema}
+                    onSubmit={() => { }}
+                  >
+                    {(props) => (
+                      <Form>
+                        <Field name="cost">
+                          {({ field, form }) => (
+                            <FormControl isInvalid={form.errors.cost && form.touched.cost}>
+                              <Input
+                                isReadOnly={true}
+                                {...field}
+                                type="number"
+                                color='white'
+                                style={{
+                                  border:
+                                    props.cost && props.cost
+                                      ? '1px solid red'
+                                      : '',
+                                }}
+                              /*onChange={() => editElement(item._id)}*/
+                              />
+                              <FormErrorMessage fontWeight="bold">{form.errors.cost}</FormErrorMessage>
+                            </FormControl>
+                          )}
+                        </Field>
+                      </Form>
+                    )}
+                  </Formik>
                 </Td>
                 <Td>
                   <IconButton
@@ -113,8 +180,9 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
           <Tfoot>
             <Tr>
               <Th color='white'>Nombre</Th>
-              <Th color='white'>Existencias</Th>
-              <Th color='white'>Editar</Th>
+              <Th color='white'>Unidad</Th>
+              <Th color='white'>Cantidad</Th>
+              <Th color='white'>Costo Total</Th>
               <Th color='white'>Eliminar</Th>
             </Tr>
           </Tfoot>
@@ -128,4 +196,4 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
   );
 };
 
-export default TableComponent;
+export default TableComponentEditRecipe;

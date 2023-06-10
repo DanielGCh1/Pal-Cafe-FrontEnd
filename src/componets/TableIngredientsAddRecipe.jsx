@@ -10,7 +10,7 @@ const TableComponent = ({ data, onAdd }) => {
     return (
 
         <TableContainer width="100%">
-            <Box overflowY="scroll" maxHeight="25rem" sx={{
+            <Box overflowY="scroll" maxHeight="15rem" sx={{
                 "&::-webkit-scrollbar": {
                     width: "7px",
                     backgroundColor: "transparent",
@@ -25,7 +25,6 @@ const TableComponent = ({ data, onAdd }) => {
                 },
             }}>
                 <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
-                    <TableCaption color='white'>Ingredientes</TableCaption>
                     <Thead>
                         <Tr>
                             <Th color='white'>Nombre</Th>

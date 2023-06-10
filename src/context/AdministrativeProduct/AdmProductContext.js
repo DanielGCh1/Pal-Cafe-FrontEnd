@@ -26,19 +26,18 @@ const isUndefinedOrNull = obj => {
 };
 
 const deliteItemList = (data, itemId) => {
-  var list = [];
   if (!isUndefinedOrNull(data) && data.length > 0) {
-    list = data.filter((element) => element._id != itemId);
+    return data.filter((element) => element._id != itemId);
   }
-  return list;
+  return [];
 };
 
 const searchItemList = (data, itemId) => {
-  var itemSearch = null;
   if (!isUndefinedOrNull(data) && data.length > 0) {
-    itemSearch = data.find((element) => { return element._id == itemId })
+    console.log(data.find((element) => { return element._id == itemId}));
+    return data.find((element) => { return element._id == itemId});
   }
-  return itemSearch;
+  return null;
 };
 
 const AdmProductProvider = props => {
@@ -114,6 +113,12 @@ const AdmProductProvider = props => {
       setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
     } catch (error) { }
   };
+  const editAdmProductRecipe = async () => {
+    try {
+
+      Axios.put(`/api/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
+    } catch (error) { }
+  };
 
   const editAdmProduct = async (values, actions) => {
     try {
@@ -170,12 +175,15 @@ const AdmProductProvider = props => {
     var list = [];
     var ing = null;
     if (!isUndefinedOrNull(ingredient)) {
+      console.log(ingredient);
       ing = searchItemList(admProduct.pro_ingredientes, ingredient._id);
+      console.log(ing);
       if (isUndefinedOrNull(ing)) {
         ingredientPro = {
           _id: ingredient._id,
           nombre_ingrediente: ingredient.ing_nombre,
           cantidad_original_ingrediente: ingredient.ing_cantidad,
+          unidad: ingredient.ing_tipo_unidad,
           cantidad_ingrediente: 0,
           precio_original_ingrediente: ingredient.ing_precio
         }
@@ -191,6 +199,25 @@ const AdmProductProvider = props => {
     console.log(admProduct.pro_ingredientes);
   };
 
+  const deliteIngredientList = (ingredient) => {
+    var list = [];
+    var ing = null;
+    if (!isUndefinedOrNull(ingredient)) {
+      ing = searchItemList(admProduct.pro_ingredientes, ingredient);
+      console.log(ingredient);
+      console.log(admProduct.pro_ingredientes);
+      if (!isUndefinedOrNull(ing)) {
+        admProduct.pro_ingredientes = deliteItemList( admProduct.pro_ingredientes ,ing._id );
+        console.log("Se elimino el ingrediente");
+        window.alert("Se elimino el ingrediente");
+      }
+    }
+    else {
+      console.log("El ingrediente no existe en la lista");
+      window.alert("El ingrediente no existe en la lista")
+    }
+    console.log(admProduct.pro_ingredientes);
+  };
   return (
     <AdmProductContext.Provider
       value={{
@@ -204,7 +231,9 @@ const AdmProductProvider = props => {
         deleteAdmProduct,
         editAdmProducts,
         editAdmProduct,
-        addIngredientList
+        addIngredientList,
+        editAdmProductRecipe,
+        deliteIngredientList
       }}
     >
       {props.children}

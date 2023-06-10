@@ -75,7 +75,7 @@ export default function EditIngredient() {
         }
     }, []);
     return <>
-        <VStack bg="rgba(0,0,0,.4)" h='100vh' overflowY="scroll" maxHeight="37rem" sx={{
+        <VStack bg="rgba(0,0,0,.4)" h='100vh' overflowY="scroll" maxHeight="55.4rem" sx={{
             "&::-webkit-scrollbar": {
                 width: "7px",
                 backgroundColor: "transparent",

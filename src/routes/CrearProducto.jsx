@@ -16,7 +16,20 @@ export const CrearProducto = () => {
   },[selected])
 
   return (
-    <VStack m="1%">
+    <VStack m="1%" overflowY="scroll" maxHeight="55.4rem" sx={{
+      "&::-webkit-scrollbar": {
+          width: "7px",
+          backgroundColor: "transparent",
+      },
+      "&::-webkit-scrollbar-thumb": {
+          bg: "gray.400",
+          borderRadius: "full",
+          opacity: "0.4",
+          "&:hover": {
+              opacity: "0.7",
+          },
+      },
+  }}>
       <HStack spacing={10}>
         <Formik
           initialValues={{

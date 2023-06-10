@@ -38,7 +38,20 @@ export default function Header() {
 
     return <>
         <Container position='fixed' width='15%' maxWidth="15%" h='calc(100vh)' bg='white' color='black' p='0' m="0">
-            <VStack>
+            <VStack h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
+                "&::-webkit-scrollbar": {
+                    width: "7px",
+                    backgroundColor: "transparent",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                    bg: "gray.400",
+                    borderRadius: "full",
+                    opacity: "0.4",
+                    "&:hover": {
+                        opacity: "0.7",
+                    },
+                },
+            }} >
                 <Menu>
                     <Container height="120px" w="100%" maxWidth="100%" bg="black" p="0px" display="flex" justifyContent="center" alignItems="center">
                         <Image src={require("../assets/Logo.png")} w="100px" h="100px"></Image>

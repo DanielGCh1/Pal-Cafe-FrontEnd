@@ -49,6 +49,8 @@ import ManagerOrders from './routes/managerOrders';
 import EditOrder from './routes/EditOrder';
 import EditProduct from './routes/EditProduct';
 import EditRecipe from './routes/EditRecipe';
+import SeeOrder from './routes/SeeOrder';
+import MakeOrderSpecial from './routes/makeOrderSpecial';
 
 function App() {
 
@@ -117,6 +119,11 @@ function App() {
                           <Route path="Nosotros" element={<Nosotros />} />
                           <Route path="Contacto" element={<Contacto />} />
                           <Route path="CarritoDeCompra" element={<CarritoDeCompra />} />
+                          <Route path="VerOrden/:id" element={<SeeOrder />} />
+                          <Route
+                            path="HacerPedidoEspecial"
+                            element={<MakeOrderSpecial />}
+                          />
                         </Route>
 
                         <Route path="PruebasChatGpt" element={<PruebasChatGpt />} />

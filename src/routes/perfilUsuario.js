@@ -1,8 +1,8 @@
 import HeaderPaginaPrincipal from '../componets/headerPaginaPrincipal'
-import { Container, Box, Heading, Image, GridItem } from '@chakra-ui/react'
+import { Container, Box, Heading, Image, GridItem, Icon } from '@chakra-ui/react'
 import { Outlet } from "react-router-dom";
 import ProductosVentaPaginaPrincipal from '../componets/productosVentaPaginaPrincipal'
-
+import { FaTimes } from "react-icons/fa";
 import { SimpleGrid } from '@chakra-ui/react'
 
 import { Divider } from '@chakra-ui/react'
@@ -25,19 +25,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import useCustomer from '../context/Customer/UseCustomer';
+import useOrders from '../context/Orders/UseOrders';
 import { useRef } from "react";
+import TableOrdersCustomer from '../componets/TableOrdersCustomer';
 
-const Fila = () => {
-    const [hoverImage, setHoverImege] = useState(false);
-
-    return <>
-        <Tr alignItems='center' textAlign="center">
-            <Td textAlign="center" >1</Td>
-            <Td textAlign="center">₡ 1 200</Td>
-            <Td textAlign="center">Pan dulce</Td>
-        </Tr>
-    </>
-}
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
         return true;
@@ -76,34 +67,54 @@ const imprimirObjeto = obj => {
 };
 export default function PerfilUsuario() {
 
-    const [imagePreviewUrl, setImagePreviewUrl] = useState();
+    const { customer, getDate, editCustomer } = useCustomer();
+    const { getOrdersCustomer, ordersCustomer, setOrdersCustomer, getListProductsOrder } = useOrders();
+    const [imagePreviewUrl, setImagePreviewUrl] = useState();/*esta es la url de la image, para el image */
     const [image, setImage] = useState(null);
+    const navigate = useNavigate();
 
-    const ref = useRef(null);//hace referencia a los datos del formulario
+    const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
 
-    const handleImageChange = (event) => {
+    const handleImageChange = (event) => {/*Se activa cuando se hace un cambio en la imagen, 
+    normalmente, es cuando se agrega una imagen, y convertirla a url*/
         event.preventDefault();
         let reader = new FileReader();
         let file = event.target.files[0];
-        setImage(file);
-        ref.current.values.foto = file;
+
+        //ref.current.values.image = file;
+        validateImage(ref.current.values.image);
         reader.onloadend = () => {
             setImagePreviewUrl(reader.result);
         };
         reader.readAsDataURL(file);
     };
+    const handleImageDelete = () => { /*Se activa cuando se elimina la imagen*/
+        setImagePreviewUrl(null);
+        //ref.current.values.image = null;
+    };
+    function validateImage(value) { /*Valida si el archivo que se subio, es de tipo imagen*/
+        /*let error
+        if (isNull(value)) {
+            return error = 'La imagen del ingrediente es requerida'
+        }
+        if (!value.type.includes("image/")) { tengo que limitar por jpg y png
+            return error = "Ingrese una imagen válida"
+        }
+        return error*/
+    }
 
-    const { customer } = useCustomer();
-    /*
-        const errors = validate(
-            clienteSelecionado ? clienteSelecionado.id : '',
-            clienteSelecionado ? clienteSelecionado.last_name : '',
-            clienteSelecionado ? clienteSelecionado.first_name : '',
-            clienteSelecionado ? clienteSelecionado.email : '',
-            clienteSelecionado ? clienteSelecionado.first_name : '',
-            clienteSelecionado ? clienteSelecionado.first_name : ''
-        );
-    */
+    const seeOrder = (id) => {
+        if (window.confirm("¿Estás seguro de que quieres habandonar esta pagina, para cargar la ventana de vista del pedido?")) {
+            setOrdersCustomer(null);
+            navigate(`/PalCafe/VerOrden/${id}`)
+        }
+    };
+
+    useEffect(() => {
+        if (!isUndefinedOrNull(customer) && (typeof ordersCustomer == 'undefined' || ordersCustomer.length <= 0)) {
+            getOrdersCustomer(customer._id);//TODO:
+        }
+    }, [customer])
     return <>
 
         <Box p='4' display="flex" justifyContent={'center'}>
@@ -113,37 +124,35 @@ export default function PerfilUsuario() {
             <Formik
                 innerRef={ref}
                 initialValues={{
-                    nombre: customer.usu_nombre,
-                    primerApellido: customer.usu_primer_apellido,
-                    segundoApellido: customer.usu_segundo_apellido,
+                    name: customer.usu_nombre,
+                    user: customer.usu_usuario,
+                    surname: customer.usu_primer_apellido,
+                    secondSurname: customer.usu_segundo_apellido,
+                    registrationDate: getDate(customer.usu_fecha_registro),
+                    firstNumber: customer.usu_numero_telefono1,
+                    secondNumber: customer.usu_numero_telefono2,
+                    address: customer.usu_direccion,
+                    state: customer.usu_estado,
                     email: customer.usu_correo,
-                    numeroUno: customer.usu_numero_telefono1,
-                    numeroDos: '',
-                    direcciom: customer.usu_direccion,
-                    foto: ''
+                    password: '',
+                    newPassword: '',
+                    image: customer.usu_foto
                 }}
 
                 validationSchema={Yup.object({
-                    nombre: Yup.string()
+                    name: Yup.string()
                         .required('Requerido'),
-                    primerApellido: Yup.string()
+                    user: Yup.string()
                         .required('Requerido'),
-                    segundoApellido: Yup.string()
+                    surname: Yup.string()
+                        .required('Requerido'),
+                    secondSurname: Yup.string()
+                        .required('Requerido'),
+                    firstNumber: Yup.number()
+                        .required('Requerido'),
+                    address: Yup.string()
                         .required('Requerido'),
                     email: Yup.string()
-                        .email('Invalid email address')
-                        .required('Requerido'),
-                    primerApellido: Yup.string()
-                        .required('Requerido'),
-                    segundoApellido: Yup.string()
-                        .required('Requerido'),
-                    numeroUno: Yup.number()
-                        .required('Requerido'),
-                    direcciom: Yup.string()
-                        .required('Requerido'),
-                    contra: Yup.string()
-                        .required('Requerido'),
-                    repContra: Yup.string()
                         .required('Requerido'),
                     /*
                 foto: Yup.mixed().required("Debes subir una imagen").test(
@@ -154,10 +163,11 @@ export default function PerfilUsuario() {
                 })}
 
                 onSubmit={(values, actions) => {
-                    setTimeout(() => {
+                    /*setTimeout(() => {
                         alert(JSON.stringify(values, null, 2))
                         actions.setSubmitting(false)
-                    }, 1000)
+                    }, 1000)*/
+                    editCustomer(values, actions);
                 }}
             >
                 {(props) => (
@@ -166,65 +176,125 @@ export default function PerfilUsuario() {
                             <HStack spacing='28'>
                                 <SimpleGrid columns={[1, 2, 3]} spacing='40px' alignItems='center'>
                                     <GridItem rowSpan={2}>
-                                        <Field name="foto">
+                                        <Field name="image" validate={validateImage} h='calc(100vh)'>
                                             {({ field, form }) => (
-                                                <FormControl>
+                                                <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
+                                                    display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
                                                     <FormLabel htmlFor="foto">Foto</FormLabel>
                                                     {imagePreviewUrl ? (
-                                                        <Box mb={4}>
-                                                            <Image src={imagePreviewUrl} alt="Preview" />
+                                                        <Box mt={4} pos="relative">
+                                                            <Image src={imagePreviewUrl}
+                                                                width='200px'
+                                                                height='200px'
+                                                                alt="Imagen seleccionada" />
+                                                            <Button
+                                                                pos="absolute"
+                                                                top="0"
+                                                                right="0"
+                                                                colorScheme="red"
+                                                                onClick={handleImageDelete}
+                                                            >
+                                                                <Icon as={FaTimes} />
+                                                            </Button>
                                                         </Box>
                                                     ) : null}
+
+                                                    <Button
+                                                        colorScheme="green"
+                                                        size="sm"
+                                                        borderRadius="md"
+                                                        onClick={() => document.getElementById('image').click()}
+                                                    >
+                                                        Buscar
+                                                    </Button>
                                                     <Input
-                                                        {...''}
-                                                        border='null'
+                                                        style={{ display: 'none' }}
                                                         placeholder='Debe incluir una imagen'
                                                         id="image"
                                                         type="file"
-                                                        accept="image/*"
+                                                        accept=".jpg, .png"
                                                         onChange={handleImageChange}
                                                     />
+                                                    <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
 
                                     </GridItem>
 
-                                    <Field name='nombre'>
+                                    <Field name='name'>
                                         {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
+                                            <FormControl isInvalid={form.errors.name && form.touched.name}>
                                                 <FormLabel>Nombre</FormLabel>
                                                 <Input {...field} />
-                                                <FormErrorMessage>{form.errors.nombre}</FormErrorMessage>
+                                                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                                             </FormControl>
                                         )}
                                     </Field>
-                                    <Field name='primerApellido'>
+                                    <Field name='user'>
                                         {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.primerApellido && form.touched.primerApellido}>
+                                            <FormControl isInvalid={form.errors.user && form.touched.user}>
+                                                <FormLabel>Usuario</FormLabel>
+                                                <Input isReadOnly={true} {...field} />
+                                                <FormErrorMessage>{form.errors.user}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='surname'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.surname && form.touched.surname}>
                                                 <FormLabel>Primer apellido</FormLabel>
                                                 <Input {...field} />
-                                                <FormErrorMessage>{form.errors.primerApellido}</FormErrorMessage>
+                                                <FormErrorMessage>{form.errors.surname}</FormErrorMessage>
                                             </FormControl>
                                         )}
                                     </Field>
-                                    <Field name='segundoApellido'>
+                                    <Field name='secondSurname'>
                                         {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.segundoApellido && form.touched.segundoApellido}>
+                                            <FormControl isInvalid={form.errors.secondSurname && form.touched.secondSurname}>
                                                 <FormLabel>Segundo apellido</FormLabel>
                                                 <Input {...field} />
-                                                <FormErrorMessage>{form.errors.segundoApellido}</FormErrorMessage>
+                                                <FormErrorMessage>{form.errors.secondSurname}</FormErrorMessage>
                                             </FormControl>
                                         )}
                                     </Field>
-                                    <FormControl>
-                                        <FormLabel>Fecha de registro: </FormLabel>
-                                        <Input
-                                            placeholder="Select Date and Time"
-                                            size="md"
-                                            type="date"
-                                        />
-                                    </FormControl>
+                                    <Field name='firstNumber'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.firstNumber && form.touched.firstNumber}>
+                                                <FormLabel>Numero de teléfono 1</FormLabel>
+                                                <Input {...field} type='number' />
+                                                <FormErrorMessage>{form.errors.firstNumber}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='secondNumber'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.secondNumber && form.touched.secondNumber}>
+                                                <FormLabel>Numero de teléfono 2</FormLabel>
+                                                <Input {...field} type='number' />
+                                                <FormErrorMessage>{form.errors.secondNumber}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='address'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.address && form.touched.address}>
+                                                <FormLabel>Dirección</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='state'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.state && form.touched.state}>
+                                                <FormLabel>Estado Cliente</FormLabel>
+                                                <Input isReadOnly={true} {...field} />
+                                                <FormErrorMessage>{form.errors.state}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+
                                     <Field name='email'>
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.email && form.touched.email}>
@@ -234,78 +304,48 @@ export default function PerfilUsuario() {
                                             </FormControl>
                                         )}
                                     </Field>
-                                    <Field name='numeroUno'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.numeroUno && form.touched.numeroUno}>
-                                                <FormLabel>Numero de teléfono 1</FormLabel>
-                                                <Input {...field} type='number' />
-                                                <FormErrorMessage>{form.errors.numeroUno}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
-                                    <Field name='numeroDos'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.numeroDos && form.touched.numeroDos}>
-                                                <FormLabel>Numero de teléfono 2</FormLabel>
-                                                <Input {...field} type='number' />
-                                                <FormErrorMessage>{form.errors.numeroDos}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
-                                    <Field name='direcciom'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.direcciom && form.touched.direcciom}>
-                                                <FormLabel>Dirección</FormLabel>
-                                                <Input {...field} />
-                                                <FormErrorMessage>{form.errors.direcciom}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
-                                    <Field name='contra'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.contra && form.touched.contra}>
-                                                <FormLabel>Contraseña</FormLabel>
-                                                <Input {...field} />
-                                                <FormErrorMessage>{form.errors.contra}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
-                                    <Field name='repContra'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.repContra && form.touched.repContra}>
-                                                <FormLabel>Repetir contraseña</FormLabel>
-                                                <Input {...field} />
-                                                <FormErrorMessage>{form.errors.repContra}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
 
-                                    <FormControl>
-                                        <FormLabel>Estado</FormLabel>
-                                        <FormLabel>Aceptado</FormLabel>
-                                    </FormControl>
+                                    <Field name='password'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.password && form.touched.password}>
+                                                <FormLabel>Contraseña Actual</FormLabel>
+                                                <Input {...field} type="password" />
+                                                <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='newPassword'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.newPassword && form.touched.newPassword}>
+                                                <FormLabel>Nueva Contraseña</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage>{form.errors.newPassword}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <HStack minW='13.2rem'>
+                                        <Field name="dateHour">
+                                            {({ field, form }) => (
+                                                <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
+                                                    <FormLabel>Fecha y hora de registro</FormLabel>
+                                                    <Input isReadOnly={true} type="datetime-local" {...field} />
+                                                    <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+                                    </HStack>
                                 </SimpleGrid>
                             </HStack>
                             <Box p='5'>
                                 <Heading size='md'>Pedidos:</Heading>
                             </Box>
 
-                            <TableContainer width='100%' bg='white' color='black'>
-                                <Table variant='striped' colorScheme='blackAlpha'>
-                                    <Thead bg='red.900'>
-                                        <Tr >
-                                            <Th color='white' textAlign="center">Pedido Numero:</Th>
-                                            <Th color='white' textAlign="center">Costo</Th>
-                                            <Th color='white' textAlign="center">Descripción</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody alignItems='center'>
-                                        <Fila />
-                                        <Fila />
-                                        <Fila />
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
+                            <VStack alignItems='center' h='100vh' maxHeight="15rem">
+                                <VStack maxWidth="100rem" margin="0 auto" display="flex" flexDirection='column' h='100vh' maxHeight="15rem">
+                                    <TableOrdersCustomer data={ordersCustomer} seeOrder={seeOrder} getListProductsOrder={getListProductsOrder} />
+                                </VStack>
+                            </VStack>
+
                             <Flex
                                 h='100px'
                                 direction={{ base: 'column', md: 'row' }}
@@ -314,21 +354,11 @@ export default function PerfilUsuario() {
                                 <Button
                                     mt={4}
                                     colorScheme='red'
-                                    isLoading={props.isSubmitting}
+                                    onClick={() => {navigate('/PalCafe/HacerPedidoEspecial')}}
                                     type='submit'
                                     marginTop='10'
                                 >
                                     Hacer pedido especial
-                                </Button>
-                                <Spacer />
-                                <Button
-                                    mt={4}
-                                    colorScheme='red'
-                                    isLoading={props.isSubmitting}
-                                    type='submit'
-                                    marginTop='10'
-                                >
-                                    Carrito
                                 </Button>
                                 <Spacer />
                                 <Button
