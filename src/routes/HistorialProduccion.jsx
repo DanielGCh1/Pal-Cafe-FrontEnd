@@ -1,101 +1,111 @@
-import { Button, HStack, Image, Input, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, Input, Table, TableCaption, TableContainer, Tbody, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import ComboBox from '../componets/ComboBox'
+import axios from 'axios'
 
 const HistorialProduccion = () => {
     const [selected, setSelected] = useState(true)
     const [list, setList] = useState([])
+    const [productos, setProductos] = useState([])
+    const [promociones, setPromociones] = useState([])
     const [date, setDate] = useState("")
+
     //const [productos, setProductos] = useState()
-
-    const productos = [
-        {
-            id: '1',
-            name: 'Harina',
-            category: 'Producto'
-        },
-        {
-            id: '2',
-            name: 'Mantequilla',
-            category: 'Producto'
-        },
-        {
-            id: '3',
-            name: 'leche',
-            category: 'Producto'
+    useEffect(() => {
+        const fetchProductos = async () => {
+          try {
+            const response = await axios.get('/api/historial/buscar/productos');
+            setProductos(response.data);
+          } catch (error) {
+            console.error('Error al obtener los productos:', error);
+          }
         }
-    ]
-       
-    const promociones = [
-        {
-            id: '1',
-            name: 'rosquillas',
-            category: 'Promocion'
-        },
-        {
-            id: '2',
-            name: 'Orejas',
-            category: 'Promocion'
-        },
-        {
-            id: '3',
-            name: 'pizzero',
-            category: 'Promocion'
+
+        const fetchPromos = async () => {
+            try {
+              const response = await axios.get('/api/historial/buscar/promociones');
+              setPromociones(response.data);
+            } catch (error) {
+              console.error('Error al obtener las promociones:', error);
+            }
         }
-    ]
-    const history = [
+    
+        fetchProductos()
+        fetchPromos()
+    }, []);
 
-    ]
-
+    useEffect(() => {
+        console.log(list)
+    }, [list])
+    
     const addElement = (element) => {
+        console.log(element)
         setList([...list,
             {
                 id: element.id,
-                name: element.name,
-                category: element.category,
-                sales: 0,
-                expired: 0,
-                surplus: 0,
-                royalties: 0
+                nombre: element.nombre,
+                tipo: element.tipo,
+                ventas: 0,
+                expirados: 0,
+                sobrantes: 0,
+                regalias: 0
             }
         ])
     }
 
-    useEffect(() => {
-        //getProductosHistorial()
-        //getPromocionesHistorial()
-    }, [])
+
+    const getData = async (fecha) => {
+        try {
+            const date = new Date(fecha).toLocaleDateString().replace(/\//g, '-')
+            setDate(date)
+            const res = await axios.get(`/api/historial/${date}`)
+            if (res.data.mensaje === "No hay datos") {
+                alert(date + " no hay registros")
+            }
+            else {
+                setList(res.data)
+            }
+        } catch (error) {
+            console.log(error);
+        } 
+    }
     
     const handleChange = (e, i) => {
         const { name, value } = e.target
         const vector = [...list]
         vector[i][name] = value
         setList(vector)
-        console.log(list)
     }
 
-    const searchHistory = (date) => {
-        console.log(date.target.value)
+    const saveData = async () => {
+        if(date === "") {
+            alert("Falta una fecha")
+        }
+        else
+        {
+            const datos = {
+                fecha: date,
+                hist: list
+            }
+            try {
+                const response = await axios.post('/api/historial/add', datos);
+                alert(response.data);
+                console.log(response.status)
+            } catch (error) {
+                console.error('Error al realizar la solicitud POST:', error);
+            } 
+        }     
     }
 
-    const saveData = () => {
-        history.push(list)
-        console.log(history)
+    const eliminar = (nombre) => {
+        console.log(nombre)
+        const updatedItems = list.filter(item => item.nombre !== nombre);
+        setList(updatedItems);
     }
 
     return (
         <VStack>
             <HStack marginBottom="2%" width="100%" padding="2%" bg="rgba(0,0,0,0.1)" alignItems="center" justifyContent="center">
-                    <HStack>
-                        <Button bg="rgba(0,0,0,.2)" color={selected ? '#FFDB58' : '#56070C'} borderColor="" fontSize="20px" variant='outline' 
-                            onClick={() => setSelected(!selected)}>{selected ? "Productos" : "Promociones"}
-                        </Button>
-                        <ComboBox          
-                            options={(selected === true) ? productos : promociones}
-                            onChange={(value) => addElement(value)}
-                            searchable
-                        />
-                    </HStack>                 
                     <VStack>
                         <Input
                             justifyContent="left" width="20%"
@@ -103,14 +113,38 @@ const HistorialProduccion = () => {
                             size="md"
                             type="datetime-local"
                             width="250px"
-                            bg="rgba(0,0,0,.2)"
-                            onChange={searchHistory}
+                            bg="rgba(255,255,255,.4)"
+                            onChange={(event) => {getData(event.target.value)}}
                         />
                         <Button width="100%" colorScheme='green' onClick={saveData}>
                             Guardar
                         </Button>
                     </VStack>
-                    
+                    <HStack>
+                        <VStack bg="rgba(255, 255, 255, .4)"
+                            color={selected ? "#FFDB58" : "#56070C"}
+                            borderColor=""
+                            fontSize="20px"
+                            variant="outline"
+                            width="100%" // Ajusta el ancho del botón al 100% del contenedor
+                            height="100%" // Ajusta la altura del botón al 100% del contenedor
+                            display="flex"
+                            flexDirection="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            padding="5px"
+                            borderRadius="5px"
+                        >
+                            <Button bg="rgba(0,0,0,.2)" color={selected ? '#FFDB58' : '#56070C'} borderColor="" fontSize="20px" variant='outline' 
+                                onClick={() => setSelected(!selected)}>{selected ? "Productos" : "Promociones"}
+                            </Button>
+                            <ComboBox          
+                                options={(selected === true) ? productos : promociones}
+                                onChange={(value) => addElement(value)}
+                                searchable
+                            />
+                        </VStack>     
+                    </HStack>                    
             </HStack>
 
             <TableContainer width="90%">
@@ -118,39 +152,41 @@ const HistorialProduccion = () => {
                     <TableCaption color="#000">Palcafe Historial de Produccion</TableCaption>
                     <Thead>
                     <Tr>
-                        <Th color="#000">Nombre</Th>
-                        <Th color="#000">Categoria</Th>
-                        <Th color="#000">Vendidos</Th>
-                        <Th color="#000">Expirados</Th>
-                        <Th color="#000">Sobrantes</Th>
-                        <Th color="#000">Regalias</Th>
-                        <Th color="#000">Eliminar</Th>
+                        <Th color="#fff">Nombre</Th>
+                        <Th color="#fff">Categoria</Th>
+                        <Th color="#fff">Vendidos</Th>
+                        <Th color="#fff">Expirados</Th>
+                        <Th color="#fff">Sobrantes</Th>
+                        <Th color="#fff">Regalias</Th>
+                        <Th color="#fff">Eliminar</Th>
 
                     </Tr>
                     </Thead>
-                    <Tbody>
+                    <Tbody style={{ placeItems: 'center' }}>
                         {list.map((row, i) => (
-                           <tr key={i}>
-                            <td>
-                                {row.name}
+                            <tr key={i} style={{ textAlign: 'center', margin: '10px 10px' }}>
+                            <td style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                                {row.nombre}
                             </td>
                             <td>
-                                {row.category}
+                                {row.tipo}
                             </td>
                             <td>
-                                <Input name='sales' value={row.sales} onChange={e => handleChange(e, i)} />
+                                <Input name='ventas' value={row.ventas} onChange={e => handleChange(e, i)} />
                             </td>
                             <td>
-                                <Input name='expired' value={row.expired} onChange={e => handleChange(e, i)} />
+                                <Input name='expirados' value={row.expirados} onChange={e => handleChange(e, i)} />
                             </td>
                             <td>
-                                <Input name='surplus' value={row.surplus} onChange={e => handleChange(e, i)} />
+                                <Input name='sobrantes' value={row.sobrantes} onChange={e => handleChange(e, i)} />
                             </td>
                             <td>
-                                <Input name='royalties' value={row.royalties} onChange={e => handleChange(e, i)} />
+                                <Input name='regalias' value={row.regalias} onChange={e => handleChange(e, i)} />
                             </td>
                             <td>
-                                <Image src={require("../assets/eliminar.png")} width="35px" height="35px" alt="Eliminar" m="auto" borderBlock="1px" borderRadius="5px" bg="rgba(0,0,0,.2)" />
+                                <a onClick={() => eliminar(row.nombre)}>
+                                    <Image src={require("../assets/eliminar.png")} width="35px" height="35px" alt="Eliminar" m="auto" borderBlock="1px" borderRadius="5px" bg="rgba(0,0,0,.2)" />
+                                </a>
                             </td>
                            </tr> 
                         ))}
