@@ -5,11 +5,11 @@ function ComboBox({ options, onChange, searchable }) {
   const [filterInput, setFilterInput] = useState('');
 
   const filteredOptions = options.filter(option =>
-    option.name.toLowerCase().includes(filterInput.toLowerCase())
+    option.nombre.toLowerCase().includes(filterInput.toLowerCase())
   );
 
   const handleChange = event => {
-    const selected = options.find(p => (p.name === event.target.value))
+    const selected = options.find(p => (p.nombre === event.target.value))
     onChange(selected)
   };
 
@@ -25,8 +25,8 @@ function ComboBox({ options, onChange, searchable }) {
           )}
           <Select fontWeight= "bold" size='sm' border="none" hover="none" color="#000" onChange={handleChange} >
               {filteredOptions.map(option => (
-              <option value={option.name} key={option.id}>
-                  {option.name}
+              <option value={option.nombre} key={option.id}>
+                  {option.nombre}
               </option>
               ))}
           </Select>
