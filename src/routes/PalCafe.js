@@ -12,7 +12,7 @@ export default function PalCafe() {
                 justifyContent='center'>
 
                 <VStack
-                    divider={<StackDivider borderColor='gray.200' />}
+
                     spacing={4}
                     align='stretch'
                 >

@@ -22,9 +22,7 @@ export default function paginaPrincipal() {
         <Stack spacing={5} alignItems='center'>
             <Text fontSize='6xl'>Sobre Nosotros</Text>
             <Text fontSize='4xl'>Historia</Text>
-            <Text fontSize='2xl' p='50px'>Contrary to popular belief, Lorem Ipsum is not simply
-                random text. It has roots in a piece of classical Latin literature from
-                45 BC, making it over 2000 years old.</Text>
+            <Text fontSize='2xl' p='50px'>Somos un pequeño negocio familiar dedicado a la panadería y repostería tradicional de la zona. Todos nuestros  productos son elaborados de manera artesanal y libres de preservantes artificiales.</Text>
 
         </Stack>
 

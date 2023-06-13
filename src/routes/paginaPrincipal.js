@@ -8,9 +8,7 @@ export default function paginaPrincipal() {
 
         <Stack spacing={5} alignItems='center'>
             <Text fontSize='5xl'>PAL CAFÉ</Text>
-            <Text fontSize='2xl' p='50px'>Contrary to popular belief, Lorem Ipsum is not simply
-                random text. It has roots in a piece of classical Latin literature from
-                45 BC, making it over 2000 years old.</Text>
+            <Text fontSize='2xl' p='50px'>Somos un pequeño negocio familiar dedicado a la panadería y repostería tradicional de la zona. Todos nuestros  productos son elaborados de manera artesanal y libres de preservantes artificiales.</Text>
 
         </Stack>
 
@@ -27,7 +25,7 @@ export default function paginaPrincipal() {
         >
             <Stack spacing={1} alignItems='center'>
                 <Text fontSize='3xl'>VISÍTANOS</Text>
-                <Text fontSize='2xl' p='25px'>Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
+                <Text fontSize='2xl' p='25px'>100 este del templo católico de Barrio Las Brisas</Text>
 
             </Stack>
             <Spacer />

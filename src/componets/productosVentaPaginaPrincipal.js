@@ -1,5 +1,5 @@
 import HeaderPaginaPrincipal from './headerPaginaPrincipal'
-import { Button, Container, } from '@chakra-ui/react'
+import { Button, Container, Text, Box } from '@chakra-ui/react'
 import { Outlet } from "react-router-dom";
 import ProductoPresentacion from './productoPresentacion'
 
@@ -80,15 +80,15 @@ export default function ProductosVentaPaginaPrincipal() {
   };
 
   return <>
-    <Button onClick={hola}>
+    <Box p='6' display="flex" justifyContent={'center'}>
+      <Text fontSize='3xl' fontWeight="bold">Nuestros Productos</Text>
+    </Box>
 
-    </Button>
-
-    <SimpleGrid columns={[1, 2, 3]} spacing='40px'>
+    <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing='40px'>
       {((typeof products !== 'undefined') && (products.length > 0))
         ? products.map((prod, index) => (
-          <ProductoPresentacion key={index} 
-          textAlign="center" _id={prod._id} image={prod.image} />
+          <ProductoPresentacion key={index}
+            textAlign="center" _id={prod._id} image={prod.image} />
         ))
         : null}
 

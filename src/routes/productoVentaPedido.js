@@ -319,14 +319,14 @@ selected ? selected.first_name : ''
                 <Text fontSize='2xl' fontWeight="bold" p='25px'>Producto no disponible en este momento</Text>
 
               </Stack>
-              : (!isUndefinedOrNull(customer) && customer.usu_estado !== "Aceptado") ?
+              : (!isUndefinedOrNull(customer) && customer.usu_estado != "Aceptado") ?
                 <Stack spacing={1} alignItems='center'>
-                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sección y estar aprobado, para registrar productos al carrito de compra</Text>
+                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sesión para agregar productos al carrito de compra</Text>
 
                 </Stack>
                 :
                 <Stack spacing={1} alignItems='center'>
-                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe estar aprobado, para registrar productos al carrito de compra</Text>
+                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Su perfil debe estar aprobado para continuar con la compra</Text>
 
                 </Stack>
           }

@@ -18,7 +18,7 @@ export default function Footer() {
                 </Box>
 
                 <Box w={["100%", "30%"]} display="flex" justifyContent={['center', 'space-between']}>
-                    <Text m="auto" color="white">Barrio Las Brisas, Daniel Flores, Pérez Zeledón</Text>
+                    <Text m="auto" color="white">100 este del templo católico de Barrio Las Brisas</Text>
                 </Box>
 
                 <Box w={["100%", "10%"]} display="flex" justifyContent={['center','flex-end']}>

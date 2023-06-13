@@ -66,7 +66,7 @@ export default function EditRecipe() {
 
     return <>
 
-        {(!isUndefinedOrNull(admProduct) &&!isUndefinedOrNull(ingredients) )
+        {(!isUndefinedOrNull(admProduct) && !isUndefinedOrNull(ingredients) )
             ?
             <VStack h='100vh' alignItems='center' overflowY="scroll" maxHeight="55rem" sx={{
                 "&::-webkit-scrollbar": {
