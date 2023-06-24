@@ -5,12 +5,6 @@ import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 
 export default function Home() {
-  const [notice, setNotice] = useState(false)
-  
-  useEffect(() => {
-    
-  },[])
-
   return (
     <>
       <Container

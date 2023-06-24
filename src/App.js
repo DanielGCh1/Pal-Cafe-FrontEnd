@@ -35,6 +35,7 @@ import EditPromocion from './routes/editPromotion';
 import EditEmployee from './routes/editarEmpleado';
 import LookClientes from './routes/LookClientes';
 import EditClient from './routes/EditClient';
+import VerEstadisticas from './routes/VerEstadisticas';
 
 function App() {
 
@@ -77,6 +78,7 @@ function App() {
                         <Route path="EditarClientes/:id" element={<EditClient />} />
                         <Route path="HistorialProduccion" element={<HistorialProduccion />} />
                         <Route path="CrearPromociones" element={<PromotionsForm />} />
+                        <Route path="VerEstadisticas" element={<VerEstadisticas />} />
                         <Route path="BuscarPromociones" element={<LookPromotions />} />
                         <Route path="EditarPromociones/:id" element={<EditPromocion />} />
                       </Route>

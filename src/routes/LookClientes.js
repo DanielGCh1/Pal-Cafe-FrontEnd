@@ -12,7 +12,6 @@ const LookClientes = () => {
     state: "",
   });
   const [isChecked, setisChecked] = useState(false);
-  const history = createBrowserHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [editedClientes, setEditedClientes] = useState([]);
