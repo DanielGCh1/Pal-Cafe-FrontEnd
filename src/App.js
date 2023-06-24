@@ -10,7 +10,6 @@ import ManagerIngredient from './routes/managerIngredient';
 import PaginaPrincipal from './routes/paginaPrincipal';
 import ProductoVentaPedido from './routes/productoVentaPedido';
 import PerfilUsuario from './routes/perfilUsuario';
-import { CrearProducto } from './routes/CrearProducto';
 import { ProductProvider } from './context/Product/ProductContext';
 import { AdmProductProvider } from './context/AdministrativeProduct/AdmProductContext';
 import RegistrarProductos from './routes/RegistrarProductos';
@@ -24,21 +23,17 @@ import BuscarCliente from './routes/buscarCliente';
 import { IngredientProvider } from './context/Ingredient/IngredientContext';
 import { ClienteProvider } from './context/Cliente/ClienteContext';
 //import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
-
-
 import { useState, useMemo, useEffect } from "react";
-
-
+import { IngredientProvider } from './context/Ingredients/IngredientContext';
+import { ClienteProvider } from './context/Cliente/ClienteContext';
+import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
 import PalCafe from './routes/PalCafe';
-
 import PruebasChatGpt from './routes/PruebasChatGpt';
-
 import AdministracionEmpleados from './routes/AdministracionEmpleados';
 import AdministracionProductos from './routes/AdministracionProductos';
 
 import RegistrarEmpleados from './routes/RegistrarEmpleados';
 import CreacionPromociones from './routes/CreacionPromociones';
-
 import { CustomerProvider } from './context/Customer/CustomerContext';
 import CarritoDeCompra from './routes/CarritoDeCompra';
 import HistorialProduccion from './routes/HistorialProduccion';
@@ -52,6 +47,13 @@ import EditRecipe from './routes/EditRecipe';
 import SeeOrder from './routes/SeeOrder';
 import MakeOrderSpecial from './routes/makeOrderSpecial';
 import ChangePasswordCustomer from './routes/changePasswordCustomer';
+import PromotionsForm from './routes/promociones';
+import LookPromotions from './routes/LookPromotions';
+import EditPromocion from './routes/editPromotion';
+import EditEmployee from './routes/editarEmpleado';
+import LookClientes from './routes/LookClientes';
+import EditClient from './routes/EditClient';
+import VerEstadisticas from './routes/VerEstadisticas';
 
 function App() {
 
@@ -65,6 +67,7 @@ function App() {
                 <EmployeeProvider>
                   <PromotionProvider>
                     <OrderProvider>
+
                       <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="Register" element={<Register />} />
@@ -73,7 +76,6 @@ function App() {
                           <Route path="EditarIngrediente/:id" element={<EditIngredient />} />
                           <Route path="EditarProducto/:id" element={<EditProduct />} />
                           <Route path="EditarReceta/:id" element={<EditRecipe />} />
-
                           <Route path="AdministrarIngredientes" element={<ManagerIngredient />} />
                           <Route path="AdministrarOrdenes" element={<ManagerOrders />} />
                           <Route path="EditarOrden/:id" element={<EditOrder />} />
@@ -86,8 +88,18 @@ function App() {
                             element={<AdministracionProductos />}
                           />
                           <Route
+                            path="CreacionPromociones"
+                            element={<CreacionPromociones />}
+                          />
+                          <Route path="BuscarCliente" element={<BuscarCliente />} />
+                          <Route path="HistorialProduccion" element={<HistorialProduccion />} />
+                          <Route
                             path="AdministracionEmpleados"
                             element={<AdministracionEmpleados />}
+                          />
+                          <Route
+                            path="EditarEmpleados/:id"
+                            element={<EditEmployee />}
                           />
                           <Route
                             path="RegistrarEmpleados"
@@ -97,11 +109,13 @@ function App() {
                             path="CreacionPromociones"
                             element={<CreacionPromociones />}
                           />
-                          <Route path="BuscarCliente" element={<BuscarCliente />} />
-
-                          <Route path="BuscarCliente" element={<BuscarCliente />} />
+                          <Route path="BuscarClientes" element={<LookClientes />} />
+                          <Route path="EditarClientes/:id" element={<EditClient />} />
                           <Route path="HistorialProduccion" element={<HistorialProduccion />} />
-
+                          <Route path="CrearPromociones" element={<PromotionsForm />} />
+                          <Route path="VerEstadisticas" element={<VerEstadisticas />} />
+                          <Route path="BuscarPromociones" element={<LookPromotions />} />
+                          <Route path="EditarPromociones/:id" element={<EditPromocion />} />
                         </Route>
 
                         <Route path="/PalCafe" element={<PalCafe />} >
@@ -121,7 +135,7 @@ function App() {
                           <Route path="Contacto" element={<Contacto />} />
                           <Route path="CarritoDeCompra" element={<CarritoDeCompra />} />
                           <Route path="VerOrden/:id" element={<SeeOrder />} />
-                          <Route path="CambiarContraseña" element={<ChangePasswordCustomer/>} />
+                          <Route path="CambiarContraseña" element={<ChangePasswordCustomer />} />
                           <Route
                             path="HacerPedidoEspecial"
                             element={<MakeOrderSpecial />}

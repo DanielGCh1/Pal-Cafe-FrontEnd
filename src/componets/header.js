@@ -112,16 +112,19 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Clientes')}
                     <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
+                        <Link to='/Home/BuscarClientes'>
+                            <MenuItem>Buscar clientes</MenuItem>
+                        </Link>
                     </MenuList>
                 </Menu>
                 <Menu>
                     {buttonMenu('Promociones')}
                     <MenuList>
                         <MenuItem>
-                            <Link to='/Home/CreacionPromociones'>Administrar Promociones</Link>
+                            <Link to='/Home/CrearPromociones'>Crear Promociones</Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to='/Home/BuscarPromociones'>Administrar Promociones</Link>
                         </MenuItem>
                     </MenuList>
                 </Menu>

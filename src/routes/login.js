@@ -1,7 +1,8 @@
 import { Container, Box, Heading, Spacer, Button, Flex, Input, Text, HStack, Image, AspectRatio } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Axios from "../context/api";
 
 export default function Login() {
   const [user, setUser] = useState('')
@@ -9,13 +10,17 @@ export default function Login() {
   const [userLogin, setUserLogin] = useState({})
   const handleChangeUser = (event) => setUser(event.target.value)
   const handleChangePassword = (event) => setPassword(event.target.value)
+  const navigate = useNavigate();
+
 
   const loginUser = async () => {
     try {
-        Axios.post("/api/loginSession", { correo: user, password: password }, {
+      Axios.post("/api/login", { correo: user, password: password }, {
         withCredentials: true
-      }).then((data => console.log(data.data.user)))
-      console.log("El usuario fue");
+      }).then((data) => {
+        console.log(data);
+        navigate("/home")
+      })
     } catch (error) {
       console.log(error)
     }
@@ -46,22 +51,22 @@ export default function Login() {
     }
   }
 
-/*
-  const validateLogin = async () => {
-    try {
-      const { data } = await Axios.post(
-        "http://localhost:9000/api/user",
-        {
-          correo: user,
-          password: password
-        }
-      ).then((res) => {
-        console.log(res)
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }*/
+  /*
+    const validateLogin = async () => {
+      try {
+        const { data } = await Axios.post(
+          "http://localhost:9000/api/user",
+          {
+            correo: user,
+            password: password
+          }
+        ).then((res) => {
+          console.log(res)
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }*/
 
   return <>
     <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' color='white' display='flex' maxW='100%' h='calc(100vh)'
@@ -101,7 +106,7 @@ export default function Login() {
         </HStack>
 
         <Spacer w='50px' />
-        <h1>{userLogin ? userLogin.usu_correo: ""}</h1>
+        <h1>{userLogin ? userLogin.usu_correo : ""}</h1>
         <Button colorScheme='red' onClick={() => loginUser()}>Logiar</Button>
         <Button colorScheme='red' onClick={() => getCookie()}>ValidarSesion</Button>
         <Button colorScheme='red' onClick={() => eliminarCookie()}>eliminarCookie</Button>
