@@ -304,25 +304,6 @@ export default function PerfilUsuario() {
                                             </FormControl>
                                         )}
                                     </Field>
-
-                                    <Field name='password'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                                <FormLabel>Contraseña Actual</FormLabel>
-                                                <Input {...field} type="password" />
-                                                <FormErrorMessage>{form.errors.password}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
-                                    <Field name='newPassword'>
-                                        {({ field, form }) => (
-                                            <FormControl isInvalid={form.errors.newPassword && form.touched.newPassword}>
-                                                <FormLabel>Nueva Contraseña</FormLabel>
-                                                <Input {...field} />
-                                                <FormErrorMessage>{form.errors.newPassword}</FormErrorMessage>
-                                            </FormControl>
-                                        )}
-                                    </Field>
                                     <HStack minW='13.2rem'>
                                         <Field name="dateHour">
                                             {({ field, form }) => (
@@ -359,6 +340,16 @@ export default function PerfilUsuario() {
                                     marginTop='10'
                                 >
                                     Hacer pedido especial
+                                </Button>
+                                <Spacer />
+                                <Button
+                                    mt={4}
+                                    colorScheme='red'
+                                    onClick={() => {navigate('/PalCafe/CambiarContraseña')}}
+                                    type='submit'
+                                    marginTop='10'
+                                >
+                                    Cambiar contraseña
                                 </Button>
                                 <Spacer />
                                 <Button

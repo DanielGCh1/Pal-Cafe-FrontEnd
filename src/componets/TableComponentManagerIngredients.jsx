@@ -16,8 +16,14 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesIngredients }) => {
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
-      if (ref.current.errors.stock != 'Existencias requeridas') {
-        saveChangesIngredients();
+      if(data.length > 0){
+        if (ref.current.errors.stock != 'Existencias requeridas') {
+  
+          saveChangesIngredients();
+        }
+      }
+      else{
+        window.alert("No existen ingredientes, para guardar cambios");
       }
     }
   };

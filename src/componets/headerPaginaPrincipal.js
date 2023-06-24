@@ -13,9 +13,9 @@ import {
     VStack,
     Image,
     Flex,
-    FormLabel
+    Box
 } from '@chakra-ui/react'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, HamburgerIcon } from '@chakra-ui/icons'
 
 import { Link } from 'react-router-dom'
 import { SettingsIcon } from '@chakra-ui/icons'
@@ -29,22 +29,25 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
 import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure } from "@chakra-ui/react";
 import ShoppingCartProductList from './shoppingCartProductList'
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const buttonMenu = (name) => {
-    return <>
-        <MenuButton
+    return (
+        <Button
+            bg='black'
+            color='white'
             px={4}
             py={2}
+            borderRadius={10}
             h='70px'
-            _hover={{ bg: 'white' }}
-            _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px' }}
-            _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: '#56070C' }}
+            _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+            _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+            _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
         >
             {name} <ChevronDownIcon />
-        </MenuButton>
-    </>
+        </Button>
+    );
 }
 
 
@@ -56,6 +59,12 @@ export default function HeaderPaginaPrincipal() {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
 
     useEffect(() => {
         if (customer == null) {
@@ -83,52 +92,196 @@ export default function HeaderPaginaPrincipal() {
                     </Container>
                 </Menu>
                 <Spacer />
-                {(customer == null) ?
-                    <Link to='/PalCafe/LoginCustomer'>
-                        Inicio Sesión
-                    </Link>
-                    : null}
-                <Menu>
-                    <Link to='/PalCafe/Nosotros'>
-                        {buttonMenu('Nosotros')}
-                    </Link>
-                </Menu>
-                <Menu>
-                    <Link to='/PalCafe/Contacto'>
-                        {buttonMenu('Contacto')}
-                    </Link>
-                </Menu>
-                {(customer != null) ?
-                    <Menu>
-                        {buttonMenu(customer.usu_nombre)}
-                        <MenuList color='#d5ae0f' bg='#56070c'>
-                            <MenuItem>
-                                <Link to='/PalCafe/PerfilUsuario'>
-                                    Perfil
-                                </Link>
-                            </MenuItem>
-                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
-                        </MenuList>
-                    </Menu>
-                    : null}
-                {(customer != null) ?
-                    <Menu>
-                        {buttonMenu(<SettingsIcon />)}
-                        <MenuList color='#d5ae0f' bg='#56070c'>
-                            <MenuItem>
-                                <Link to='/PalCafe/PerfilUsuario'>
-                                    Perfil
-                                </Link>
-                            </MenuItem>
-                            <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
-                        </MenuList>
-                    </Menu>
-                    : null}
-                {(customer != null && customer.usu_estado === "Aceptado") ?
-                    <Button leftIcon={<FaShoppingCart />} backgroundColor="black" onClick={onOpen}>
-                    </Button>
+                <Box display={['none', 'block']}>
+                    {(customer == null) ?
+                        <Link to='/PalCafe/LoginCustomer' >
+                            <Button
+                                bg='black'
+                                color='white'
+                                px={4}
+                                py={2}
+                                borderRadius={10}
+                                h='70px'
+                                _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                            >
+                                Inicio Sesión
+                            </Button>
 
-                    : null}
+                        </Link>
+                        : null}
+                    <Menu>
+                        <Link to='/PalCafe/Nosotros' >
+                            <Button
+                                bg='black'
+                                color='white'
+                                px={4}
+                                py={2}
+                                borderRadius={10}
+                                h='70px'
+                                _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                            >
+                                Nosotros
+                            </Button>
+
+                        </Link>
+                    </Menu>
+                    <Menu>
+                        <Link to='/PalCafe/Contacto' >
+                            <Button
+                                bg='black'
+                                color='white'
+                                px={4}
+                                py={2}
+                                borderRadius={10}
+                                h='70px'
+                                _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                            >
+                                Contacto
+                            </Button>
+
+                        </Link>
+                    </Menu>
+                    {(customer != null) ?
+                        <Menu>
+                            {buttonMenu(customer.usu_nombre)}
+                            <MenuList color='#d5ae0f' bg='#56070c'>
+                                <MenuItem>
+                                    <Link to='/PalCafe/PerfilUsuario'>
+                                        Perfil
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                            </MenuList>
+                        </Menu>
+                        : null}
+                    {(customer != null && customer.usu_estado === "Aceptado") ?
+                        <Button leftIcon={<FaShoppingCart />} backgroundColor="black" onClick={onOpen}
+                            bg='black'
+                            color='white'
+                            px={4}
+                            py={2}
+                            borderRadius={10}
+                            h='70px'
+                            _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                            _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                            _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                        >
+                        </Button>
+
+                        : null}
+                </Box>
+
+                <Box display={['block', 'none']}>
+                    {/* Menú tipo hamburguesa para dispositivos móviles */}
+                    <Button
+                        bg='black'
+                        color='white'
+                        px={4}
+                        py={2}
+                        borderRadius={10}
+                        h='70px'
+                        onClick={toggleMenu}
+                        _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger', fontWeight: 'bold' }}
+                        _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger', fontWeight: 'bold' }}
+                        _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger', fontWeight: 'bold' }}
+                    >
+                        <HamburgerIcon></HamburgerIcon>
+                    </Button>
+                    {isMenuOpen && (
+                        <Box mt={2} bg='blackAlpha.900' p={2}>
+                            {/* Resto de los elementos del menú */}
+                            {(customer == null) ?
+                                <Link to='/PalCafe/LoginCustomer' >
+                                    <Button
+                                        bg='black'
+                                        color='white'
+                                        px={4}
+                                        py={2}
+                                        borderRadius={10}
+                                        h='70px'
+                                        _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                        _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                        _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                                    >
+                                        Inicio Sesión
+                                    </Button>
+
+                                </Link>
+                                : null}
+                            <Menu>
+                                <Link to='/PalCafe/Nosotros' >
+                                    <Button
+                                        bg='black'
+                                        color='white'
+                                        px={4}
+                                        py={2}
+                                        borderRadius={10}
+                                        h='70px'
+                                        _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                        _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                        _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                                    >
+                                        Nosotros
+                                    </Button>
+
+                                </Link>
+                            </Menu>
+                            <Menu>
+                                <Link to='/PalCafe/Contacto' >
+                                    <Button
+                                        bg='black'
+                                        color='white'
+                                        px={4}
+                                        py={2}
+                                        borderRadius={10}
+                                        h='70px'
+                                        _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                        _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                        _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                                    >
+                                        Contacto
+                                    </Button>
+
+                                </Link>
+                            </Menu>
+                            {(customer != null) ?
+                                <Menu>
+                                    {buttonMenu(customer.usu_nombre)}
+                                    <MenuList color='#d5ae0f' bg='#56070c'>
+                                        <MenuItem>
+                                            <Link to='/PalCafe/PerfilUsuario'>
+                                                Perfil
+                                            </Link>
+                                        </MenuItem>
+                                        <MenuItem onClick={signOffCustomer}>Cerrar Sesión</MenuItem>
+                                    </MenuList>
+                                </Menu>
+                                : null}
+                            {(customer != null && customer.usu_estado === "Aceptado") ?
+                                <Button leftIcon={<FaShoppingCart />} backgroundColor="black" onClick={onOpen}
+                                    bg='black'
+                                    color='white'
+                                    px={4}
+                                    py={2}
+                                    borderRadius={10}
+                                    h='70px'
+                                    _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
+                                    _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
+                                    _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
+                                >
+                                </Button>
+
+                                : null}
+                        </Box>
+                    )}
+                </Box>
+
                 {(customer != null && customer.usu_estado === "Aceptado") ?
                     <Drawer isOpen={isOpen} onClose={onClose} >
                         <DrawerOverlay>

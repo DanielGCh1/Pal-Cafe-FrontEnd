@@ -39,7 +39,7 @@ const TableComponentEditRecipe = ({ data, onDelete, saveChangesRecipe, ingredien
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
-      if (ref.current.errors.amount != 'Existencias requeridas') {
+      if (data.length == 0 || ref.current.errors.amount != 'Existencias requeridas') {
         saveChangesRecipe();
       }
     }
@@ -65,135 +65,139 @@ const TableComponentEditRecipe = ({ data, onDelete, saveChangesRecipe, ingredien
     setCost(refCost.current.values.cost);
   }
 
-  return (
+  return <>
 
-    <TableContainer width="100%">
-      <Box overflowY="scroll" maxHeight="25rem" sx={{
-        "&::-webkit-scrollbar": {
-          width: "7px",
-          backgroundColor: "transparent",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          bg: "gray.400",
-          borderRadius: "full",
-          opacity: "0.4",
-          "&:hover": {
-            opacity: "0.7",
+    {!isUndefinedOrNull(ingredients)
+      ?
+
+      <TableContainer width="100%">
+        <Box overflowY="scroll" maxHeight="25rem" sx={{
+          "&::-webkit-scrollbar": {
+            width: "7px",
+            backgroundColor: "transparent",
           },
-        },
-      }}>
-        <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
-          <TableCaption color='white'>Administrar Ingredientes</TableCaption>
-          <Thead>
-            <Tr>
-              <Th color='white'>Nombre</Th>
-              <Th color='white'>Unidad</Th>
-              <Th color='white'>Cantidad</Th>
-              <Th color='white'>Costo Total</Th>
-              <Th color='white'>Eliminar</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map((item) => (
-              <Tr key={item._id}>
-                <Td>
-                  <Text color="white" >{item.nombre_ingrediente}</Text>
-                </Td>
-                <Td>
-                  <Text color="white" >{item.unidad}</Text>
-                </Td>
-                <Td>
-                  <Formik
-                    innerRef={ref}
-                    initialValues={{ amount: item.cantidad_ingrediente }}
-                    validationSchema={validationSchema}
-                    onSubmit={() => { }}
-                  >
-                    {(props) => (
-                      <Form>
-                        <Field name="amount" validate={() => validate(item._id)}>
-                          {({ field, form }) => (
-                            <FormControl isInvalid={form.errors.amount && form.touched.amount}>
-                              <Input
-                                {...field}
-                                type="number"
-                                color='white'
-                                style={{
-                                  border:
-                                    props.amount && props.amount
-                                      ? '1px solid red'
-                                      : '',
-                                }}
-                              /*onChange={() => editElement(item._id)}*/
-                              />
-                              <FormErrorMessage fontWeight="bold">{form.errors.amount}</FormErrorMessage>
-                            </FormControl>
-                          )}
-                        </Field>
-                      </Form>
-                    )}
-                  </Formik>
-                </Td>
-                <Td>
-                  <Formik
-                    innerRef={refCost}
-                    initialValues={{ cost: getCost(item._id, item.cantidad_ingrediente) }}
-                    validationSchema={validationSchema}
-                    onSubmit={() => { }}
-                  >
-                    {(props) => (
-                      <Form>
-                        <Field name="cost">
-                          {({ field, form }) => (
-                            <FormControl isInvalid={form.errors.cost && form.touched.cost}>
-                              <Input
-                                isReadOnly={true}
-                                {...field}
-                                type="number"
-                                color='white'
-                                style={{
-                                  border:
-                                    props.cost && props.cost
-                                      ? '1px solid red'
-                                      : '',
-                                }}
-                              /*onChange={() => editElement(item._id)}*/
-                              />
-                              <FormErrorMessage fontWeight="bold">{form.errors.cost}</FormErrorMessage>
-                            </FormControl>
-                          )}
-                        </Field>
-                      </Form>
-                    )}
-                  </Formik>
-                </Td>
-                <Td>
-                  <IconButton
-                    aria-label="Eliminar"
-                    icon={<DeleteIcon />}
-                    onClick={() => onDelete(item._id)}
-                  />
-                </Td>
+          "&::-webkit-scrollbar-thumb": {
+            bg: "gray.400",
+            borderRadius: "full",
+            opacity: "0.4",
+            "&:hover": {
+              opacity: "0.7",
+            },
+          },
+        }}>
+          <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
+            <TableCaption color='white'>Administrar Ingredientes</TableCaption>
+            <Thead>
+              <Tr>
+                <Th color='white'>Nombre</Th>
+                <Th color='white'>Unidad</Th>
+                <Th color='white'>Cantidad</Th>
+                <Th color='white'>Costo Total</Th>
+                <Th color='white'>Eliminar</Th>
               </Tr>
-            ))}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th color='white'>Nombre</Th>
-              <Th color='white'>Unidad</Th>
-              <Th color='white'>Cantidad</Th>
-              <Th color='white'>Costo Total</Th>
-              <Th color='white'>Eliminar</Th>
-            </Tr>
-          </Tfoot>
-        </Table>
+            </Thead>
+            <Tbody>
+              {data.map((item) => (
+                <Tr key={item._id}>
+                  <Td>
+                    <Text color="white" >{item.nombre_ingrediente}</Text>
+                  </Td>
+                  <Td>
+                    <Text color="white" >{item.unidad}</Text>
+                  </Td>
+                  <Td>
+                    <Formik
+                      innerRef={ref}
+                      initialValues={{ amount: item.cantidad_ingrediente }}
+                      validationSchema={validationSchema}
+                      onSubmit={() => { }}
+                    >
+                      {(props) => (
+                        <Form>
+                          <Field name="amount" validate={() => validate(item._id)}>
+                            {({ field, form }) => (
+                              <FormControl isInvalid={form.errors.amount && form.touched.amount}>
+                                <Input
+                                  {...field}
+                                  type="number"
+                                  color='white'
+                                  style={{
+                                    border:
+                                      props.amount && props.amount
+                                        ? '1px solid red'
+                                        : '',
+                                  }}
+                                /*onChange={() => editElement(item._id)}*/
+                                />
+                                <FormErrorMessage fontWeight="bold">{form.errors.amount}</FormErrorMessage>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </Form>
+                      )}
+                    </Formik>
+                  </Td>
+                  <Td>
+                    <Formik
+                      innerRef={refCost}
+                      initialValues={{ cost: getCost(item._id, item.cantidad_ingrediente) }}
+                      validationSchema={validationSchema}
+                      onSubmit={() => { }}
+                    >
+                      {(props) => (
+                        <Form>
+                          <Field name="cost">
+                            {({ field, form }) => (
+                              <FormControl isInvalid={form.errors.cost && form.touched.cost}>
+                                <Input
+                                  isReadOnly={true}
+                                  {...field}
+                                  type="number"
+                                  color='white'
+                                  style={{
+                                    border:
+                                      props.cost && props.cost
+                                        ? '1px solid red'
+                                        : '',
+                                  }}
+                                /*onChange={() => editElement(item._id)}*/
+                                />
+                                <FormErrorMessage fontWeight="bold">{form.errors.cost}</FormErrorMessage>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </Form>
+                      )}
+                    </Formik>
+                  </Td>
+                  <Td>
+                    <IconButton
+                      aria-label="Eliminar"
+                      icon={<DeleteIcon />}
+                      onClick={() => onDelete(item._id)}
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <Tfoot>
+              <Tr>
+                <Th color='white'>Nombre</Th>
+                <Th color='white'>Unidad</Th>
+                <Th color='white'>Cantidad</Th>
+                <Th color='white'>Costo Total</Th>
+                <Th color='white'>Eliminar</Th>
+              </Tr>
+            </Tfoot>
+          </Table>
 
-      </Box>
-      <Button marginTop="20px" bg="red" color="white" onClick={saveChanges}>
-        Guardar cambios
-      </Button>
-    </TableContainer>
-  );
-};
+        </Box>
+        <Button marginTop="20px" bg="red" color="white" onClick={saveChanges}>
+          Guardar cambios
+        </Button>
+      </TableContainer>
+      : null}
+  </>
+}
 
 export default TableComponentEditRecipe;

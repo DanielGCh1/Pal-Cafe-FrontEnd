@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001",
+  "test": "jest --config=.babelrc",
   "dependencies": {
     "@chakra-ui/card": "^2.1.6",
     "@chakra-ui/icons": "^2.0.11",
@@ -45,5 +46,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
+    "babel-jest": "^29.5.0",
+    "babel-preset-react-app": "^10.0.1"
   }
 }

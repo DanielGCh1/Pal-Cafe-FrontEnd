@@ -1,8 +1,21 @@
-.linksto:hover{
-    color:red
+/*
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+
+body {
+    font-family: 'Yellowtail', sans-serif;
 }
 
-#divCenter{
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+
+
+
+.linksto:hover {
+    color: red
+}
+
+#divCenter {
     width: 85%;
     position: relative;
     top: 0px;
@@ -10,15 +23,16 @@
     height: 90%;
 }
 
-.title{
+.title {
     font-size: 34px;
     font-weight: bolder;
     margin-bottom: 29px;
 }
-.formProducto{
+
+.formProducto {
     width: 100%;
 }
 
-.inputsFoms{
+.inputsFoms {
     color: black;
 }

@@ -1,15 +1,15 @@
 import Header from '../componets/header';
 import Notificaciones from './Notificaciones';
-import { Container } from '@chakra-ui/react';
+import { Container, VStack } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 
 export default function Home() {
   const [notice, setNotice] = useState(false)
-  
+
   useEffect(() => {
-    
-  },[])
+
+  }, [])
 
   return (
     <>
@@ -22,13 +22,21 @@ export default function Home() {
         p="0"
         display="flex"
       >
-        
+
         <Header />
-        <div id="divCenter">
-        <Notificaciones /> 
+        <VStack
+
+          spacing={4}
+          width='85%'
+          position='relative'
+          top='0px'
+          left='15%'
+          height='90%'
+        >
+          <Notificaciones />
           <Outlet />
-        </div>
-      
+        </VStack>
+
       </Container>
     </>
   );

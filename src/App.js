@@ -51,6 +51,7 @@ import EditProduct from './routes/EditProduct';
 import EditRecipe from './routes/EditRecipe';
 import SeeOrder from './routes/SeeOrder';
 import MakeOrderSpecial from './routes/makeOrderSpecial';
+import ChangePasswordCustomer from './routes/changePasswordCustomer';
 
 function App() {
 
@@ -120,6 +121,7 @@ function App() {
                           <Route path="Contacto" element={<Contacto />} />
                           <Route path="CarritoDeCompra" element={<CarritoDeCompra />} />
                           <Route path="VerOrden/:id" element={<SeeOrder />} />
+                          <Route path="CambiarContraseña" element={<ChangePasswordCustomer/>} />
                           <Route
                             path="HacerPedidoEspecial"
                             element={<MakeOrderSpecial />}
