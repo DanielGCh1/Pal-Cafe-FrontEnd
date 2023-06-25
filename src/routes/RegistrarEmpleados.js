@@ -124,11 +124,12 @@ export default function EditEmployee() {
     }
 
     return <>
-        <VStack bg="rgba(0,0,0,.4)" h='100vh'>
+        <VStack  bg="rgba(0,0,0,.4)" w={"100%"} h={"100%"} overflow="auto">
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="white" fontWeight="bold" size='2xl'>Crear Promocion</Heading>
+                <Heading color="white" fontWeight="bold" size='2xl'>Registrar Empleado</Heading>
             </Box>
             <Formik
+                style={{ maxWidth: '100%' }}
                 innerRef={ref}
                 initialValues={{
                     /*      image: null,     */
@@ -143,7 +144,8 @@ export default function EditEmployee() {
                     correo: "",
                     password: "",
                     roles: [],
-                }}
+                }
+            }
 
                 validationSchema={Yup.object({
                     nombre: Yup.string()
@@ -218,7 +220,7 @@ export default function EditEmployee() {
                             <Field name='nombre'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
-                                        <FormLabel>Nombre</FormLabel>
+                                        <FormLabel>Nombre:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.nombre}</FormErrorMessage>
                                     </FormControl>
@@ -227,7 +229,7 @@ export default function EditEmployee() {
                             <Field name='primerApellido'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.primerApellido && form.touched.primerApellido}>
-                                        <FormLabel>Primer Apellido</FormLabel>
+                                        <FormLabel>Primer Apellido:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.primerApellido}</FormErrorMessage>
                                     </FormControl>
@@ -236,7 +238,7 @@ export default function EditEmployee() {
                             <Field name='segundoApellido'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.segundoApellido && form.touched.segundoApellido}>
-                                        <FormLabel>Segundo Apellido</FormLabel>
+                                        <FormLabel>Segundo Apellido:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.segundoApellido}</FormErrorMessage>
                                     </FormControl>
@@ -245,7 +247,7 @@ export default function EditEmployee() {
                             <Field name='usuario'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.usuario && form.touched.usuario}>
-                                        <FormLabel>Usuario</FormLabel>
+                                        <FormLabel>Usuario:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.usuario}</FormErrorMessage>
                                     </FormControl>
@@ -254,7 +256,7 @@ export default function EditEmployee() {
                             <Field name='telefonoPrimer'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.telefonoPrimer && form.touched.telefonoPrimer}>
-                                        <FormLabel>Numero principal</FormLabel>
+                                        <FormLabel>Numero principal:</FormLabel>
                                         <Input {...field} type='number' />
                                         <FormErrorMessage fontWeight="bold">{form.errors.telefonoPrimer}</FormErrorMessage>
                                     </FormControl>
@@ -264,7 +266,7 @@ export default function EditEmployee() {
                             <Field name='telefonoSegundo'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.telefonoSegundo && form.touched.telefonoSegundo}>
-                                        <FormLabel>Numero segundario</FormLabel>
+                                        <FormLabel>Numero segundario:</FormLabel>
                                         <Input {...field} type='number' />
                                         <FormErrorMessage fontWeight="bold">{form.errors.telefonoSegundo}</FormErrorMessage>
                                     </FormControl>
@@ -274,7 +276,7 @@ export default function EditEmployee() {
                             <Field name='direccion'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.direccion && form.touched.direccion}>
-                                        <FormLabel>Direccion</FormLabel>
+                                        <FormLabel>Dirección:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.direccion}</FormErrorMessage>
                                     </FormControl>
@@ -284,7 +286,7 @@ export default function EditEmployee() {
                             <Field name='correo'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.correo && form.touched.correo}>
-                                        <FormLabel>Correo</FormLabel>
+                                        <FormLabel>Correo:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.correo}</FormErrorMessage>
                                     </FormControl>
@@ -294,7 +296,7 @@ export default function EditEmployee() {
                             <Field name='password'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                        <FormLabel>Contraseña</FormLabel>
+                                        <FormLabel>Contraseña:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.password}</FormErrorMessage>
                                     </FormControl>
@@ -303,7 +305,7 @@ export default function EditEmployee() {
                             <VStack bg={"white"} color={"black"} padding={"5px 4px 5px 4px"}>
                                 <HStack w={"100%"} alignItems={'flex-start'}>
                                     <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles asignados</Text>
+                                        <Text>Roles asignados:</Text>
                                         {rolesAsignados?.map((role, index) => (
                                             <Container
                                                 key={role.id}
@@ -322,7 +324,7 @@ export default function EditEmployee() {
                                         ))}
                                     </VStack>
                                     <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles no asignados</Text>
+                                        <Text>Roles no asignados:</Text>
                                         {rolesNoAsignados?.map((role, index) => (
                                             <Container
                                                 key={role.id}

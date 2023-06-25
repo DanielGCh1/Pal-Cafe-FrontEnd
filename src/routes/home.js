@@ -1,19 +1,32 @@
 import Header from '../componets/header';
-import Notificaciones from './Notificaciones';
-import { Container, VStack } from '@chakra-ui/react';
-import { Outlet } from 'react-router-dom';
+import NotificationsDrawer from '../componets/NotificationsDrawer';
+import { Container } from '@chakra-ui/react';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
+import Axios from "../context/api";
 
 export default function Home() {
-  const [notice, setNotice] = useState(false)
+  const navigate = useNavigate();
 
+  const [logeado, setlogeado] = useState(false)
   useEffect(() => {
+    const fetchData = async () => {
+      await Axios.get("/getCookie", {
+        withCredentials: true
+      }).then(res => {
+        setlogeado(true)
+      }).catch(err => {
+        navigate("/");
+      });
+    };
 
-  }, [])
+    fetchData();
+  }, []);
 
   return (
     <>
-      <Container
+      {logeado ? (
+        <Container
         backgroundImage={require('../assets/fondoLogin.jpg')}
         backgroundSize="cover"
         w="100%"
@@ -38,6 +51,9 @@ export default function Home() {
         </VStack>
 
       </Container>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

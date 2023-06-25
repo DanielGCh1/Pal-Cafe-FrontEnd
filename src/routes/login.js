@@ -1,21 +1,55 @@
-import { Container, Box, Heading, Spacer, Button, Flex, Input, Text, HStack, Image, AspectRatio } from '@chakra-ui/react'
+import { Container, Box, Heading, Spacer, Button, Flex, Input, Text, HStack, Image, AspectRatio, VStack, FormControl, FormLabel, Stack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Axios from "../context/api";
+import { ChevronRightIcon } from '@chakra-ui/icons';
+import { extendTheme } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { useEffect } from 'react';
+import { InputGroup, InputRightElement, IconButton } from "@chakra-ui/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+const MotionButton = motion(Button);
+
+const MotionChevronRightIcon = motion(ChevronRightIcon);
+
+const MotionScaleButton = ({ children, ...props }) => {
+  return (
+    <MotionButton
+      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.05, backgroundColor: "rgb(231, 193, 21)" }}
+      {...props}
+    >
+      {children}
+    </MotionButton>
+  );
+};
 
 export default function Login() {
   const [user, setUser] = useState('')
-  const [password, setPassword] = useState('')
   const [userLogin, setUserLogin] = useState({})
   const handleChangeUser = (event) => setUser(event.target.value)
-  const handleChangePassword = (event) => setPassword(event.target.value)
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
 
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value);
+  };
+
+
+  useEffect(() => {
+    getCookie();
+  }, [])
 
   const loginUser = async () => {
     try {
-      Axios.post("/api/login", { correo: user, password: password }, {
+      Axios.post("/login", { correo: user, password: password }, {
         withCredentials: true
       }).then((data) => {
         console.log(data);
@@ -28,45 +62,17 @@ export default function Login() {
 
   const getCookie = async () => {
     try {
-      const { data } = await Axios.get("/api/getCookie", {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(data)
-      setUserLogin(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const eliminarCookie = async () => {
-    try {
-      const { data } = await Axios.get("/api/logout", {
+      const { data, status } = await Axios.get("/getCookie", {
         withCredentials: true
       });
-      console.log(data)
+      if (status == 200) {
+        setUserLogin(data);
+        navigate("/home")
+      }
     } catch (error) {
       console.log(error);
     }
   }
-
-  /*
-    const validateLogin = async () => {
-      try {
-        const { data } = await Axios.post(
-          "http://localhost:9000/api/user",
-          {
-            correo: user,
-            password: password
-          }
-        ).then((res) => {
-          console.log(res)
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }*/
 
   return <>
     <Container backgroundImage={require('../assets/fondoLogin.jpg')} backgroundSize='cover' color='white' display='flex' maxW='100%' h='calc(100vh)'
@@ -81,42 +87,75 @@ export default function Login() {
         </Box>
 
         <Spacer />
+        <Stack spacing="8px" color="black">
+          <FormControl>
+            <FormLabel color="white" htmlFor="correo">
+              Correo:
+            </FormLabel>
+            <Input
+              id="correo"
+              bg="rgba(255, 255, 255, 0.5)"
+              _focus={{
+                boxShadow: "0 0 0 3px rgba(255, 0, 0, 0.5)",
+                borderColor: "red.500",
+              }}
+              value={user}
+              onChange={handleChangeUser}
+              placeholder=""
+              size="sm"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel color="white" htmlFor="contrasena">
+              Contraseña:
+            </FormLabel>
+            <InputGroup>
+              <Input
+                id="contrasena"
+                bg="rgba(255, 255, 255, 0.5)"
+                _focus={{
+                  boxShadow: "0 0 0 3px rgba(255, 0, 0, 0.5)",
+                  borderColor: "red.500",
+                }}
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={handleChangePassword}
+                placeholder=""
+                size="sm"
+              />
+              <InputRightElement width="20%" height={"100%"}>
+                <IconButton
+                  variant="ghost"
+                  colorScheme="gray"
+                  size="sm"
+                  w={"100%"}
+                  lineHeight="normal"
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+                  onClick={handleTogglePassword}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+        </Stack>
 
-        <HStack spacing='34px' color="Black">
-          <Text color={"white"} mb='8px'>Usuario:</Text>
-          <Input
-            borderColor='grey'
-            bg='white'
-            value={user}
-            variant='outline'
-            onChange={handleChangeUser}
-            placeholder=''
-            size='sm' />
-        </HStack>
-        <HStack color="Black">
-          <Text color={"white"} mb='8px'>Contraseña:</Text>
-          <Input
-            borderColor='grey'
-            bg='white'
-            value={password}
-            variant='outline'
-            onChange={handleChangePassword}
-            placeholder=''
-            size='sm' />
-        </HStack>
+
 
         <Spacer w='50px' />
         <h1>{userLogin ? userLogin.usu_correo : ""}</h1>
-        <Button colorScheme='red' onClick={() => loginUser()}>Logiar</Button>
-        <Button colorScheme='red' onClick={() => getCookie()}>ValidarSesion</Button>
-        <Button colorScheme='red' onClick={() => eliminarCookie()}>eliminarCookie</Button>
-
+        <MotionScaleButton
+          bg={"#b31b1b"}
+          rightIcon={<MotionChevronRightIcon />}
+          onClick={() => loginUser()}
+        >
+          Ingresar
+        </MotionScaleButton>
         <Spacer />
 
-        <HStack>
-          <Text color={"white"}>¿Aún no no está registrado/a?</Text>
-          <Link className='linksto' to="/Register">Registrar</Link>
-        </HStack>
+        <VStack>
+          <Text color={"white"}>¿Aún no está registrado/a en el sistema de administración?</Text>
+          <Text color={"white"}>Póngase en contacto con el equipo de mantenimiento.</Text>
+        </VStack>
       </Flex>
     </Container>
   </>
