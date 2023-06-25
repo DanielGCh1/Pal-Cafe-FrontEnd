@@ -120,7 +120,7 @@ export default function PerfilUsuario() {
         <Box p='4' display="flex" justifyContent={'center'}>
             <Heading size='2xl'>Cliente</Heading>
         </Box>
-        {(customer == null) ?
+        {(customer != null) ?
             <Formik
                 innerRef={ref}
                 initialValues={{
