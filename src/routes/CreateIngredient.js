@@ -35,11 +35,10 @@ const isUndefinedOrNull = obj => {
 
 export default function CreateIngredient() {
     const { addIngredient } = useIngredient();
-    const [imagePreviewUrl, setImagePreviewUrl] = useState();/*esta es la url de la image, para el image */
-    const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
+    const [imagePreviewUrl, setImagePreviewUrl] = useState();
+    const ref = useRef(null);
 
-    const handleImageChange = (event) => {/*Se activa cuando se hace un cambio en la imagen, 
-    normalmente, es cuando se agrega una imagen, y convertirla a url*/
+    const handleImageChange = (event) => {
         event.preventDefault();
         let reader = new FileReader();
         let file = event.target.files[0];

@@ -109,10 +109,10 @@ const HistorialProduccion = () => {
                     <VStack>
                         <Input
                             justifyContent="left" width="20%"
-                            placeholder="Select Date and Time"
+                            placeholder="Select Date"
                             size="md"
-                            type="datetime-local"
-                            width="250px"
+                            type="date"
+                            w="250px"
                             bg="rgba(255,255,255,.4)"
                             onChange={(event) => {getData(event.target.value)}}
                         />
@@ -208,4 +208,4 @@ const HistorialProduccion = () => {
     )
 }
 
-export default HistorialProduccion
+export default HistorialProduccion;

@@ -10,9 +10,23 @@ import Axios from "axios";
 import { FaTimes } from "react-icons/fa";
 import useAdmProducts from "../context/AdministrativeProduct/AdmUseProduct";
 
+const isUndefined = obj => {
+  if (obj === "undefined" || typeof obj === "undefined") {
+      return true;
+  }
+  return false;
+};
+
 const isNull = obj => {
   if (obj === null) {
-    return true;
+      return true;
+  }
+  return false;
+};
+
+const isUndefinedOrNull = obj => {
+  if (isUndefined(obj) || isNull(obj)) {
+      return true;
   }
   return false;
 };
@@ -21,11 +35,10 @@ const isNull = obj => {
 export default function RegistrarProductos() {
   const { addAdmProduct, getAdmProduct } = useAdmProducts();
 
-  const [imagePreviewUrl, setImagePreviewUrl] = useState();/*Esta es la url de la imagen, para el image */
-  const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
+  const [imagePreviewUrl, setImagePreviewUrl] = useState();
+  const ref = useRef(null); 
 
-  const handleImageChange = (event) => {/*Se activa cuando se hace un cambio en la imagen, 
-    normalmente, es cuando se agrega una imagen, y convertirla a url*/
+  const handleImageChange = (event) => {
     event.preventDefault();
     let reader = new FileReader();
     let file = event.target.files[0];
