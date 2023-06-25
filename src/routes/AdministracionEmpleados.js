@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useEmployees from "../context/Employee/UseEmployees";
 
-const LookPromotions = () => {
+const AdministracionEmpleados = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Sitios
@@ -235,4 +235,4 @@ const LookPromotions = () => {
   );
 };
 
-export default LookPromotions;
+export default AdministracionEmpleados;

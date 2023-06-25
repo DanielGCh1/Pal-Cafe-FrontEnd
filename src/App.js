@@ -23,10 +23,7 @@ import BuscarCliente from './routes/buscarCliente';
 import { IngredientProvider } from './context/Ingredient/IngredientContext';
 import { ClienteProvider } from './context/Cliente/ClienteContext';
 //import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
-import { useState, useMemo, useEffect } from "react";
-import { IngredientProvider } from './context/Ingredients/IngredientContext';
-import { ClienteProvider } from './context/Cliente/ClienteContext';
-import { ProductosValoresProvider } from './context/Product/ProductosValoresContext';
+
 import PalCafe from './routes/PalCafe';
 import PruebasChatGpt from './routes/PruebasChatGpt';
 import AdministracionEmpleados from './routes/AdministracionEmpleados';

@@ -13,15 +13,15 @@ export default function paginaPrincipal() {
             <Text fontSize='4xl' textAlign='justify' fontWeight="bold" w='70%' p='50px'>Somos un pequeño negocio familiar dedicado a la panadería y repostería tradicional de la zona. Todos nuestros productos son elaborados de manera artesanal y libres de preservantes artificiales.</Text>
         </Stack>
 
-        <AspectRatio ratio={4 / 2} h='60vh'>
+        <AspectRatio ratio={4 / 2} h='80vh'>
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3936.5903856472532!2d-83.68107094127808!3d9.369467042815717!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa14fcec96d1653%3A0xaabcb7b8d5b0b0dd!2zUGFsIGNhZsOp!5e0!3m2!1ses!2scr!4v1673391758308!5m2!1ses!2scr"
                 width="200"
                 style={{
                     border: '2px solid #ddd', // Añade un borde de 2px sólido con color #ddd
                     borderRadius: '8px', // Suaviza las esquinas con un radio de 8px
-                    width: '70%',
-                    height: '60vh',
+                    width: '80%',
+                    height: '80vh',
                     margin: '0 auto',
                 }}
                 allowFullScreen=""

@@ -22,6 +22,14 @@ const isUndefinedOrNull = obj => {
   return false;
 };
 
+function searchItemList(data, itemId) {
+  let itemSearch = null;
+  if (!isUndefinedOrNull(data) && data.length > 0) {
+    itemSearch = data.find((element) => { return element._id == itemId })
+  }
+  return itemSearch;
+};
+
 const IngredientContext = createContext(null)
 
 const IngredientProvider = (props) => {
@@ -41,10 +49,10 @@ const IngredientProvider = (props) => {
       }
       console.log("los ingredientes llegan al contex");
     } catch (error) {
-      console.log("La consulta de optener ingredientes, fallo");
+      window.alert("Error al optener los ingredientes");
     }
   };
-  const addIngredientsAux = async (data) => {//TODO:
+  const addIngredientsAux = async (data) => {
     if (!isUndefinedOrNull(data) && data.length > 0) {
       const list = [];
       data.map((element) => {
@@ -62,13 +70,15 @@ const IngredientProvider = (props) => {
   };
   const getIngredient = async id => {
     try {
-      const res = await Axios.get(`/api/ingredientes/${id}`);
-      const data = res.data;
-      setIngredient(data[0]);
-      console.log(data[0])
-      console.log("Se busco el ingrediente");
+      const response = await Axios.get(`/api/ingredientes/${id}`);
+      const data = response.data;
+      setIngredient(data);
+      if (response.status != 200) {
+        window.alert(response.data.message);
+      }
     } catch (error) {
-      console.log("La consulta de optener el ingrediente fallo");
+      console.log(error)
+      window.alert("Error inesperado al buscar el ingrediente");
     }
   };
   const getIngredientImageUrl = async id => {
@@ -169,31 +179,39 @@ const IngredientProvider = (props) => {
   };
   const editIngredientList = async (values, ingAux) => { //TODO:
     try {
-      // TODO: 
-      console.log(values);
-      Axios.put(`/api/ingredientes/edit/${values._id}`, values).then((data => console.log(data)))
-      ingAux.ing_existencias = values.ing_existencias;
-    } catch (error) { }
+      const ing = {
+        _id: values._id,
+        name: values.ing_nombre, description: values.ing_descripcion,
+        price: values.ing_precio, drive_type: values.ing_tipo_unidad, amount: values.ing_cantidad,
+        image: values.ing_imagenURL, stock: values.ing_existencias
+      }
+
+      const response = await Axios.put(`/api/ingredientes/edit/${values._id}`, ing);
+      if (response.status == 200) {
+        ingAux.ing_existencias = values.ing_existencias;
+      }
+      else {
+        window.alert(response.data.message + " " + values.ing_nombre);
+      }
+
+    } catch (error) {
+      window.alert("Error inesperado al editar el ingrediente");
+    }
   };
   const editIngredients = async () => {//TODO:
     try {
-      if (ingredients.length == ingredientsAux.length) {
-        for (let i = 0; i < ingredients.length; i++) {
-          if (ingredients[i].ing_existencias !== ingredientsAux[i].ing_existencias) {
-            console.log("el ingrediente ");
-            console.log(ingredients[i].ing_existencias);
-            console.log("cambio");
-            editIngredientList(ingredients[i], ingredientsAux[i]);
-          }
+      for (let i = 0; i < ingredients.length; i++) {
+        var aux = searchItemList(ingredientsAux, ingredients[i]._id);
+        if (ingredients[i].ing_existencias !== aux.ing_existencias) {
+          console.log("el ingrediente ");
+          console.log(ingredients[i].ing_existencias);
+          console.log("cambio");
+          editIngredientList(ingredients[i], aux);
         }
       }
-      else {
-        setTimeout(() => {
-          alert(JSON.stringify("Las listas de ingredientes no son el mismo tamaño", null, 2))
-
-        }, 1000)
-      }
-    } catch (error) { }
+    } catch (error) {
+      window.alert("Hubo un error inesperado al editar los ingredientes");
+    }
   };
   return (
     <IngredientContext.Provider
@@ -210,7 +228,9 @@ const IngredientProvider = (props) => {
         editIngredient,
         getIngredientImageUrl,
         ingredientUrl,
-        setIngredientUrl
+        setIngredientUrl,
+        ingredientsAux,
+        setIngredients
       }}
     >
       {props.children}

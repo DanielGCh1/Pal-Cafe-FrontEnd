@@ -14,6 +14,8 @@ export default function Home() {
   return (
     <>
       <Container
+        backgroundImage={require('../assets/fondoLogin.jpg')}
+        backgroundSize="cover"
         w="100%"
         maxW="100%"
         h="calc(100vh)"

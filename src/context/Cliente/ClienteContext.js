@@ -14,7 +14,7 @@ const ClienteProvider = props => {
 
   useEffect(() => {
     setError(null);
-    API.get('/users-getall')
+    axios.get('/users-getall')
       .then(response => {
         const data = response.data;
         setClientes(data);
@@ -46,7 +46,7 @@ const ClienteProvider = props => {
 
   const getClientes = async () => {
     try {
-      const res = await API.get('/users-getall');
+      const res = await axios.get('/api/users-getall');
       const data = res.data;
       setClientes(data)
     } catch (error) {
@@ -55,7 +55,7 @@ const ClienteProvider = props => {
   };
 
   const modifyClientes = (clientes) => {
-    axios.put('/clientes/edit-all-permission/', clientes)
+    axios.put('/api/clientes/edit-all-permission/', clientes)
       .then(response => {
         console.log(response.data);
       })
@@ -66,7 +66,7 @@ const ClienteProvider = props => {
 
   const deleteCliente = async (id) => {
     try {
-      const response = await axios.delete(`/users/delete/${id}`);
+      const response = await axios.delete(`/api/users/delete/${id}`);
       if (response.status === 200) {
         setClientes((promotions) => promotions.filter((promocion) => promocion._id !== id));
       } else {
@@ -88,7 +88,7 @@ const ClienteProvider = props => {
 
   const logIn = async (correo, password) => {
     try {
-      const res = await API.get('/use/login/:correo/:password');
+      const res = await axios.get('/use/login/:correo/:password');
       const data = res.data.data;
       setClienteSelecionado(data)
     } catch (error) {
