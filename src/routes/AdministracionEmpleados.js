@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useEmployees from "../context/Employee/UseEmployees";
 
-const LookPromotions = () => {
+const AdministracionEmpleados = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Sitios
@@ -17,26 +17,6 @@ const LookPromotions = () => {
     borderColor: isHovered ? "red" : "#fff" // Cambiar el borde a rojo si el input está en hover
   };
 
-  const inputTableStyle = {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "#fff",
-    border: "2px solid #fff",
-    borderRadius: "5px",
-    padding: "2px",
-  };
-
-  const selectStyle = {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "#fff",
-    padding: "5px",
-  };
-
-  const optionStyle = {
-    color: "#fff",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    padding: "5px",
-  };
-
   const { employees,
     getEmployee,
     deleteEmpleado } = useEmployees();
@@ -45,7 +25,6 @@ const LookPromotions = () => {
   const [filters, setFilters] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedEmployees, setSelectedEmployees] = useState(null);
-  const [editStockPromotions, setEditStockPromotions] = useState([]);
 
 
   const handleMouseOver = () => {
@@ -66,25 +45,8 @@ const LookPromotions = () => {
     getEmployee();
   }, []);
 
-  function handleAddPromotion(promotion) {
-    // Verificar si la promoción ya existe en el array
-    const existingPromotionIndex = editStockPromotions.findIndex(
-      (p) => p._id === promotion._id
-    );
-
-    // Si la promoción ya existe, actualizarla en el array
-    if (existingPromotionIndex != -1) {
-      const updatedPromotions = [...editStockPromotions];
-      updatedPromotions[existingPromotionIndex] = promotion;
-      setEditStockPromotions(updatedPromotions);
-    } else {
-      // Si la promoción no existe, agregarla al array
-      setEditStockPromotions([...editStockPromotions, promotion]);
-    }
-  }
 
   useEffect(() => {
-
     const nameFilter = filters.toLowerCase();
 
     const filteredEmployees = [...employees]
@@ -93,7 +55,7 @@ const LookPromotions = () => {
           employees.usu_nombre.toLowerCase().includes(nameFilter)
         );
       })
-      setEmployeesFilters(filteredEmployees);
+    setEmployeesFilters(filteredEmployees);
   }, [filters, employees]);
 
   function handleFilterChange(event) {
@@ -135,21 +97,19 @@ const LookPromotions = () => {
         Administrar empleados
       </Text>
       <HStack alignSelf={"flex-start"}>
-        <form>
-          <Text fontWeight={"bold"} color={"white"} fontSize={"18px"}>
-            Filtros:
-          </Text>
-          <input
-            type="text"
-            placeholder="Nombre de el empleado"
-            name="name"
-            value={filters}
-            onChange={handleFilterChange}
-            style={inputStyle}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-          />
-        </form>
+        <Text fontWeight={"bold"} color={"black"} fontSize={"18px"}>
+          Filtros:
+        </Text>
+        <input
+          type="text"
+          placeholder="Nombre de el empleado"
+          name="name"
+          value={filters}
+          onChange={handleFilterChange}
+          style={inputStyle}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        />
       </HStack>
       <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" maxHeight="37rem" sx={{
         "&::-webkit-scrollbar": {
@@ -235,4 +195,4 @@ const LookPromotions = () => {
   );
 };
 
-export default LookPromotions;
+export default AdministracionEmpleados;

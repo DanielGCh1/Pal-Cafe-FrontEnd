@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import {
     FormControl, FormLabel, FormErrorMessage, Button, Box, Input, SimpleGrid, GridItem,
-    Heading, Image, VStack, Icon, Select, HStack, Text, Container
+    Heading, Image, VStack, Icon, HStack, Text, Container
 } from '@chakra-ui/react'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 import useEmployees from '../context/Employee/UseEmployees';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 export default function EditEmployee() {
     const { id } = useParams();
@@ -138,17 +137,11 @@ export default function EditEmployee() {
         // }
         // return error
     }
-    const options = [
-        { value: "Administrador", label: "Administrador" },
-        { value: "Cajero", label: "Cajero" },
-        { value: "Repostero", label: "Repostero" }
-    ];
-
 
     return <>
         <VStack bg="rgba(0,0,0,.4)" h='100vh'>
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="white" fontWeight="bold" size='2xl'>Crear Promocion</Heading>
+                <Heading color="white" fontWeight="bold" size='2xl'>Editar Empleado</Heading>
             </Box>
             <Formik
                 innerRef={ref}
@@ -238,7 +231,7 @@ export default function EditEmployee() {
                             <Field name='nombre'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
-                                        <FormLabel>Nombre</FormLabel>
+                                        <FormLabel>Nombre:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.nombre}</FormErrorMessage>
                                     </FormControl>
@@ -247,7 +240,7 @@ export default function EditEmployee() {
                             <Field name='primerApellido'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.primerApellido && form.touched.primerApellido}>
-                                        <FormLabel>Primer Apellido</FormLabel>
+                                        <FormLabel>Primer Apellido:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.primerApellido}</FormErrorMessage>
                                     </FormControl>
@@ -256,7 +249,7 @@ export default function EditEmployee() {
                             <Field name='segundoApellido'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.segundoApellido && form.touched.segundoApellido}>
-                                        <FormLabel>Segundo Apellido</FormLabel>
+                                        <FormLabel>Segundo Apellido:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.segundoApellido}</FormErrorMessage>
                                     </FormControl>
@@ -265,7 +258,7 @@ export default function EditEmployee() {
                             <Field name='usuario'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.usuario && form.touched.usuario}>
-                                        <FormLabel>Usuario</FormLabel>
+                                        <FormLabel>Usuario:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.usuario}</FormErrorMessage>
                                     </FormControl>
@@ -274,7 +267,7 @@ export default function EditEmployee() {
                             <Field name='telefonoPrimer'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.telefonoPrimer && form.touched.telefonoPrimer}>
-                                        <FormLabel>Numero principal</FormLabel>
+                                        <FormLabel>Numero principal:</FormLabel>
                                         <Input {...field} type='number' />
                                         <FormErrorMessage fontWeight="bold">{form.errors.telefonoPrimer}</FormErrorMessage>
                                     </FormControl>
@@ -284,7 +277,7 @@ export default function EditEmployee() {
                             <Field name='telefonoSegundo'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.telefonoSegundo && form.touched.telefonoSegundo}>
-                                        <FormLabel>Numero segundario</FormLabel>
+                                        <FormLabel>Numero segundario:</FormLabel>
                                         <Input {...field} type='number' />
                                         <FormErrorMessage fontWeight="bold">{form.errors.telefonoSegundo}</FormErrorMessage>
                                     </FormControl>
@@ -294,7 +287,7 @@ export default function EditEmployee() {
                             <Field name='direccion'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.direccion && form.touched.direccion}>
-                                        <FormLabel>Direccion</FormLabel>
+                                        <FormLabel>Dirección:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.direccion}</FormErrorMessage>
                                     </FormControl>
@@ -304,7 +297,7 @@ export default function EditEmployee() {
                             <Field name='correo'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.correo && form.touched.correo}>
-                                        <FormLabel>Correo</FormLabel>
+                                        <FormLabel>Correo:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.correo}</FormErrorMessage>
                                     </FormControl>
@@ -314,7 +307,7 @@ export default function EditEmployee() {
                             <Field name='password'>
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                        <FormLabel>Contraseña</FormLabel>
+                                        <FormLabel>Contraseña:</FormLabel>
                                         <Input {...field} />
                                         <FormErrorMessage fontWeight="bold">{form.errors.password}</FormErrorMessage>
                                     </FormControl>
@@ -323,7 +316,7 @@ export default function EditEmployee() {
                             <VStack bg={"white"} color={"black"} padding={"5px 4px 5px 4px"}>
                                 <HStack w={"100%"} alignItems={'flex-start'}>
                                     <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles asignados</Text>
+                                        <Text>Roles asignados:</Text>
                                         {rolesAsignados?.map((role, index) => (
                                             <Container
                                                 key={role.id}
@@ -342,7 +335,7 @@ export default function EditEmployee() {
                                         ))}
                                     </VStack>
                                     <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles no asignados</Text>
+                                        <Text>Roles no asignados:</Text>
                                         {rolesNoAsignados?.map((role, index) => (
                                             <Container
                                                 key={role.id}

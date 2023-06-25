@@ -52,16 +52,14 @@ export default function PromotionsForm() {
   }
 
   return <>
-    <VStack bg="rgba(0,0,0,.4)" h='100vh'>
+    <VStack bg="rgba(0,0,0,.4)" w={"100%"} h={"100%"} overflow="auto">
       <Box p='4' display="flex" justifyContent={'center'}>
         <Heading color="white" fontWeight="bold" size='2xl'>Crear Promocion</Heading>
       </Box>
       <Formik
+        style={{ maxWidth: '100%' }}
         innerRef={ref}
         initialValues={{
-          /*
-                              image: null,
-                              */
           image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
           name: "",
           price: 0,
@@ -170,9 +168,9 @@ export default function PromotionsForm() {
                   </FormControl>
                 )}
               </Field>
-              
+
               <Field name='activo'>
-                {({ field, form}) => (
+                {({ field, form }) => (
                   <FormControl isInvalid={form.errors.activo && form.touched.activo}>
                     <FormLabel htmlFor='activo'>Activo</FormLabel>
                     <Select {...field} id='activo'>

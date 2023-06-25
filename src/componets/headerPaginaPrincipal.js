@@ -3,17 +3,10 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
     Container,
-    MenuDivider,
     Spacer,
-    Button,
-    VStack,
     Image,
     Flex,
-    FormLabel
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
@@ -57,9 +50,7 @@ export default function HeaderPaginaPrincipal() {
 
     return <>
         <Container position='relative' width='100%' maxW='container.xl%' bg='black' color="white" p='{0}'>
-
             <Flex
-
                 direction={['column', 'row']}
                 alignItems='center'
             >
@@ -123,9 +114,7 @@ export default function HeaderPaginaPrincipal() {
                         <MenuItem>Carrito</MenuItem>
                     </MenuList>
                 </Menu>
-
             </Flex>
-
         </Container>
     </>
 }

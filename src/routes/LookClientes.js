@@ -1,8 +1,9 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Checkbox, Tfoot, Text, VStack, Input, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Box, HStack, InputRightElement, Image } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Checkbox, Tfoot, Text, VStack, Input, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Box, HStack, InputRightElement, Image, Select } from "@chakra-ui/react";
 import { createBrowserHistory } from "history";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UseClientes from '../context/Cliente/UseClientes';
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const LookClientes = () => {
   const { clientes, modifyClientes, deleteCliente, loading } = UseClientes();
@@ -115,35 +116,47 @@ const LookClientes = () => {
       <Text fontWeight={"bold"} color={"white"} fontSize={"48px"}>
         Buscar Clientes
       </Text>
-      <form>
-        <Text fontWeight={"bold"} color={"white"} fontSize={"18px"}>
-          Filtros:
-        </Text>
-        <HStack alignSelf={"flex-start"}>
-          <input
-            type="text"
-            placeholder="Nombre de el cliente"
-            name="name"
-            value={filters.name}
-            onChange={handleFilterChange}
-            className={"inputStyle"}
-          />
-          <Text fontWeight={"bold"} color={"white"} fontSize={"18px"}>
+      <Text fontWeight={"bold"} color={"black"}  fontSize={"18px"} alignSelf={"flex-start"}>
+        Filtros:
+      </Text>
+      <form className="formFiltros">
+        <input
+          type="text"
+          placeholder="Nombre de el cliente"
+          name="name"
+          value={filters.name}
+          onChange={handleFilterChange}
+          className={"inputStyle"}
+        />
+        <div className="content-select">
+          <Text  left={3} top={-9} fontWeight={"bold"} color={"black"} fontSize={"18px"} position={"absolute"}>
             Estado:
           </Text>
-          <select
+          <Select
             name="state"
             value={filters.state}
-            className={"selectStyle"}
+            className="selectStyle"
             onChange={handleFilterChange}
+            icon={<ChevronDownIcon />}
           >
-            <option value="" className={"optionStyle"}>Todos</option>
-            <option value="Aceptado" className={"optionStyle"}>Aceptado</option>
-            <option value="Rechazado" className={"optionStyle"}>Rechazado</option>
-            <option value="Pendiente" className={"optionStyle"}>Pendiente</option>
-            <option value="De baja" className={"optionStyle"}>De baja</option>
-          </select>
-        </HStack>
+            <Box as="option" value="" className="optionStyle">
+              Todos
+            </Box>
+            <Box as="option" value="Aceptado" className="optionStyle">
+              Aceptado
+            </Box>
+            <Box as="option" value="Rechazado" className="optionStyle">
+              Rechazado
+            </Box>
+            <Box as="option" value="Pendiente" className="optionStyle">
+              Pendiente
+            </Box>
+            <Box as="option" value="De baja" className="optionStyle">
+              De baja
+            </Box>
+          </Select>
+          <span className="select-arrow">&#9662;</span>
+        </div>
       </form>
       <Box maxH="55vh" width="100%" borderRadius="10px" overflowY="scroll" maxHeight="37rem" sx={{
         "&::-webkit-scrollbar": {
