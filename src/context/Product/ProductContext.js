@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
-import Axios from "axios";
-import API from '../api';
+import axios from '../api';
 import { string } from 'yup';
 
 const ProductContext = createContext(null)
@@ -65,18 +64,18 @@ const ProductProvider = props => {
   const getProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await Axios.get('/api/productos/get-all-homepage');
+      const res = await axios.get('/api/productos/get-all-homepage');
       //const res = await axios.get('https://reqres.in/api/users');
       const data = res.data;
       formatoProductos(data);
     } catch (error) {
-      console.log("la consulta fallo, procedo a setear unos datos por defecto");
+      console.log("La consulta fallo, procedo a setear unos datos por defecto");
     }
   };
 
   const getProduct = async id => {
     try {
-      const res = await Axios.get(`/api/producto-homepage/${id}`);
+      const res = await axios.get(`/api/producto-homepage/${id}`);
       const data = res.data;
       setProductSelected(formatoProducto(data[0]))
     } catch (error) { }

@@ -79,15 +79,15 @@ export default function Header() {
                 <Menu>
                     {buttonMenu('Ingredientes')}
                     <MenuList>
-                        <MenuItem onClick={() => handleClick('/Home/RegisterMaterial')}>Crear Material</MenuItem>
-                        <MenuItem onClick={() => handleClick('/Home/BuscarMaterial')}>Buscar material</MenuItem>
+                        <MenuItem onClick={() => handleClick('/Home/CrearIngrediente')}>Crear Material</MenuItem>
+                        <MenuItem onClick={() => handleClick('/Home/AdministrarIngredientes')}>Buscar material</MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>
                     {buttonMenu('Productos')}
                     <MenuList>
-                        <MenuItem onClick={() => handleClick('/Home/CreacionProductos')}>Administrar Producto</MenuItem>
-                        <MenuItem onClick={() => handleClick('/Home/CrearReseta')}>Crear Reseta</MenuItem>
+                        <MenuItem onClick={() => handleClick('/Home/RegistrarProductos')}>Registrar producto</MenuItem>
+                        <MenuItem onClick={() => handleClick('/Home/AdministracionProductos')}>Administrar Productos</MenuItem>
                     </MenuList>
                 </Menu>
                 <Menu>

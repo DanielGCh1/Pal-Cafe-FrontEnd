@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
-import Axios from "axios";
-import API from '../api';
+
+import Axios from '../api';
 
 const AdmProductContext = createContext(null)
 
@@ -49,7 +49,7 @@ const AdmProductProvider = props => {
   const getAdmProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await Axios.get('/api/productos/get-all');
+      const res = await Axios.get('/productos/get-all');
       const data = res.data;
       setAdmProducts(data);
       addAdmProductsAux(data);
@@ -61,7 +61,7 @@ const AdmProductProvider = props => {
 
   const getAdmProduct = async id => {
     try {
-      const res = await Axios.get(`/api/producto/${id}`);
+      const res = await Axios.get(`/producto/${id}`);
       const data = res.data;
       setAdmProduct(data[0]);
       console.log(data)
@@ -91,7 +91,7 @@ const AdmProductProvider = props => {
 
   const addAdmProduct = async (values, actions) => {
     try {
-      Axios.post('/api/products/add', {
+      Axios.post('/products/add', {
         pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
         pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
         pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
@@ -108,7 +108,7 @@ const AdmProductProvider = props => {
     console.log(id);
     try {
       // TODO: 
-      Axios.delete(`/api/productos/delete/${id}`).then((data => console.log(data)));
+      Axios.delete(`/productos/delete/${id}`).then((data => console.log(data)));
       setAdmProductsAux((current) => current.filter((admProductsAux) => admProductsAux._id != id))
       setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
     } catch (error) { }
@@ -116,7 +116,7 @@ const AdmProductProvider = props => {
   const editAdmProductRecipe = async () => {
     try {
 
-      Axios.put(`/api/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
+      Axios.put(`/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
     } catch (error) { }
   };
 
@@ -132,7 +132,7 @@ const AdmProductProvider = props => {
         pro_imagenUrl: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
         pro_ingredientes: values.receta
       };
-      Axios.put(`/api/productos/edit/${values._id}`, val).then((data => console.log(data)))
+      Axios.put(`/productos/edit/${values._id}`, val).then((data => console.log(data)))
     } catch (error) { }
     actions.setSubmitting(false);
   };
@@ -141,7 +141,7 @@ const AdmProductProvider = props => {
     try {
       // TODO: 
       console.log(values);
-      Axios.put(`/api/productos/edit/${values._id}`, values).then((data => console.log(data)))
+      Axios.put(`/productos/edit/${values._id}`, values).then((data => console.log(data)))
       proAux.pro_existencias = values.pro_existencias;
     } catch (error) { }
   };

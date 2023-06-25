@@ -1,7 +1,7 @@
 import { Button, HStack, Image, Input, Table, TableCaption, TableContainer, Tbody, Tfoot, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import ComboBox from '../componets/ComboBox'
-import axios from 'axios'
+import axios from '../context/api'
 
 const HistorialProduccion = () => {
     const [selected, setSelected] = useState(true)
@@ -14,7 +14,7 @@ const HistorialProduccion = () => {
     useEffect(() => {
         const fetchProductos = async () => {
           try {
-            const response = await axios.get('/api/historial/buscar/productos');
+            const response = await axios.get('/historial/buscar/productos');
             setProductos(response.data);
           } catch (error) {
             console.error('Error al obtener los productos:', error);
@@ -23,7 +23,7 @@ const HistorialProduccion = () => {
 
         const fetchPromos = async () => {
             try {
-              const response = await axios.get('/api/historial/buscar/promociones');
+              const response = await axios.get('/historial/buscar/promociones');
               setPromociones(response.data);
             } catch (error) {
               console.error('Error al obtener las promociones:', error);
@@ -58,7 +58,7 @@ const HistorialProduccion = () => {
         try {
             const date = new Date(fecha).toLocaleDateString().replace(/\//g, '-')
             setDate(date)
-            const res = await axios.get(`/api/historial/${date}`)
+            const res = await axios.get(`/historial/${date}`)
             if (res.data.mensaje === "No hay datos") {
                 alert(date + " no hay registros")
             }
@@ -88,7 +88,7 @@ const HistorialProduccion = () => {
                 hist: list
             }
             try {
-                const response = await axios.post('/api/historial/add', datos);
+                const response = await axios.post('/historial/add', datos);
                 alert(response.data);
                 console.log(response.status)
             } catch (error) {

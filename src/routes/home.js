@@ -1,6 +1,6 @@
 import Header from '../componets/header';
 import NotificationsDrawer from '../componets/NotificationsDrawer';
-import { Container } from '@chakra-ui/react';
+import { Container, VStack } from '@chakra-ui/react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import Axios from "../context/api";
@@ -46,7 +46,7 @@ export default function Home() {
           left='15%'
           height='90%'
         >
-          <Notificaciones />
+          {/* <Notificaciones /> */}
           <Outlet />
         </VStack>
 

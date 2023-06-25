@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import Axios from 'axios'
+import axios from '../api'
 
 const isUndefined = obj => {
   if (obj === "undefined" || typeof obj === "undefined") {
@@ -41,7 +41,7 @@ const IngredientProvider = (props) => {
 
   const getIngredients = async () => {
     try {
-      const res = await Axios.get('/api/ingredientes/get-all');
+      const res = await axios.get('/ingredientes/get-all');
       const data = res.data;
       if (data.length > 0) {
         setIngredients(data);
@@ -70,7 +70,7 @@ const IngredientProvider = (props) => {
   };
   const getIngredient = async id => {
     try {
-      const response = await Axios.get(`/api/ingredientes/${id}`);
+      const response = await axios.get(`/ingredientes/${id}`);
       const data = response.data;
       setIngredient(data);
       if (response.status != 200) {
@@ -83,9 +83,9 @@ const IngredientProvider = (props) => {
   };
   const getIngredientImageUrl = async id => {
     try {
-      const response = await Axios.get(`/api/ingredientes/imagen/${id}`);
+      const response = await axios.get(`/ingredientes/imagen/${id}`);
       if (response.status = 200) {
-        setIngredientUrl(`http://localhost:3001/api/ingredientes/imagen/${id}`);
+        setIngredientUrl(`http://localhost:3001/ingredientes/imagen/${id}`);
       }
       else {
         setIngredientUrl(require('../../assets/ImagenNoEncontrada.png'));
@@ -108,7 +108,7 @@ const IngredientProvider = (props) => {
       formData.append('image', values.image);
       formData.append('stock', values.stock);
 
-      const response = await Axios.post('/api/ingredientes/add', formData, {
+      const response = await axios.post('/ingredientes/add', formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -132,7 +132,7 @@ const IngredientProvider = (props) => {
     console.log(id);
     try {
       let response;
-      await Axios.delete(`/api/ingredientes/delete/${id}`).then((data => response = data));
+      await axios.delete(`/ingredientes/delete/${id}`).then((data => response = data));
       if (response.status == 200) {
         setIngredientsAux((current) => current.filter((ingredientsAux) => ingredientsAux._id != id))
         setIngredients((current) => current.filter((ingredients) => ingredients._id != id))
@@ -158,8 +158,8 @@ const IngredientProvider = (props) => {
       formDataEdit.append('newImage', values.newImage);
 
       console.log(formDataEdit);
-      //const response = await Axios.put(`/api/ingredientes/edit/${values._id}`, formData, {
-      const response = await Axios.put(`/api/ingredientes/edit/${values._id}`, formDataEdit, {
+      //const response = await axios.put(`/ingredientes/edit/${values._id}`, formData, {
+      const response = await axios.put(`/ingredientes/edit/${values._id}`, formDataEdit, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -186,7 +186,7 @@ const IngredientProvider = (props) => {
         image: values.ing_imagenURL, stock: values.ing_existencias
       }
 
-      const response = await Axios.put(`/api/ingredientes/edit/${values._id}`, ing);
+      const response = await axios.put(`/ingredientes/edit/${values._id}`, ing);
       if (response.status == 200) {
         ingAux.ing_existencias = values.ing_existencias;
       }
