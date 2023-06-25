@@ -1,7 +1,5 @@
 import React, { createContext, useState } from 'react';
 import Axios from "axios";
-import API from '../api';
-import { string } from 'yup';
 
 const ProductContext = createContext(null)
 

@@ -4,6 +4,7 @@ import { Container, VStack } from '@chakra-ui/react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import Axios from "../context/api";
+import Notificaciones from '../routes/Notificaciones';
 
 export default function Home() {
   const navigate = useNavigate();
