@@ -62,7 +62,7 @@ export default function SeeOrder() {
             },
         }}>
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="black" fontWeight="bold" size='2xl'>Pedido</Heading>
+                <Heading  fontWeight="bold" size='2xl'>Pedido</Heading>
             </Box>
             {(order != null) ?
                 <Formik

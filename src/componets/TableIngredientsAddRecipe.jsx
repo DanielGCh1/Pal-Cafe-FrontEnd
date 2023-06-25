@@ -5,79 +5,101 @@ import { Table, Tbody, Tr, Td, Button, IconButton, Text, FormControl, FormErrorM
 import { AddIcon } from '@chakra-ui/icons';
 import { useRef } from "react";
 
+const isUndefined = obj => {
+    if (obj === "undefined" || typeof obj === "undefined") {
+        return true;
+    }
+    return false;
+};
+
+const isNull = obj => {
+    if (obj === null) {
+        return true;
+    }
+    return false;
+};
+
+const isUndefinedOrNull = obj => {
+    if (isUndefined(obj) || isNull(obj)) {
+        return true;
+    }
+    return false;
+};
+
 const TableComponent = ({ data, onAdd }) => {
 
-    return (
-
-        <TableContainer width="100%">
-            <Box overflowY="scroll" maxHeight="15rem" sx={{
-                "&::-webkit-scrollbar": {
-                    width: "7px",
-                    backgroundColor: "transparent",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                    bg: "gray.400",
-                    borderRadius: "full",
-                    opacity: "0.4",
-                    "&:hover": {
-                        opacity: "0.7",
+    return <>
+        {!isUndefinedOrNull(data)
+            ?
+            <TableContainer width="100%">
+                <Box overflowY="scroll" maxHeight="15rem" sx={{
+                    "&::-webkit-scrollbar": {
+                        width: "7px",
+                        backgroundColor: "transparent",
                     },
-                },
-            }}>
-                <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
-                    <Thead>
-                        <Tr>
-                            <Th color='white'>Nombre</Th>
-                            <Th color='white'>Unidad</Th>
-                            <Th color='white'>Cantidad</Th>
-                            <Th color='white'>Precio</Th>
-                            <Th color='white'>Agregar</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {data.map((item) => (
-                            <Tr key={item._id}>
-                                <Td>
-                                    <Text color="white" >{item.ing_nombre}</Text>
-                                </Td>
-                                <Td>
-                                    <Text color="white" >{item.ing_tipo_unidad}</Text>
-                                </Td>
-                                <Td>
-                                    <Text color="white" >{item.ing_cantidad}</Text>
-                                </Td>
-                                <Td>
-                                    <Text color="white" >{item.ing_precio}</Text>
-                                </Td>
-                                <Td>
-                                    <IconButton
-                                        aria-label="Agregar"
-                                        icon={<AddIcon />}
-                                        onClick={() => onAdd(item)}
-                                    />
-                                </Td>
+                    "&::-webkit-scrollbar-thumb": {
+                        bg: "gray.400",
+                        borderRadius: "full",
+                        opacity: "0.4",
+                        "&:hover": {
+                            opacity: "0.7",
+                        },
+                    },
+                }}>
+                    <Table variant='simple' bgColor="rgba(0,0,0,.2)" borderRadius="7px">
+                        <Thead>
+                            <Tr>
+                                <Th color='white'>Nombre</Th>
+                                <Th color='white'>Unidad</Th>
+                                <Th color='white'>Cantidad</Th>
+                                <Th color='white'>Precio</Th>
+                                <Th color='white'>Agregar</Th>
                             </Tr>
-                        ))}
-                    </Tbody>
-                    <Tfoot>
-                        <Tr>
-                            <Th color='white'>Nombre</Th>
-                            <Th color='white'>Unidad</Th>
-                            <Th color='white'>Cantidad</Th>
-                            <Th color='white'>Precio</Th>
-                            <Th color='white'>Agregar</Th>
-                        </Tr>
-                    </Tfoot>
-                </Table>
+                        </Thead>
+                        <Tbody>
+                            {data.map((item) => (
+                                <Tr key={item._id}>
+                                    <Td>
+                                        <Text color="white" >{item.ing_nombre}</Text>
+                                    </Td>
+                                    <Td>
+                                        <Text color="white" >{item.ing_tipo_unidad}</Text>
+                                    </Td>
+                                    <Td>
+                                        <Text color="white" >{item.ing_cantidad}</Text>
+                                    </Td>
+                                    <Td>
+                                        <Text color="white" >{item.ing_precio}</Text>
+                                    </Td>
+                                    <Td>
+                                        <IconButton
+                                            aria-label="Agregar"
+                                            icon={<AddIcon />}
+                                            onClick={() => onAdd(item)}
+                                        />
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th color='white'>Nombre</Th>
+                                <Th color='white'>Unidad</Th>
+                                <Th color='white'>Cantidad</Th>
+                                <Th color='white'>Precio</Th>
+                                <Th color='white'>Agregar</Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
 
-            </Box>
-            {/*
+                </Box>
+                {/*
             <Button marginTop="20px" bg="red" color="white" onClick={saveChanges}>
                 Guardar cambios
             </Button>
              */}
-        </TableContainer>
-    );
-};
-
+            </TableContainer>
+            : null}
+    </>
+}
 export default TableComponent;

@@ -165,7 +165,13 @@ export default function EditProduct() {
                                 .required('El producto requiere de las existencias que hay'),
                         })}
                         onSubmit={(values, actions) => {
-                            editAdmProduct(values, actions);
+                            if (window.confirm("¿Está seguro que desea editar el producto?")) {
+                                editAdmProduct(values, actions);
+                            }
+                            else {
+                                actions.setSubmitting(false);
+                            }
+
                         }}
                     >
                         {(props) => (
@@ -174,49 +180,49 @@ export default function EditProduct() {
                                     <HStack spacing='28'>
                                         <SimpleGrid columns={[1, 2, 3, 4]} spacing='30px' alignItems='center' w="100%">
                                             <GridItem rowSpan={2}>
-                                            <Field name="imageUrlLocal" validate={validateImage} h='calc(100vh)'>
-                                                {({ field, form }) => (
-                                                    <FormControl maxW='100%' isInvalid={form.errors.imageUrlLocal && form.touched.imageUrlLocal}
-                                                        display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
-                                                        <FormLabel htmlFor="foto">Foto</FormLabel>
-                                                        {productUrl ? (
-                                                            <Box mt={4} pos="relative">
-                                                                <Image src={productUrl}
-                                                                    width='200px'
-                                                                    height='200px'
-                                                                    alt="Imagen seleccionada" />
-                                                                <Button
-                                                                    pos="absolute"
-                                                                    top="0"
-                                                                    right="0"
-                                                                    colorScheme="red"
-                                                                    onClick={handleImageDelete}
-                                                                >
-                                                                    <Icon as={FaTimes} />
-                                                                </Button>
-                                                            </Box>
-                                                        ) : null}
+                                                <Field name="imageUrlLocal" validate={validateImage} h='calc(100vh)'>
+                                                    {({ field, form }) => (
+                                                        <FormControl maxW='100%' isInvalid={form.errors.imageUrlLocal && form.touched.imageUrlLocal}
+                                                            display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
+                                                            <FormLabel htmlFor="foto">Foto</FormLabel>
+                                                            {productUrl ? (
+                                                                <Box mt={4} pos="relative">
+                                                                    <Image src={productUrl}
+                                                                        width='200px'
+                                                                        height='200px'
+                                                                        alt="Imagen seleccionada" />
+                                                                    <Button
+                                                                        pos="absolute"
+                                                                        top="0"
+                                                                        right="0"
+                                                                        colorScheme="red"
+                                                                        onClick={handleImageDelete}
+                                                                    >
+                                                                        <Icon as={FaTimes} />
+                                                                    </Button>
+                                                                </Box>
+                                                            ) : null}
 
-                                                        <Button
-                                                            colorScheme="green"
-                                                            size="sm"
-                                                            borderRadius="md"
-                                                            onClick={() => document.getElementById('image').click()}
-                                                        >
-                                                            Buscar
-                                                        </Button>
-                                                        <Input
-                                                            style={{ display: 'none' }}
-                                                            placeholder='Debe incluir una imagen'
-                                                            id="image"
-                                                            type="file"
-                                                            accept=".jpg, .png, .jpeg"
-                                                            onChange={handleImageChange}
-                                                        />
-                                                        <FormErrorMessage fontWeight="bold">{form.errors.imageUrlLocal}</FormErrorMessage>
-                                                    </FormControl>
-                                                )}
-                                            </Field>
+                                                            <Button
+                                                                colorScheme="green"
+                                                                size="sm"
+                                                                borderRadius="md"
+                                                                onClick={() => document.getElementById('image').click()}
+                                                            >
+                                                                Buscar
+                                                            </Button>
+                                                            <Input
+                                                                style={{ display: 'none' }}
+                                                                placeholder='Debe incluir una imagen'
+                                                                id="image"
+                                                                type="file"
+                                                                accept=".jpg, .png, .jpeg"
+                                                                onChange={handleImageChange}
+                                                            />
+                                                            <FormErrorMessage fontWeight="bold">{form.errors.imageUrlLocal}</FormErrorMessage>
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
                                             </GridItem>
                                             <Field name='nombre'>
                                                 {({ field, form }) => (
