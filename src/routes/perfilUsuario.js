@@ -124,19 +124,18 @@ export default function PerfilUsuario() {
             <Formik
                 innerRef={ref}
                 initialValues={{
+                    _id: customer._id,
                     name: customer.usu_nombre,
                     user: customer.usu_usuario,
                     surname: customer.usu_primer_apellido,
                     secondSurname: customer.usu_segundo_apellido,
-                    registrationDate: getDate(customer.usu_fecha_registro),
+                    registrationDate: customer.usu_fecha_registro,
                     firstNumber: customer.usu_numero_telefono1,
                     secondNumber: customer.usu_numero_telefono2,
                     address: customer.usu_direccion,
                     state: customer.usu_estado,
                     email: customer.usu_correo,
-                    password: '',
-                    newPassword: '',
-                    image: customer.usu_foto
+                    password: customer.usu_contraseña
                 }}
 
                 validationSchema={Yup.object({
@@ -175,53 +174,6 @@ export default function PerfilUsuario() {
                         <Form>
                             <HStack spacing='28'>
                                 <SimpleGrid columns={[1, 2, 3]} spacing='40px' alignItems='center'>
-                                    <GridItem rowSpan={2}>
-                                        <Field name="image" validate={validateImage} h='calc(100vh)'>
-                                            {({ field, form }) => (
-                                                <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
-                                                    display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
-                                                    <FormLabel htmlFor="foto">Foto</FormLabel>
-                                                    {imagePreviewUrl ? (
-                                                        <Box mt={4} pos="relative">
-                                                            <Image src={imagePreviewUrl}
-                                                                width='200px'
-                                                                height='200px'
-                                                                alt="Imagen seleccionada" />
-                                                            <Button
-                                                                pos="absolute"
-                                                                top="0"
-                                                                right="0"
-                                                                colorScheme="red"
-                                                                onClick={handleImageDelete}
-                                                            >
-                                                                <Icon as={FaTimes} />
-                                                            </Button>
-                                                        </Box>
-                                                    ) : null}
-
-                                                    <Button
-                                                        colorScheme="green"
-                                                        size="sm"
-                                                        borderRadius="md"
-                                                        onClick={() => document.getElementById('image').click()}
-                                                    >
-                                                        Buscar
-                                                    </Button>
-                                                    <Input
-                                                        style={{ display: 'none' }}
-                                                        placeholder='Debe incluir una imagen'
-                                                        id="image"
-                                                        type="file"
-                                                        accept=".jpg, .png"
-                                                        onChange={handleImageChange}
-                                                    />
-                                                    <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
-                                                </FormControl>
-                                            )}
-                                        </Field>
-
-                                    </GridItem>
-
                                     <Field name='name'>
                                         {({ field, form }) => (
                                             <FormControl isInvalid={form.errors.name && form.touched.name}>

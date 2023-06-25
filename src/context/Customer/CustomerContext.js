@@ -178,17 +178,25 @@ const CustomerProvider = props => {
 
     const editCustomer = async (values, actions) => {
         try {
-          console.log(values);
-          const val = {
-            _id: values._id,
-            ing_nombre: values.name, ing_descripcion: values.description,
-            ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
-            ing_imagen: values.image, ing_existencias: values.stock
-          };
-          Axios.put(`/api/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+            console.log(values);
+            const val = {
+                _id: values._id,
+                usu_nombre: values.name,
+                usu_usuario: values.user,
+                usu_primer_apellido: values.surname,
+                usu_segundo_apellido: values.secondSurname,
+                usu_fecha_registro: values.registrationDate,
+                usu_numero_telefono1: values.firstNumber,
+                usu_numero_telefono2: values.secondNumber,
+                usu_direccion: values.address,
+                usu_estado: values.state,
+                usu_correo: values.email,
+                usu_contraseña: values.password
+            };
+            Axios.put(`/api/users/edit/${values._id}`, val).then((data => console.log(data)))
         } catch (error) { }
         actions.setSubmitting(false);
-      };
+    };
     return (
         <CustomerContext.Provider
             value={{
