@@ -14,7 +14,7 @@ const ClienteProvider = props => {
 
   useEffect(() => {
     setError(null);
-    axios.get('/api/users-getall')
+    axios.get('/users-getall')
       .then(response => {
         const data = response.data;
         setClientes(data);
@@ -102,7 +102,7 @@ const ClienteProvider = props => {
 
   const setCliente = async () => {
     try {
-      const res = axios.put('/api/clientes/edit-all-permission/', clientes)
+      const res = axios.put('/clientes/edit-all-permission/', clientes)
       console.log(res)
     } catch (error) {
       console.error(error);
@@ -111,7 +111,7 @@ const ClienteProvider = props => {
 
   const editClient = async (values, actions) => {
     try {
-      const res = await axios.put(`/api/cliente/edit/${values._id}`, values);
+      const res = await axios.put(`/cliente/edit/${values._id}`, values);
       if (res.status == 200) {
         // Find the index of the edited promotion in the promotions array
         const editedClientesIndex = clientes.findIndex(cliente => cliente._id === values._id);
