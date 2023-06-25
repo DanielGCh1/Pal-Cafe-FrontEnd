@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import useAdmProduct from '../context/AdministrativeProduct/AdmUseProduct';
 import TableComponent from '../componets/TableComponentManagerProducts';
 import { Link, useNavigate } from "react-router-dom";
+import ProductFilter from '../componets/ProductFilter';
 
 export default function AdministracionProductos() {
 
-    const { admProduct, admProducts, deleteAdmProduct, editAdmProduct, getAdmProducts, setAdmProduct, getProductsAux } = useAdmProduct();
+    const { admProduct, admProducts,setAdmProducts, admProductsAux, deleteAdmProduct, editAdmProducts, getAdmProducts, setAdmProduct, getProductsAux } = useAdmProduct();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,7 +31,7 @@ export default function AdministracionProductos() {
     };
     //TODO: editar esto a productos
     const handleEditProducts = () => {
-        editAdmProduct();
+        editAdmProducts();
     };
     return <>
         <VStack h='100vh' alignItems='center'>
@@ -38,7 +39,7 @@ export default function AdministracionProductos() {
             <Box p='6' display="flex" justifyContent={'center'}>
                 <Heading color="white" fontWeight="bold" size='2xl'>Administrar Productos</Heading>
             </Box>
-
+            <ProductFilter admProductsAux={admProductsAux}  setAdmProducts={setAdmProducts}></ProductFilter>
             <VStack maxWidth="600px" margin="0 auto" display="flex" flexDirection='column'>
                 <TableComponent data={admProducts} onEdit={handleEdit} onDelete={handleDelete} saveChangesProducts={handleEditProducts} />
             </VStack>

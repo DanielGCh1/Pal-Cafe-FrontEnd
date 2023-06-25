@@ -107,7 +107,7 @@ const IngredientProvider = (props) => {
       formData.append('amount', values.amount);
       formData.append('image', values.image);
       formData.append('stock', values.stock);
-
+      console.log(formData);
       const response = await Axios.post('/api/ingredientes/add', formData, {
         withCredentials: true,
         headers: {
@@ -173,7 +173,7 @@ const IngredientProvider = (props) => {
         window.alert(response.data.message);
       }
     } catch (error) {
-      window.alert("Error inesperado al agregar el ingrediente" + error);
+      window.alert("Error inesperado al editar el ingrediente");
     }
     actions.setSubmitting(false);
   };

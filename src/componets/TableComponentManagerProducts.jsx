@@ -16,8 +16,13 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
-      if (ref.current.errors.stock != 'Existencias requeridas') {
-        saveChangesProducts();
+      if (data.length > 0) {
+        if (ref.current.errors.stock != 'Existencias requeridas') {
+          saveChangesProducts();
+        }
+      }
+      else {
+        window.alert("No existen productos, para guardar cambios");
       }
     }
   };
@@ -63,13 +68,13 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesProducts }) => {
                 <Td>
                   <Formik
                     innerRef={ref}
-                    initialValues={{ existencias: item.pro_existencias }}
+                    initialValues={{ stock: item.pro_existencias }}
                     validationSchema={validationSchema}
                     onSubmit={() => { }}
                   >
                     {(props) => (
                       <Form>
-                        <Field name="existencias" validate={() => validate(item._id)}>
+                        <Field name="stock" validate={() => validate(item._id)}>
                           {({ field, form }) => (
                             <FormControl isInvalid={form.errors.stock && form.touched.stock}>
                               <Input

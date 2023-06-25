@@ -42,7 +42,6 @@ export default function CreateIngredient() {
         event.preventDefault();
         let reader = new FileReader();
         let file = event.target.files[0];
-        console.log(file);
         ref.current.values.image = file;
         validateImage(ref.current.values.image);
         reader.onloadend = () => {
@@ -69,9 +68,6 @@ export default function CreateIngredient() {
         }
         return error
     }
-    useEffect(() => {
-        console.log(imagePreviewUrl);
-    }, [imagePreviewUrl]);
     return <>
         <VStack h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
             "&::-webkit-scrollbar": {
@@ -100,9 +96,6 @@ export default function CreateIngredient() {
                         drive_type: 'Gramos',
                         amount: 0,
                         image: null,
-                        /*
-                        image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
-                        */
                         stock: 0,
                     }}
 
@@ -174,7 +167,7 @@ export default function CreateIngredient() {
                                                             placeholder='Debe incluir una imagen'
                                                             id="image"
                                                             type="file"
-                                                            accept=".jpg, .png"
+                                                            accept=".jpg, .png, .jpeg"
                                                             onChange={handleImageChange}
                                                         />
                                                         <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
@@ -196,8 +189,7 @@ export default function CreateIngredient() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.price && form.touched.price}>
                                                     <FormLabel>Precio</FormLabel>
-                                                    <Input {...field} min={1} type='number' /> {/*el {...field} = es donde esta el valor a donde 
-                                        esta apuntando el name, en este caso seria 'price' de los initialValues*/}
+                                                    <Input {...field} min={1} type='number' /> 
                                                     <FormErrorMessage fontWeight="bold">{form.errors.price}</FormErrorMessage>
                                                 </FormControl>
                                             )}
