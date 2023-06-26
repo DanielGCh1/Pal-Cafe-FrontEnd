@@ -43,7 +43,6 @@ export default function CreateIngredient() {
         let reader = new FileReader();
         let file = event.target.files[0];
         ref.current.values.image = file;
-        validateImage(ref.current.values.image);
         reader.onloadend = () => {
             setImagePreviewUrl(reader.result);
         };
@@ -64,7 +63,7 @@ export default function CreateIngredient() {
             }
         }
         else {
-            return error = "Ingrese una imagen válida, solo se admite los formatos: png y jpg."
+            return error = "Ingrese una imagen válida, solo se admite los formatos: png, jpg  y jpeg."
         }
         return error
     }

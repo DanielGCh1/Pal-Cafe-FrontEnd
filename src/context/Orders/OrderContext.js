@@ -44,20 +44,20 @@ const deliteItemList = (data, itemId) => {
 };
 const getMinorDayMonth = (val) => {
   if (val == 0) {
-      val++;
+    val++;
   }
   if (val < 10) {
-      var value = '0';
-      value = value + `${val}`
-      return value;
+    var value = '0';
+    value = value + `${val}`
+    return value;
   }
   return val;
 }
 const getMinor = (val) => {
   if (val < 10) {
-      var value = '0';
-      value = value + `${val}`
-      return value;
+    var value = '0';
+    value = value + `${val}`
+    return value;
   }
   return val;
 }
@@ -230,32 +230,45 @@ const OrderProvider = props => {
     return list;
   };
   const formatoOrdenEnviar = (values) => {
-    const order = {
-      ped_nombre_cliente: values.name,
-      ped_direccion: values.address,
-      ped_numero_telefono1: values.phoneNumber1,
-      ped_numero_telefono2: values.phoneNumber2,
-      ped_costo: values.cost,
-      ped_fecha_pedido: values.dateHour,
-      ped_nota_cliente: values.customerNote,
-      ped_fk_usuario: values.customer_id,
-      ped_especial: values.specialOrder,
-      ped_productos: productShippingListFormat(listProductsOrder),
-      ped_imagenes_pedido: imagesOrder,
-      ped_enviar_pedido: values.sendOrder,
-    }
-    return order;
+    const formData = new FormData();
+
+    formData.append('ped_nombre_cliente', values.name);
+    formData.append('ped_direccion', values.address);
+    formData.append('ped_numero_telefono1', values.phoneNumber1);
+    formData.append('ped_numero_telefono2', values.phoneNumber2);
+    formData.append('ped_costo', values.cost);
+    formData.append('ped_fecha_pedido', values.dateHour);
+    formData.append('ped_nota_cliente', values.customerNote);
+    formData.append('ped_fk_usuario', values.customer_id);
+    formData.append('ped_especial', values.specialOrder);
+    formData.append('ped_productos', productShippingListFormat(listProductsOrder));
+    formData.append('ped_imagenes_pedido', values.image);
+    formData.append('ped_enviar_pedido', values.sendOrder);
+
+    return formData;
   };
+
+
   const addOrder = async (values, actions) => {
-    console.log(formatoOrdenEnviar(values));
     try {
-      const res = await Axios.post('/api/pedido/add',
-        formatoOrdenEnviar(values)
-        , {
-          withCredentials: true
-        }).then((data => console.log(data)))
-      actions.setSubmitting(false)
-    } catch (error) { }
+      var formattedOrder = formatoOrdenEnviar(values);
+      const response = await Axios.post('/api/pedido/add', formattedOrder, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 200) {
+        window.alert(response.data.message);
+      } else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      window.alert("Error inesperado al guardar el pedido");
+      console.error(error);
+    }
+    actions.setSubmitting(false);
   };
 
   const getOrder = async id => {
