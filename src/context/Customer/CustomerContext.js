@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
-import { useEffect } from 'react';
 import Axios from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
@@ -83,22 +83,18 @@ const CustomerContext = createContext(null)
 const CustomerProvider = props => {
 
     const [customer, setCustomer] = useState(null)
+    const navigate = useNavigate();
 
     const getCookie = async () => {
-        try {
-            const { data } = await Axios.get("/getCookie", {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            if (isObj(data)) {
-                setCustomer(data);
-                console.log(data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        await Axios.get("/getCookie", {
+            withCredentials: true
+        }).then(res => {
+            setCustomer(res.data);
+        }).catch(err => {
+            navigate("/palcafe");
+        });
     }
+
     const getSectionCustomer = async () => {
         getCookie();
     };
@@ -141,7 +137,7 @@ const CustomerProvider = props => {
         console.log("hola");
         try {
             console.log("hola");
-            const { data } = await Axios.get("/logout", {
+            const { data } = await Axios.delete("/logout", {
                 withCredentials: true
             });
             setCustomer(null);
@@ -165,17 +161,17 @@ const CustomerProvider = props => {
 
     const editCustomer = async (values, actions) => {
         try {
-          console.log(values);
-          const val = {
-            _id: values._id,
-            ing_nombre: values.name, ing_descripcion: values.description,
-            ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
-            ing_imagen: values.image, ing_existencias: values.stock
-          };
-          Axios.put(`/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+            console.log(values);
+            const val = {
+                _id: values._id,
+                ing_nombre: values.name, ing_descripcion: values.description,
+                ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
+                ing_imagen: values.image, ing_existencias: values.stock
+            };
+            Axios.put(`/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
         } catch (error) { }
         actions.setSubmitting(false);
-      };
+    };
     return (
         <CustomerContext.Provider
             value={{

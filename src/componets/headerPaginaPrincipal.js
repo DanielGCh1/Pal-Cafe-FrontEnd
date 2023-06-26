@@ -34,7 +34,7 @@ import { useNavigate } from "react-router-dom";
 
 const buttonMenu = (name) => {
     return (
-        <Button
+        <MenuButton
             bg='black'
             color='white'
             px={4}
@@ -46,7 +46,7 @@ const buttonMenu = (name) => {
             _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}
         >
             {name} <ChevronDownIcon />
-        </Button>
+        </MenuButton>
     );
 }
 

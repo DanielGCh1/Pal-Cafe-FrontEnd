@@ -64,8 +64,8 @@ const ProductProvider = props => {
   const getProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await axios.get('/api/productos/get-all-homepage');
-      //const res = await axios.get('https://reqres.in/api/users');
+      const res = await axios.get('/productos/get-all-homepage');
+      //const res = await axios.get('https://reqres.in/users');
       const data = res.data;
       formatoProductos(data);
     } catch (error) {
@@ -75,7 +75,7 @@ const ProductProvider = props => {
 
   const getProduct = async id => {
     try {
-      const res = await axios.get(`/api/producto-homepage/${id}`);
+      const res = await axios.get(`/producto-homepage/${id}`);
       const data = res.data;
       setProductSelected(formatoProducto(data[0]))
     } catch (error) { }
