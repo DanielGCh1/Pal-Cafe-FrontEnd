@@ -113,7 +113,7 @@ export default function MakeOrder() {
     return <>
 
         <Box p='4' display="flex" justifyContent={'center'}>
-            <Heading size='2xl'>Hacer Pedido</Heading>
+            <Heading size='2xl' color='white'>Hacer Pedido</Heading>
         </Box>
         {(customer != null) ?
             <Formik

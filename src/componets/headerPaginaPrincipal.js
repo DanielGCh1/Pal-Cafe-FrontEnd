@@ -31,7 +31,21 @@ import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, 
 import ShoppingCartProductList from './shoppingCartProductList'
 import { useNavigate } from "react-router-dom";
 
-
+/*
+const buttonMenu = (name) => {
+    return <>
+        <MenuButton
+            px={4}
+            py={2}
+            h='70px'
+            _hover={{ bg: 'white' }}
+            _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px' }}
+            _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: '#56070C' }}
+        >
+            {name} <ChevronDownIcon />
+        </MenuButton>
+    </>
+} */
 const buttonMenu = (name) => {
     return (
         <MenuButton
@@ -41,6 +55,7 @@ const buttonMenu = (name) => {
             py={2}
             borderRadius={10}
             h='70px'
+            fontWeight="bold"
             _hover={{ bg: '#56070C', color: 'white', fontSize: 'larger' }}
             _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px', fontSize: 'larger' }}
             _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: 'white', fontSize: 'larger' }}

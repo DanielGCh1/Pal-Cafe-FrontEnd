@@ -69,7 +69,6 @@ const TableComponentEditRecipe = ({ data, onDelete, saveChangesRecipe, ingredien
 
     {!isUndefinedOrNull(ingredients)
       ?
-
       <TableContainer width="100%">
         <Box overflowY="scroll" maxHeight="25rem" sx={{
           "&::-webkit-scrollbar": {

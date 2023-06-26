@@ -1,4 +1,4 @@
-import { Container, Box, Heading, Image, GridItem, Textarea, Checkbox } from '@chakra-ui/react'
+import { Container, Box, Heading, Image, GridItem, Textarea, Checkbox, Icon } from '@chakra-ui/react'
 import { SimpleGrid } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
 import { Flex, Spacer } from '@chakra-ui/react'
@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import useCustomer from '../context/Customer/UseCustomer';
 import { useRef } from "react";
 import useOrders from '../context/Orders/UseOrders';
+import { FaTimes } from "react-icons/fa";
 import { useEffect, useState } from 'react';
 
 const getMinor = (val) => {
@@ -76,7 +77,36 @@ export default function MakeOrderSpecial() {
     const { customer } = useCustomer();
     const { addOrder, calculateOrderCost, listProductsOrder } = useOrders();
 
-    const ref = useRef(null);//hace referencia a los datos del formulario
+    const ref = useRef(null);
+
+    const handleImageChange = (event) => {
+        event.preventDefault();
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        ref.current.values.image = file;
+        reader.onloadend = () => {
+            setImagePreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+    const handleImageDelete = () => {
+        setImagePreviewUrl(null);
+        ref.current.values.image = null;
+    };
+    function validateImage(value) {
+        let error
+        if (!isUndefinedOrNull(value)) {
+            if (value.type === "image/png" || value.type === "image/jpg" || value.type === "image/jpeg") {
+                if (value.size > 1500000) {
+                    return error = "La imagen no puede pesar mas de 1500000";
+                }
+            }
+            else {
+                return error = "Ingrese una imagen válida, solo se admite los formatos: png y jpg."
+            }
+        }
+        return error
+    }
 
 
     return <>
@@ -96,7 +126,8 @@ export default function MakeOrderSpecial() {
                     customer_id: customer._id,
                     specialOrder: true,
                     dateHour: getDate(),
-                    sendOrder: false
+                    sendOrder: false,
+                    image: null,
                 }}
 
                 validationSchema={Yup.object({
@@ -108,12 +139,6 @@ export default function MakeOrderSpecial() {
                         .required('Requerido'),
                     dateHour: Yup.date().required('Este campo es obligatorio')
 
-                    /*
-                foto: Yup.mixed().required("Debes subir una imagen").test(
-                    "es-imagen",
-                    "Debes subir un archivo de tipo imagen",
-                    (value) => value && value.type.includes("image")),
-                */
                 })}
 
                 onSubmit={(values, actions) => {
@@ -204,6 +229,53 @@ export default function MakeOrderSpecial() {
                             <Box p='4' display="flex" justifyContent={'center'}>
                                 <Heading size='md'>Imagenes del pedido</Heading>
                             </Box>
+
+                            <GridItem rowSpan={2}>
+                                {/* Este fiel, es el de imagen, aqui es donde se busca la imagen*/}
+                                <Field name="image" validate={validateImage} >
+                                    {({ field, form }) => (
+                                        <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
+                                            display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
+                                            <FormLabel htmlFor="foto">Foto</FormLabel>
+                                            {imagePreviewUrl ? (
+                                                <Box mt={4} pos="relative">
+                                                    <Image src={imagePreviewUrl}
+                                                        width='200px'
+                                                        height='200px'
+                                                        alt="Imagen seleccionada" />
+                                                    <Button
+                                                        pos="absolute"
+                                                        top="0"
+                                                        right="0"
+                                                        colorScheme="red"
+                                                        onClick={handleImageDelete}
+                                                    >
+                                                        <Icon as={FaTimes} />
+                                                    </Button>
+                                                </Box>
+                                            ) : null}
+
+                                            <Button
+                                                colorScheme="green"
+                                                size="sm"
+                                                borderRadius="md"
+                                                onClick={() => document.getElementById('image').click()}
+                                            >
+                                                Buscar
+                                            </Button>
+                                            <Input
+                                                style={{ display: 'none' }}
+                                                placeholder='Debe incluir una imagen'
+                                                id="image"
+                                                type="file"
+                                                accept=".jpg, .png, .jpeg"
+                                                onChange={handleImageChange}
+                                            />
+                                            <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
+                                        </FormControl>
+                                    )}
+                                </Field>
+                            </GridItem>
 
                             <Button
                                 mt={4}

@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
-
-import Axios from '../api';
+import Axios from "axios";
+import API from '../api';
 
 const AdmProductContext = createContext(null)
 
@@ -34,8 +34,8 @@ const deliteItemList = (data, itemId) => {
 
 const searchItemList = (data, itemId) => {
   if (!isUndefinedOrNull(data) && data.length > 0) {
-    console.log(data.find((element) => { return element._id == itemId}));
-    return data.find((element) => { return element._id == itemId});
+    console.log(data.find((element) => { return element._id == itemId }));
+    return data.find((element) => { return element._id == itemId });
   }
   return null;
 };
@@ -45,11 +45,13 @@ const AdmProductProvider = props => {
   const [admProducts, setAdmProducts] = useState([])
   const [admProductsAux, setAdmProductsAux] = useState([])
   const [admProduct, setAdmProduct] = useState(null)
+  const [receta, setReceta] = useState([])
+  const [productUrl, setProductUrl] = useState(null)
 
   const getAdmProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await Axios.get('/productos/get-all');
+      const res = await Axios.get('/api/productos/get-all');
       const data = res.data;
       setAdmProducts(data);
       addAdmProductsAux(data);
@@ -61,13 +63,27 @@ const AdmProductProvider = props => {
 
   const getAdmProduct = async id => {
     try {
-      const res = await Axios.get(`/producto/${id}`);
+      const res = await Axios.get(`/api/producto/${id}`);
       const data = res.data;
       setAdmProduct(data[0]);
       console.log(data)
       console.log("Se buscó el producto");
     } catch (error) {
       console.log("La consulta de obtener el producto falló");
+    }
+  };
+  const getProductImageUrl = async id => {
+    try {
+      const response = await Axios.get(`/api/productos/imagen/${id}`);
+      if (response.status = 200) {
+        setProductUrl(`http://localhost:3001/api/productos/imagen/${id}`);
+      }
+      else {
+        setProductUrl(require('../../assets/ImagenNoEncontrada.png'));
+      }
+    } catch (error) {
+      console.log('La consulta para obtener la imagen del productos falló');
+      setProductUrl(require('../../assets/ImagenNoEncontrada.png'));
     }
   };
 
@@ -91,84 +107,142 @@ const AdmProductProvider = props => {
 
   const addAdmProduct = async (values, actions) => {
     try {
-      Axios.post('/products/add', {
-        pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
-        pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
-        pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
-        pro_imagenUrl: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
-        pro_ingredientes: values.receta
-      }, {
-        withCredentials: true
-      }).then((data => console.log(data)))
-      actions.setSubmitting(false)
-    } catch (error) { }
+      const formData = new FormData();
+      formData.append('nombre', values.nombre);
+      formData.append('valor_venta', values.valor_venta);
+      formData.append('duracion', values.duracion);
+      formData.append('valor_tiempo', values.valor_tiempo);
+      formData.append('valor_total_unidad', values.valor_total_unidad);
+      formData.append('cantidad', values.cantidad);
+      formData.append('precio_mano_obra', values.precio_mano_obra);
+      formData.append('descripcion', values.descripcion);
+      formData.append('imagen', values.imagen);
+      formData.append('existencias', values.existencias);
+      formData.append('receta', receta);
+
+
+      const response = await Axios.post('/api/productos/add', formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 200) {
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      window.alert("Error inesperado al agregar el producto");
+    }
+    actions.setSubmitting(false);
   };
 
   const deleteAdmProduct = async (id) => {
-    console.log(id);
     try {
-      // TODO: 
-      Axios.delete(`/productos/delete/${id}`).then((data => console.log(data)));
-      setAdmProductsAux((current) => current.filter((admProductsAux) => admProductsAux._id != id))
-      setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
-    } catch (error) { }
+      let response;
+      await Axios.delete(`/api/productos/delete/${id}`).then((data => response = data));
+      if (response.status == 200) {
+        setAdmProductsAux((current) => current.filter((admProductsAux) => admProductsAux._id != id))
+        setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      window.alert("Error inesperado al eliminar el producto");
+    }
   };
   const editAdmProductRecipe = async () => {
     try {
 
-      Axios.put(`/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
+      Axios.put(`/api/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
     } catch (error) { }
   };
 
   const editAdmProduct = async (values, actions) => {
     try {
-      // TODO:
-      console.log(values);
-      const val = {
-        _id: values._id,
-        pro_nombre: values.nombre, pro_valor_venta: values.valor_venta,
-        pro_duracion: values.duracion, pro_valor_tiempo: values.valor_tiempo, pro_valor_unidad: values.valor_unidad,
-        pro_cantidad: values.cantidad, pro_precio_mano_obra: values.precio_mano_obra, pro_descripcion: values.descripcion,
-        pro_imagenUrl: values.imagen, pro_existencias: values.existencias, pro_valor_total_unidad: values.valor_total_unidad,
-        pro_ingredientes: values.receta
-      };
-      Axios.put(`/productos/edit/${values._id}`, val).then((data => console.log(data)))
-    } catch (error) { }
+      const formData = new FormData();
+      formData.append('nombre', values.nombre);
+      formData.append('valor_venta', values.valor_venta);
+      formData.append('duracion', values.duracion);
+      formData.append('valor_tiempo', values.valor_tiempo);
+      formData.append('valor_total_unidad', values.valor_total_unidad);
+      formData.append('cantidad', values.cantidad);
+      formData.append('precio_mano_obra', values.precio_mano_obra);
+      formData.append('descripcion', values.descripcion);
+      formData.append('imagen', values.imagen);
+      formData.append('existencias', values.existencias);
+      formData.append('receta', values.pro_ingredientes);
+      formData.append('newImage', values.newImage);
+
+
+      const response = await Axios.put(`/api/productos/edit/${values._id}`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 200) {
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      window.alert("Error inesperado al editar el producto");
+    }
     actions.setSubmitting(false);
   };
 
   const editAdmProductList = async (values, proAux) => { //TODO:
     try {
-      // TODO: 
-      console.log(values);
-      Axios.put(`/productos/edit/${values._id}`, values).then((data => console.log(data)))
-      proAux.pro_existencias = values.pro_existencias;
-    } catch (error) { }
-  };
+      const pro = {
+        _id: values._id,
+        nombre: values.pro_nombre, valor_venta: values.pro_valor_venta, duracion: values.pro_duracion,
+        valor_tiempo: values.pro_valor_tiempo, pro_valor_unidad: values.pro_valor_unidad, cantidad: values.pro_cantidad,
+        precio_mano_obra: values.pro_precio_mano_obra, descripcion: values.pro_descripcion, imagen: values.pro_imagen,
+        existencias: values.pro_existencias, valor_total_unidad: values.pro_valor_total_unidad, receta: values.pro_ingredientes
+      }
 
-  const editAdmProducts = async () => {//TODO:
-    try {
-      if (admProducts.length == admProductsAux.length) {
-        for (let i = 0; i < admProducts.length; i++) {
-          if (admProducts[i].pro_existencias !== admProductsAux[i].pro_existencias) {
-            console.log("el producto ");
-            console.log(admProducts[i].pro_existencias);
-            console.log("cambio");
-            editAdmProductList(admProducts[i], admProductsAux[i]);
-          }
-        }
+      const response = await Axios.put(`/api/productos/edit/${values._id}`, pro);
+      if (response.status == 200) {
+        proAux.pro_existencias = values.pro_existencias;
       }
       else {
-        setTimeout(() => {
-          alert(JSON.stringify("Las listas de productos no son el mismo tamaño", null, 2))
-
-        }, 1000)
+        window.alert(response.data.message + " " + values.pro_nombre);
       }
-    } catch (error) { }
+
+    } catch (error) {
+      window.alert("Error inesperado al editar el ingrediente");
+    }
   };
 
-  const getAdmProductsfilter = async nombre => {
-  };
+  const editAdmProducts = async () => {
+    console.log('editAdmProducts');
+    try {
+      for (let i = 0; i < admProducts.length; i++) {
+        var aux = searchItemList(admProductsAux, admProducts[i]._id);
+        console.log(admProducts[i].pro_existencias);
+        console.log(aux.pro_existencias);
+        if (admProducts[i].pro_existencias !== aux.pro_existencias) {
+          console.log("el producto ");
+          console.log(admProducts[i].pro_existencias);
+          console.log("cambio");
+          editAdmProductList(admProducts[i], aux);
+        }
+      }
+    } catch (error) {
+      window.alert("Hubo un error inesperado al editar el producto");
+    }
+  }
+
 
   const addIngredientList = (ingredient) => {
     var ingredientPro = null;
@@ -207,7 +281,7 @@ const AdmProductProvider = props => {
       console.log(ingredient);
       console.log(admProduct.pro_ingredientes);
       if (!isUndefinedOrNull(ing)) {
-        admProduct.pro_ingredientes = deliteItemList( admProduct.pro_ingredientes ,ing._id );
+        admProduct.pro_ingredientes = deliteItemList(admProduct.pro_ingredientes, ing._id);
         console.log("Se elimino el ingrediente");
         window.alert("Se elimino el ingrediente");
       }
@@ -233,7 +307,13 @@ const AdmProductProvider = props => {
         editAdmProduct,
         addIngredientList,
         editAdmProductRecipe,
-        deliteIngredientList
+        deliteIngredientList,
+        productUrl,
+        setProductUrl,
+        getProductImageUrl,
+        editAdmProducts,
+        setAdmProducts,
+        admProductsAux
       }}
     >
       {props.children}

@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
-import Axios from '../api';
-import { useNavigate } from 'react-router-dom';
+import Axios from "axios";
+import { useEffect } from 'react';
+import API from '../api';
 
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
@@ -83,25 +84,42 @@ const CustomerContext = createContext(null)
 const CustomerProvider = props => {
 
     const [customer, setCustomer] = useState(null)
-    const navigate = useNavigate();
 
     const getCookie = async () => {
-        await Axios.get("/getCookie", {
-            withCredentials: true
-        }).then(res => {
-            setCustomer(res.data);
-        }).catch(err => {
-            // navigate("/PalCafe/PaginaPrincipal");
-        });
+        try {
+            const { data } = await Axios.get("/api/getCookie", {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (isObj(data)) {
+                setCustomer(data);
+                console.log(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
-
     const getSectionCustomer = async () => {
         getCookie();
+        /*
+        try {
+            const res = await API.get('/use/login/:correo/:password');
+            const data = res.data.data;
+            setCustomer(data)
+        } catch (error) {
+            console.log("Obtener la seccion fallo, proceso a setear una seccion")
+            const customId = localStorage.getItem("usu_id_usuario");
+            console.log("el id de la seccion del cliente es");
+            console.log(customId);
+            if (customId != null) {
+                setCustomer(pal_usuario)
+            }
+        }*/
     };
-
     const loginUser = async (user, password, actions) => {
         try {
-            Axios.post("/login", { correo: user, password: password }, {
+            Axios.post("/api/loginSession", { correo: user, password: password }, {
                 withCredentials: true
             }).then((data => setCustomer(data.data.user)))
             console.log("El usuario fue");
@@ -110,7 +128,6 @@ const CustomerProvider = props => {
         }
         actions.setSubmitting(false)
     };
-
     const loginCustomer = async (correo, password, actions) => {
         loginUser(correo, password, actions);
         /*try {
@@ -137,7 +154,7 @@ const CustomerProvider = props => {
         console.log("hola");
         try {
             console.log("hola");
-            const { data } = await Axios.delete("/logout", {
+            const { data } = await Axios.get("/api/logout", {
                 withCredentials: true
             });
             setCustomer(null);
@@ -164,11 +181,19 @@ const CustomerProvider = props => {
             console.log(values);
             const val = {
                 _id: values._id,
-                ing_nombre: values.name, ing_descripcion: values.description,
-                ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
-                ing_imagen: values.image, ing_existencias: values.stock
+                usu_nombre: values.name,
+                usu_usuario: values.user,
+                usu_primer_apellido: values.surname,
+                usu_segundo_apellido: values.secondSurname,
+                usu_fecha_registro: values.registrationDate,
+                usu_numero_telefono1: values.firstNumber,
+                usu_numero_telefono2: values.secondNumber,
+                usu_direccion: values.address,
+                usu_estado: values.state,
+                usu_correo: values.email,
+                usu_contraseña: values.password
             };
-            Axios.put(`/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+            Axios.put(`/api/users/edit/${values._id}`, val).then((data => console.log(data)))
         } catch (error) { }
         actions.setSubmitting(false);
     };

@@ -2,7 +2,27 @@ import { Stack, Image, Text, IconButton } from "@chakra-ui/react";
 import { MinusIcon, AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { useState } from "react";
 import { useEffect } from 'react';
-import useOrders from '../context/Orders/UseOrders';
+
+const isUndefined = obj => {
+    if (obj === "undefined" || typeof obj === "undefined") {
+        return true;
+    }
+    return false;
+};
+
+const isNull = obj => {
+    if (obj === null) {
+        return true;
+    }
+    return false;
+};
+
+const isUndefinedOrNull = obj => {
+    if (isUndefined(obj) || isNull(obj)) {
+        return true;
+    }
+    return false;
+};
 
 export default function ItemOrderEdit({ itemCart, color, deliteProductList, updateCost }) {
     const [amount, setAmount] = useState(1)
@@ -11,10 +31,12 @@ export default function ItemOrderEdit({ itemCart, color, deliteProductList, upda
         setAmount(itemCart.amount);
     }, [itemCart.amount]);
 
-    function increaseAmountItem () {
+    function increaseAmountItem() {
         if (itemCart.amountProduct < itemCart.stock) {
             itemCart.amountProduct++;
-            updateCost();
+            if (!isUndefinedOrNull(updateCost)) {
+                updateCost();
+            }
         }
         return itemCart.amountProduct;
     }
@@ -22,7 +44,9 @@ export default function ItemOrderEdit({ itemCart, color, deliteProductList, upda
     function decreaseAmountItem() {
         if (itemCart.amountProduct > 1) {
             itemCart.amountProduct--;
-            updateCost();
+            if (!isUndefinedOrNull(updateCost)) {
+                updateCost();
+            }
         }
         return itemCart.amountProduct;
     }

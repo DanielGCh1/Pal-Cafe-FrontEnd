@@ -59,13 +59,6 @@ const isEmptyString = obj => {
   return false;
 };
 
-const getImage = obj => {
-  if (!isUndefinedOrNull(obj) && !isEmptyString(obj.image)) {//Trim: remove blank spaces
-    return obj.image;
-  }
-  return require('../assets/ImagenNoEncontrada.png');
-};
-
 const getName = obj => {
   if (!isUndefinedOrNull(obj) && !isEmptyString(obj.name)) {
     return obj.name;
@@ -202,143 +195,142 @@ selected ? selected.first_name : ''
 
 
   return <>
-    <SimpleGrid
-      columns={{ base: 1, lg: 2 }}
-      spacing={{ base: 8, md: 10 }}
-      py={{ base: 18, md: 24 }}>
-      <Flex>
-        <Image
+    {(productSelected != null) ?
+      <SimpleGrid
+        columns={{ base: 1, lg: 2 }}
+        spacing={{ base: 8, md: 10 }}
+        py={{ base: 18, md: 24 }}>
+        <Flex>
+          <Image
 
-          rounded={'md'}
-          alt={'product image'}
-          src={/*!isUndefinedOrNull(productSelected) ? productSelected.pro_imagen : require('../assets/ImagenNoEncontrada.png')*/
-            getImage(productSelected)}
-          fit={'cover'}
-          align={'center'}
-          w={'100%'}
-          h={{ base: '100%', sm: '400px', lg: '500px' }}
-        />
-      </Flex>
-      <Stack spacing={{ base: 6, md: 10 }}>
-        <Box as={'header'}>
-          <Heading
-            lineHeight={1.1}
-            fontWeight={600}
-            fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-            {getName(productSelected)}
-          </Heading>
-          <Text
-            color={useColorModeValue('gray.900', 'gray.400')}
-            fontWeight={300}
-            fontSize={'2xl'}>
-            {getUnits(productSelected)}
-          </Text>
-          <Text
-            color={useColorModeValue('gray.900', 'gray.400')}
-            fontWeight={300}
-            fontSize={'2xl'}>
-            {getStockText(productSelected)}
-          </Text>
-          <Text
-            color={useColorModeValue('gray.900', 'gray.400')}
-            fontWeight={300}
-            fontSize={'2xl'}>
-            {getPrice(productSelected)}
-          </Text>
-        </Box>
-
-        <Stack
-          spacing={{ base: 4, sm: 6 }}
-          direction={'column'}
-          divider={
-            <StackDivider
-              borderColor={useColorModeValue('gray.200', 'gray.600')}
-            />
-          }>
-          <VStack spacing={{ base: 4, sm: 6 }}>
-            <Text fontSize={'lg'}>
-              {getDescription(productSelected)}
+            rounded={'md'}
+            alt={'product image'}
+            src={productSelected.image}
+            fit={'cover'}
+            align={'center'}
+            w={'100%'}
+            h={{ base: '100%', sm: '400px', lg: '500px' }}
+          />
+        </Flex>
+        <Stack spacing={{ base: 6, md: 10 }}>
+          <Box as={'header'}>
+            <Heading
+              lineHeight={1.1}
+              fontWeight={600}
+              fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
+              {getName(productSelected)}
+            </Heading>
+            <Text
+              color='white'
+              fontWeight={300}
+              fontSize={'2xl'}>
+              {getUnits(productSelected)}
             </Text>
-          </VStack>
-          {(getStock(productSelected) >= 1 && (customer != null) && customer.usu_estado === "Aceptado") ?
+            <Text
+              color='white'
+              fontWeight={300}
+              fontSize={'2xl'}>
+              {getStockText(productSelected)}
+            </Text>
+            <Text
+              color='white'
+              fontWeight={300}
+              fontSize={'2xl'}>
+              {getPrice(productSelected)}
+            </Text>
+          </Box>
 
-            <Formik
-              initialValues={{ amount: amount }}
-              innerRef={refFormik}
-              onSubmit={(values, actions) => {
-                /*
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2))
-                  actions.setSubmitting(false)
-                }, 1000)*/
-                addProductList(productSelected, values.amount, actions);
-              }}
-            >
-              {(props) => (
-                <Form>
-                  {/*
+          <Stack
+            spacing={{ base: 4, sm: 6 }}
+            direction={'column'}
+            divider={
+              <StackDivider
+                color='white'
+              />
+            }>
+            <VStack spacing={{ base: 4, sm: 6 }}>
+              <Text fontSize={'lg'}>
+                {getDescription(productSelected)}
+              </Text>
+            </VStack>
+            {(getStock(productSelected) >= 1 && (customer != null) && customer.usu_estado === "Aceptado") ?
+
+              <Formik
+                initialValues={{ amount: amount }}
+                innerRef={refFormik}
+                onSubmit={(values, actions) => {
+                  /*
+                  setTimeout(() => {
+                    alert(JSON.stringify(values, null, 2))
+                    actions.setSubmitting(false)
+                  }, 1000)*/
+                  addProductList(productSelected, values.amount, actions);
+                }}
+              >
+                {(props) => (
+                  <Form>
+                    {/*
                   <NumberInputFormik item={productSelected} value={props.values.amount} nam={'amount'} val={validateOrderValue} />
 
                   */}
 
-                  <Field name={'amount'}>
-                    {({ field, form }) => (
-                      <Stack direction="row" alignItems="center">
+                    <Field name={'amount'}>
+                      {({ field, form }) => (
+                        <Stack direction="row" alignItems="center">
 
-                        <Text>Cantidad: {amount}</Text>
+                          <Text>Cantidad: {amount}</Text>
 
-                        <IconButton color={'black'}
-                          aria-label="incrementar cantidad"
-                          icon={<AddIcon />}
-                          onClick={() => setAmount(increaseAmountItem())}
-                        />
-                        <IconButton color={'black'}
-                          aria-label="decrementar cantidad"
-                          icon={<MinusIcon />}
-                          onClick={() => setAmount(decreaseAmountItem())}
-                        />
-                      </Stack>
-                    )}
-                  </Field>
+                          <IconButton color={'black'}
+                            aria-label="incrementar cantidad"
+                            icon={<AddIcon />}
+                            onClick={() => setAmount(increaseAmountItem())}
+                          />
+                          <IconButton color={'black'}
+                            aria-label="decrementar cantidad"
+                            icon={<MinusIcon />}
+                            onClick={() => setAmount(decreaseAmountItem())}
+                          />
+                        </Stack>
+                      )}
+                    </Field>
 
-                  <Button
-                    mt={4}
-                    colorScheme='red'
-                    isLoading={props.isSubmitting}
-                    type='submit'
-                    marginTop='10'
-                  >
-                    Añadir al carro
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-            :
-            (getStock(productSelected) <= 0) ?
-              <Stack spacing={1} alignItems='center'>
-                <Text fontSize='2xl' fontWeight="bold" p='25px'>Producto no disponible en este momento</Text>
-
-              </Stack>
-              : (!isUndefinedOrNull(customer) && customer.usu_estado != "Aceptado") ?
+                    <Button
+                      mt={4}
+                      colorScheme='red'
+                      isLoading={props.isSubmitting}
+                      type='submit'
+                      marginTop='10'
+                    >
+                      Añadir al carro
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+              :
+              (getStock(productSelected) <= 0) ?
                 <Stack spacing={1} alignItems='center'>
-                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sesión para agregar productos al carrito de compra</Text>
+                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Producto no disponible en este momento</Text>
 
                 </Stack>
-                :
-                <Stack spacing={1} alignItems='center'>
-                  <Text fontSize='2xl' fontWeight="bold" p='25px'>Su perfil debe estar aprobado para continuar con la compra</Text>
+                : (!isUndefinedOrNull(customer) && customer.usu_estado != "Aceptado") ?
+                  <Stack spacing={1} alignItems='center'>
+                    <Text fontSize='2xl' fontWeight="bold" p='25px'>Debe iniciar sesión para agregar productos al carrito de compra</Text>
 
-                </Stack>
-          }
+                  </Stack>
+                  :
+                  <Stack spacing={1} alignItems='center'>
+                    <Text fontSize='2xl' fontWeight="bold" p='25px'>Su perfil debe estar aprobado para continuar con la compra</Text>
+
+                  </Stack>
+            }
 
 
 
+          </Stack>
         </Stack>
-      </Stack>
-    </SimpleGrid>
-
-
-
+      </SimpleGrid>
+      : null
+    }
   </>
 }
 /*
