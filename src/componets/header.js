@@ -91,12 +91,19 @@ export default function Header() {
                     </MenuList>
                 </Menu>
                 <Menu>
-                    {buttonMenu('Pedidos')}
-                    <MenuList>
-                        <MenuItem>New File</MenuItem>
-                        <MenuItem>New Window</MenuItem>
-                        <MenuItem>Open...</MenuItem>
-                    </MenuList>
+                    <MenuButton
+                        px={4}
+                        py={2}
+                        m="0"
+                        h='70px'
+                        w="100%"
+                        _hover={{ bg: '#dcdcdc' }}
+                        _expanded={{ bg: '#56070C', color: 'white', borderBottomColor: '#white', borderBottomStyle: 'solid', borderBottomWidth: '3px' }}
+                        _focus={{ borderBottomColor: '#56070C', borderStyle: 'solid', borderWidth: '3px', color: '#56070C' }}
+                        onClick={() => handleClick('/Home/AdministrarOrdenes')}
+                    >
+                        Administrar pedidos
+                    </MenuButton>
                 </Menu>
                 <Menu>
                     <MenuButton
