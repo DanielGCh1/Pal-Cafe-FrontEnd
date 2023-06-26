@@ -24,7 +24,7 @@ const Notificaciones = () => {
         useEffect(() => {
           async function getNotificaciones (){
             try {
-              const res = await axios.get('/api/notificaciones')
+              const res = await axios.get('/notificaciones')
               setNotis(res.data) 
             } catch (error) {
               console.log(error);
@@ -44,7 +44,7 @@ const Notificaciones = () => {
 
         async function vistas () {         
           try {
-            if (lista_no_vistas.length !== 0) await axios.put('/api/notificaciones/edit/', lista_no_vistas);         
+            if (lista_no_vistas.length !== 0) await axios.put('/notificaciones/edit/', lista_no_vistas);         
           } catch (error) {
             console.log("la consulta fallo, procedo a setear unos datos por defecto");
           }
@@ -52,7 +52,7 @@ const Notificaciones = () => {
 
         const handleEliminar = (id) => {
             console.log("Eliminar") 
-            axios.delete(`/api/notificaciones/delete/${id}`)
+            axios.delete(`/notificaciones/delete/${id}`)
               .then((res) => {
                 setNotis(notis.filter(noti => noti.id !== id)) 
                 setActualizar(!actualizar)

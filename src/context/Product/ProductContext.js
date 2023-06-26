@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import axios from '../api';
+import Axios from '../api';
 import { string } from 'yup';
 import { async } from 'q';
 
@@ -66,7 +66,7 @@ const ProductProvider = props => {
   const getProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await axios.get('/productos/get-all-homepage');
+      const res = await Axios.get('/productos/get-all-homepage');
       //const res = await axios.get('https://reqres.in/users');
       const data = res.data;
       formatoProductos(data);
@@ -78,7 +78,7 @@ const ProductProvider = props => {
   async function getImageUrl(id) {
     var imageUrl = '';
     try {
-      const response = await Axios.get(`/api/productos/imagen/${id}`);
+      const response = await Axios.get(`/productos/imagen/${id}`);
       if (response.status = 200) {
         imageUrl = `http://localhost:3001/api/productos/imagen/${id}`;
       }
@@ -93,7 +93,7 @@ const ProductProvider = props => {
 
   const getProduct = async id => {
     try {
-      const res = await axios.get(`/producto-homepage/${id}`);
+      const res = await Axios.get(`/producto-homepage/${id}`);
       const data = res.data;
       setProductSelected(await formatoProducto(data[0]))
     } catch (error) { }
