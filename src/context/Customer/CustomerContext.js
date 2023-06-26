@@ -91,7 +91,7 @@ const CustomerProvider = props => {
         }).then(res => {
             setCustomer(res.data);
         }).catch(err => {
-            navigate("/palcafe");
+            // navigate("/PalCafe/PaginaPrincipal");
         });
     }
 

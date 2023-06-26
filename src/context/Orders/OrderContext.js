@@ -1,5 +1,4 @@
 import React, { createContext, useState } from 'react';
-import Axios from 'axios';
 import API from '../api';
 import { string } from 'yup';
 
@@ -95,7 +94,7 @@ const OrderProvider = props => {
 
   const getOrdersCustomer = async (id) => {
     try {
-      const res = await Axios.get(`/api/pedidos/get_pedios_cliente/${id}`);
+      const res = await API.get(`/pedidos/get_pedios_cliente/${id}`);
       const data = res.data;
       console.log(data);
       if (data.length > 0) {
@@ -150,7 +149,7 @@ const OrderProvider = props => {
   }
   const getOrders = async () => {
     try {
-      const res = await Axios.get('/api/pedidos/get-all');
+      const res = await API.get('/pedidos/get-all');
       const data = res.data;
       console.log(data);
       if (data.length > 0) {
@@ -249,7 +248,7 @@ const OrderProvider = props => {
   const addOrder = async (values, actions) => {
     console.log(formatoOrdenEnviar(values));
     try {
-      const res = await Axios.post('/api/pedido/add',
+      const res = await API.post('/pedido/add',
         formatoOrdenEnviar(values)
         , {
           withCredentials: true
@@ -260,7 +259,7 @@ const OrderProvider = props => {
 
   const getOrder = async id => {
     try {
-      const res = await Axios.get(`/api/pedido/${id}`);
+      const res = await API.get(`/pedido/${id}`);
       const data = res.data;
       setOrder(formatoOrdenRecibir(data[0]));
     } catch (error) {
@@ -270,7 +269,7 @@ const OrderProvider = props => {
   const deliteOrder = async (id) => {
     console.log(id);
     try {
-      Axios.delete(`/api/pedidos/delete/${id}`).then((data => console.log(data)));
+      API.delete(`/pedidos/delete/${id}`).then((data => console.log(data)));
       setOrdersAux((current) => current.filter((orderAux) => orderAux._id != id))
       setOrders((current) => current.filter((order) => order._id != id))
     } catch (error) { }
@@ -295,14 +294,14 @@ const OrderProvider = props => {
   };
   const editOrder = async (values, actions) => {
     try {
-      Axios.put(`/api/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
+      API.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
     } catch (error) { }
     actions.setSubmitting(false);
   };
   const editOrderList = async (values, ordAux) => { //TODO:
     try {
       console.log(values);
-      Axios.put(`/api/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
+      API.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
       ordAux.state = values.state;
     } catch (error) { }
   };
