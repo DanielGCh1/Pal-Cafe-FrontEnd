@@ -1,7 +1,6 @@
 import React, { createContext, useState } from 'react';
-import Axios from "axios";
+import Axios from "../api";
 import { useEffect } from 'react';
-import API from '../api';
 
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
@@ -87,7 +86,7 @@ const CustomerProvider = props => {
 
     const getCookie = async () => {
         try {
-            const { data } = await Axios.get("/api/getCookie", {
+            const { data } = await Axios.get("/getCookie", {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -119,7 +118,7 @@ const CustomerProvider = props => {
     };
     const loginUser = async (user, password, actions) => {
         try {
-            Axios.post("/api/loginSession", { correo: user, password: password }, {
+            Axios.post("/loginSession", { correo: user, password: password }, {
                 withCredentials: true
             }).then((data => setCustomer(data.data.user)))
             console.log("El usuario fue");
@@ -154,7 +153,7 @@ const CustomerProvider = props => {
         console.log("hola");
         try {
             console.log("hola");
-            const { data } = await Axios.get("/api/logout", {
+            const { data } = await Axios.get("/logout", {
                 withCredentials: true
             });
             setCustomer(null);
@@ -193,7 +192,7 @@ const CustomerProvider = props => {
                 usu_correo: values.email,
                 usu_contraseña: values.password
             };
-            Axios.put(`/api/users/edit/${values._id}`, val).then((data => console.log(data)))
+            Axios.put(`/users/edit/${values._id}`, val).then((data => console.log(data)))
         } catch (error) { }
         actions.setSubmitting(false);
     };

@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { useEffect } from 'react';
-import axios from '../api';
+import axios from "axios";
 
 const ClienteContext = createContext(null)
 

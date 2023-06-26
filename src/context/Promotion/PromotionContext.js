@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import axios from '../api';
+import axios from 'axios'
 
 
 const PromotionContext = createContext(null)

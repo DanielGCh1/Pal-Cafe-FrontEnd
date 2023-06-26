@@ -23,40 +23,40 @@ export default function LoginCustomer() {
   let animationSudmit = true;
 
   const navigate = useNavigate();
-/*
-  const loginUser = async () => {
-    try {
-      Axios.post("/api/loginSession", { correo: user, password: password }, {
-        withCredentials: true
-      }).then((data => console.log(data.data.message)))
-    } catch (error) {
-      console.log(error)
+  /*
+    const loginUser = async () => {
+      try {
+        Axios.post("/api/loginSession", { correo: user, password: password }, {
+          withCredentials: true
+        }).then((data => console.log(data.data.message)))
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
-
-  const getCookie = async () => {
-    try {
-      const { data } = await Axios.get("/api/getCookie", {
-        withCredentials: true
-      });
-      console.log(data)
-      setUserLogin(data);
-    } catch (error) {
-      console.log(error);
+  
+    const getCookie = async () => {
+      try {
+        const { data } = await Axios.get("/api/getCookie", {
+          withCredentials: true
+        });
+        console.log(data)
+        setUserLogin(data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
-
-  const eliminarCookie = async () => {
-    try {
-      const { data } = await Axios.get("/api/logout", {
-        withCredentials: true
-      });
-      console.log(data)
-    } catch (error) {
-      console.log(error);
+  
+    const eliminarCookie = async () => {
+      try {
+        const { data } = await Axios.get("/api/logout", {
+          withCredentials: true
+        });
+        console.log(data)
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
-*/
+  */
   function validateMail(value) {
     console.log(value);
     let error
@@ -84,65 +84,65 @@ export default function LoginCustomer() {
     }
   }, [customer])
   return <>
-      <Flex color="white" bg='blackAlpha.800' p='20px' borderRadius='10px' flexDirection='column' minWidth='max-content' alignSelf='center' alignItems='center' gap='2' w='550px' boxShadow='dark-lg'>
-        <Box p='1'>
-          <Heading size='md'>Iniciar sesión</Heading>
-          <AspectRatio marginTop='10px' maxW='300px' ratio={5 / 5}>
-            <Image src={require("../assets/usuario.png")} alt='Usario' objectFit='contain' />
-          </AspectRatio>
-        </Box>
+    <Flex color="white" bg='blackAlpha.800' p='20px' borderRadius='10px' flexDirection='column' minWidth='max-content' alignSelf='center' alignItems='center' gap='2' w='550px' boxShadow='dark-lg'>
+      <Box p='1'>
+        <Heading size='md'>Iniciar sesión</Heading>
+        <AspectRatio marginTop='10px' maxW='300px' ratio={5 / 5}>
+          <Image src={require("../assets/usuario.png")} alt='Usario' objectFit='contain' />
+        </AspectRatio>
+      </Box>
 
-        <Spacer />
-        <Formik
-          initialValues={{ mail: '', password: '' }}
-          onSubmit={(values, actions) => {
-            loginCustomer(values.mail, values.password, actions);
-          }
-          }
-        >
-          {props => (//TODO: props tiene todos, los values, las funciones y otros
-            <Form>
-              <Field name='mail' validate={validateMail}>
-                {({ field, form }) => (
-                  <FormControl isInvalid={form.errors.mail && form.touched.mail} display="flex" flexDirection={"column"} alignItems="center">
-                    <FormLabel>Correo o nombre de usuario</FormLabel>
-                    <Input {...field} placeholder='Correo o nombre de usuario' />
-                    <FormErrorMessage>{form.errors.mail}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
+      <Spacer />
+      <Formik
+        initialValues={{ mail: '', password: '' }}
+        onSubmit={(values, actions) => {
+          loginCustomer(values.mail, values.password, actions);
+        }
+        }
+      >
+        {props => (//TODO: props tiene todos, los values, las funciones y otros
+          <Form>
+            <Field name='mail' validate={validateMail}>
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.mail && form.touched.mail} display="flex" flexDirection={"column"} alignItems="center">
+                  <FormLabel>Correo o nombre de usuario</FormLabel>
+                  <Input {...field} placeholder='Correo o nombre de usuario' />
+                  <FormErrorMessage>{form.errors.mail}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
 
-              <Field name='password' validate={validatePassword}>
-                {({ field, form }) => (
-                  <FormControl isInvalid={form.errors.password && form.touched.password} display="flex" flexDirection={"column"} alignItems="center">
-                    <FormLabel>Contraseña</FormLabel>
-                    <Input {...field} placeholder='Contraseña' type={'password'} />
-                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
-              <Spacer w='50px' />
-              <Box display="flex" flexDirection={"column"} alignItems="center">
+            <Field name='password' validate={validatePassword}>
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.password && form.touched.password} display="flex" flexDirection={"column"} alignItems="center">
+                  <FormLabel>Contraseña</FormLabel>
+                  <Input {...field} placeholder='Contraseña' type={'password'} />
+                  <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Spacer w='50px' />
+            <Box display="flex" flexDirection={"column"} alignItems="center">
 
-                <Button
-                  mt={4}
-                  colorScheme='red'
-                  isLoading={props.isSubmitting}
-                  type='submit'
-                >
-                  Ingresar
-                </Button>
-              </Box>
-            </Form>
-          )}
-        </Formik>
+              <Button
+                mt={4}
+                colorScheme='red'
+                isLoading={props.isSubmitting}
+                type='submit'
+              >
+                Ingresar
+              </Button>
+            </Box>
+          </Form>
+        )}
+      </Formik>
 
-        <Spacer />
+      <Spacer />
 
-        <HStack>
-          <Text>¿Aún no no está registrado/a?</Text>
-          <Link className='linksto' to="/RegistrarCliente">Registrar</Link>
-        </HStack>
-      </Flex>
+      <HStack>
+        <Text>¿Aún no no está registrado/a?</Text>
+        <Link className='linksto' to="/RegistrarCliente">Registrar</Link>
+      </HStack>
+    </Flex>
   </>
 }

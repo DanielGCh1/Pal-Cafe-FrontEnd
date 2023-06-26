@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
 import Axios from "axios";
-import API from '../api';
 
 const AdmProductContext = createContext(null)
 
@@ -51,7 +50,7 @@ const AdmProductProvider = props => {
   const getAdmProducts = async () => {
     try {
       //Obtener todos los productos de la parte del cliente, sin todos los datos
-      const res = await Axios.get('/api/productos/get-all');
+      const res = await Axios.get('/productos/get-all');
       const data = res.data;
       setAdmProducts(data);
       addAdmProductsAux(data);
@@ -63,7 +62,7 @@ const AdmProductProvider = props => {
 
   const getAdmProduct = async id => {
     try {
-      const res = await Axios.get(`/api/producto/${id}`);
+      const res = await Axios.get(`/producto/${id}`);
       const data = res.data;
       setAdmProduct(data[0]);
       console.log(data)
@@ -74,7 +73,7 @@ const AdmProductProvider = props => {
   };
   const getProductImageUrl = async id => {
     try {
-      const response = await Axios.get(`/api/productos/imagen/${id}`);
+      const response = await Axios.get(`/productos/imagen/${id}`);
       if (response.status = 200) {
         setProductUrl(`http://localhost:3001/api/productos/imagen/${id}`);
       }
@@ -121,7 +120,7 @@ const AdmProductProvider = props => {
       formData.append('receta', receta);
 
 
-      const response = await Axios.post('/api/productos/add', formData, {
+      const response = await Axios.post('/productos/add', formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -144,7 +143,7 @@ const AdmProductProvider = props => {
   const deleteAdmProduct = async (id) => {
     try {
       let response;
-      await Axios.delete(`/api/productos/delete/${id}`).then((data => response = data));
+      await Axios.delete(`/productos/delete/${id}`).then((data => response = data));
       if (response.status == 200) {
         setAdmProductsAux((current) => current.filter((admProductsAux) => admProductsAux._id != id))
         setAdmProducts((current) => current.filter((admProducts) => admProducts._id != id))
@@ -160,7 +159,7 @@ const AdmProductProvider = props => {
   const editAdmProductRecipe = async () => {
     try {
 
-      Axios.put(`/api/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
+      Axios.put(`/productos/edit/${admProduct._id}`, admProduct).then((data => console.log(data)))
     } catch (error) { }
   };
 
@@ -181,7 +180,7 @@ const AdmProductProvider = props => {
       formData.append('newImage', values.newImage);
 
 
-      const response = await Axios.put(`/api/productos/edit/${values._id}`, formData, {
+      const response = await Axios.put(`/productos/edit/${values._id}`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -211,7 +210,7 @@ const AdmProductProvider = props => {
         existencias: values.pro_existencias, valor_total_unidad: values.pro_valor_total_unidad, receta: values.pro_ingredientes
       }
 
-      const response = await Axios.put(`/api/productos/edit/${values._id}`, pro);
+      const response = await Axios.put(`/productos/edit/${values._id}`, pro);
       if (response.status == 200) {
         proAux.pro_existencias = values.pro_existencias;
       }

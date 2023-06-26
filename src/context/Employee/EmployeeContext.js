@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import API from '../api';
+import Axios from "axios";
 
 const EmployeeContext = createContext(null)
 
@@ -17,7 +17,7 @@ const EmployeeProvider = props => {
   const addEmployee = async (values, actions) => {
 
     try {
-      const response = await API.post(`/users/addemployee`, values);
+      const response = await Axios.post(`/users/addemployee`, values);
 
       if (response.status == 200) {
         console.log(response.data)
@@ -34,7 +34,7 @@ const EmployeeProvider = props => {
   const editEmployee = async (values, actions, _id) => {
 
     try {
-      const response = await API.put(`/users/edit/${_id}`, values);
+      const response = await Axios.put(`/users/edit/${_id}`, values);
 
       if (response.status == 200) {
         // Find the index of the edited promotion in the promotions array
@@ -58,7 +58,7 @@ const EmployeeProvider = props => {
 
   const getEmployee = async () => {
     try {
-      const res = await API.get('/users-getall-empleados', {
+      const res = await Axios.get('/users-getall-empleados', {
         withCredentials: true
       });
       const data = res.data;
@@ -71,7 +71,7 @@ const EmployeeProvider = props => {
 
   const getRoles = async () => {
     try {
-      const res = await API.get('/roles/get-all', {
+      const res = await Axios.get('/roles/get-all', {
         withCredentials: true
       });
       const data = res.data;
@@ -84,7 +84,7 @@ const EmployeeProvider = props => {
 
   const deleteEmployee = async (id) => {
     try {
-      const response = await API.delete(`/promociones/delete/${id}`);
+      const response = await Axios.delete(`/promociones/delete/${id}`);
       if (response.status === 200) {
         setEmployees((employees) => employees.filter((employees) => employees._id !== id));
       } else {
