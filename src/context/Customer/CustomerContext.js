@@ -1,7 +1,6 @@
 import React, { createContext, useState } from 'react';
-import Axios from "axios";
 import { useEffect } from 'react';
-import API from '../api';
+import Axios from '../api';
 
 const isUndefined = obj => {
     if (obj === "undefined" || typeof obj === "undefined") {
@@ -87,7 +86,7 @@ const CustomerProvider = props => {
 
     const getCookie = async () => {
         try {
-            const { data } = await Axios.get("/api/getCookie", {
+            const { data } = await Axios.get("/getCookie", {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -102,24 +101,11 @@ const CustomerProvider = props => {
     }
     const getSectionCustomer = async () => {
         getCookie();
-        /*
-        try {
-            const res = await API.get('/use/login/:correo/:password');
-            const data = res.data.data;
-            setCustomer(data)
-        } catch (error) {
-            console.log("Obtener la seccion fallo, proceso a setear una seccion")
-            const customId = localStorage.getItem("usu_id_usuario");
-            console.log("el id de la seccion del cliente es");
-            console.log(customId);
-            if (customId != null) {
-                setCustomer(pal_usuario)
-            }
-        }*/
     };
+
     const loginUser = async (user, password, actions) => {
         try {
-            Axios.post("/api/loginSession", { correo: user, password: password }, {
+            Axios.post("/login", { correo: user, password: password }, {
                 withCredentials: true
             }).then((data => setCustomer(data.data.user)))
             console.log("El usuario fue");
@@ -128,6 +114,7 @@ const CustomerProvider = props => {
         }
         actions.setSubmitting(false)
     };
+
     const loginCustomer = async (correo, password, actions) => {
         loginUser(correo, password, actions);
         /*try {
@@ -154,7 +141,7 @@ const CustomerProvider = props => {
         console.log("hola");
         try {
             console.log("hola");
-            const { data } = await Axios.get("/api/logout", {
+            const { data } = await Axios.get("/logout", {
                 withCredentials: true
             });
             setCustomer(null);
@@ -185,7 +172,7 @@ const CustomerProvider = props => {
             ing_precio: values.price, ing_tipo_unidad: values.drive_type, ing_cantidad: values.amount,
             ing_imagen: values.image, ing_existencias: values.stock
           };
-          Axios.put(`/api/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
+          Axios.put(`/ingredientes/edit/${values._id}`, val).then((data => console.log(data)))
         } catch (error) { }
         actions.setSubmitting(false);
       };

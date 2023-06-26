@@ -199,7 +199,7 @@ const HistorialProduccion = () => {
                         <Th color="#000">Expirados</Th>
                         <Th color="#000">Sobrantes</Th>
                         <Th color="#000">Regalias</Th>
-                        <Th color="#000">Eliminar</Th>
+                 j       <Th color="#000">Eliminar</Th>
                     </Tr>
                     </Tfoot>
                 </Table>
