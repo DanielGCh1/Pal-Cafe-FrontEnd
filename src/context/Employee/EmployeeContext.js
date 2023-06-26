@@ -1,5 +1,4 @@
 import React, { createContext, useState } from 'react';
-import axios from 'axios';
 import API from '../api';
 
 const EmployeeContext = createContext(null)
@@ -59,7 +58,7 @@ const EmployeeProvider = props => {
 
   const getEmployee = async () => {
     try {
-      const res = await axios.get('/users-getall-empleados', {
+      const res = await API.get('/users-getall-empleados', {
         withCredentials: true
       });
       const data = res.data;
@@ -72,7 +71,7 @@ const EmployeeProvider = props => {
 
   const getRoles = async () => {
     try {
-      const res = await axios.get('/roles/get-all', {
+      const res = await API.get('/roles/get-all', {
         withCredentials: true
       });
       const data = res.data;
@@ -85,7 +84,7 @@ const EmployeeProvider = props => {
 
   const deleteEmployee = async (id) => {
     try {
-      const response = await axios.delete(`/promociones/delete/${id}`);
+      const response = await API.delete(`/promociones/delete/${id}`);
       if (response.status === 200) {
         setEmployees((employees) => employees.filter((employees) => employees._id !== id));
       } else {
