@@ -34,7 +34,7 @@ export default function EditEmployee() {
           // Verificamos si el rol no está asignado al empleado
           return !employee.usu_roles.some((r) => r.rol_tipo === rol.rol_tipo);
         });
-      
+      console.log(rolesNoAsignados);
         // Actualizamos los estados de los roles no asignados y asignados
         setRolesNoAsignados(rolesNoAsignados);
         setRolesAsignados(employee.usu_roles);
@@ -157,7 +157,8 @@ export default function EditEmployee() {
                     direccion: employee.usu_direccion,
                     correo: employee.usu_correo,
                     password: employee.usu_contraseña,
-                    roles: employee.usu_roles,
+                    /*roles: employee.usu_roles, */
+                    roles: roles[0],
                 }}
 
                 validationSchema={Yup.object({
@@ -175,7 +176,7 @@ export default function EditEmployee() {
                         .required("Se necesita un contraseña")
                 }, 1000)}
                 onSubmit={(values, actions) => {
-                    values.roles = rolesAsignados;
+                    //values.roles = rolesAsignados;
                     console.log(values)
                     editEmployee(values, actions, id);
                 }}

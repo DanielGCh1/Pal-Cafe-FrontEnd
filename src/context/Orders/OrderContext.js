@@ -90,6 +90,7 @@ const OrderProvider = props => {
   const [listProductsOrder, setListProductsOrder] = useState([])
   const [imagesOrder, setImagesOrder] = useState([])
   const [ordersCustomer, setOrdersCustomer] = useState([])
+  const [imageUrl, setImageUrl] = useState(null)
 
 
   const getOrdersCustomer = async (id) => {
@@ -104,6 +105,20 @@ const OrderProvider = props => {
       console.log(error);
     }
   };
+  const getImageUrl = async id => {
+    try {
+      const response = await Axios.get(`/pedidos/imagen/${id}`);
+      if (response.status = 200) {
+        setImageUrl(`http://localhost:3001/api/pedidos/imagen/${id}`);
+      }
+      else {
+        setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+      }
+    } catch (error) {
+      console.log('La consulta para obtener la imagen del pedido falló');
+      setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+    }
+  };
 
   const formatoListaProductosRecibir = (data) => { //TODO: como se enviar la lista de productos
     const list = [];
@@ -113,7 +128,6 @@ const OrderProvider = props => {
         amountProduct: element.producto_cantidad,
         name: element.producto_nombre,
         price: element.producto_costo,
-        //image: getImage(_id)
       }
       list.push(prodOrder);
     })
@@ -240,7 +254,7 @@ const OrderProvider = props => {
     formData.append('ped_nota_cliente', values.customerNote);
     formData.append('ped_fk_usuario', values.customer_id);
     formData.append('ped_especial', values.specialOrder);
-    formData.append('ped_productos', productShippingListFormat(listProductsOrder));
+    formData.append('ped_productos', JSON.stringify(productShippingListFormat(listProductsOrder)));
     formData.append('ped_imagenes_pedido', values.image);
     formData.append('ped_enviar_pedido', values.sendOrder);
 
@@ -251,6 +265,7 @@ const OrderProvider = props => {
   const addOrder = async (values, actions) => {
     try {
       var formattedOrder = formatoOrdenEnviar(values);
+      console.log(formattedOrder)
       const response = await Axios.post('/pedido/add', formattedOrder, {
         withCredentials: true,
         headers: {
@@ -280,12 +295,20 @@ const OrderProvider = props => {
     }
   };
   const deliteOrder = async (id) => {
-    console.log(id);
     try {
-      Axios.delete(`/pedidos/delete/${id}`).then((data => console.log(data)));
-      setOrdersAux((current) => current.filter((orderAux) => orderAux._id != id))
-      setOrders((current) => current.filter((order) => order._id != id))
-    } catch (error) { }
+      let response;
+      await Axios.delete(`/pedidos/delete/${id}`).then((data => response = data));
+      if (response.status == 200) {
+        setOrdersAux((current) => current.filter((orderAux) => orderAux._id != id))
+        setOrders((current) => current.filter((order) => order._id != id))
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      window.alert("Error inesperado al eliminar el pedido");
+    }
   };
   const formatoOrdenEditar = (values) => {
     const order = {
@@ -297,8 +320,8 @@ const OrderProvider = props => {
       ped_fecha_pedido: values.dateHour,
       ped_nota_cliente: values.customerNote,
       ped_fk_usuario: values.customer_id,
-      ped_especial: false,
-      ped_productos: productShippingListFormat(values.listProductsOrder),
+      ped_especial: values.specialOrder,
+      ped_productos: values.listProductsOrder,
       ped_estado: values.state,
       ped_motivo_rechazo: values.reasonRejection,
       ped_enviar_pedido: values.sendOrder,
@@ -307,16 +330,32 @@ const OrderProvider = props => {
   };
   const editOrder = async (values, actions) => {
     try {
-      Axios.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
-    } catch (error) { }
+      const response = await Axios.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values));
+
+      if (response.status == 200) {
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      window.alert("Error inesperado al editar el pedido");
+    }
     actions.setSubmitting(false);
   };
-  const editOrderList = async (values, ordAux) => { //TODO:
+  const editOrderList = async (values, ordAux) => {
     try {
-      console.log(values);
-      Axios.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values)).then((data => console.log(data)))
-      ordAux.state = values.state;
-    } catch (error) { }
+      const response = await Axios.put(`/pedidos/edit/${values._id}`, formatoOrdenEditar(values));
+      if (response.status == 200) {
+        ordAux.state = values.state;
+      }
+      else {
+        window.alert(response.data.message);
+      }
+
+    } catch (error) {
+      window.alert("Error inesperado al editar el ingrediente");
+    }
   };
   const editOrders = async () => {
     try {
@@ -329,10 +368,11 @@ const OrderProvider = props => {
           editOrderList(order, orderAux);
         }
       })
-    } catch (error) { }
+    } catch (error) {
+      window.alert("Hubo un error inesperado al editar los pedidos");
+    }
   };
   const getListProductsOrder = (item) => {// Convierto la lista de productos pedidos, en un string
-    console.log(item);
     var list = "";
     try {
       item.listProductsOrder.map((product) => {
@@ -365,7 +405,12 @@ const OrderProvider = props => {
         ordersCustomer,
         setOrdersCustomer,
         setListProductsOrder,
-        deliteProductOrederList
+        deliteProductOrederList,
+        imageUrl,
+        setImageUrl,
+        getImageUrl,
+        ordersAux,
+        setOrders
       }}
     >
       {props.children}

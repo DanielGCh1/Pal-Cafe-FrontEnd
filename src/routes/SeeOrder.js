@@ -36,18 +36,22 @@ const isUndefinedOrNull = obj => {
 };
 
 export default function SeeOrder() {
-    const { order, getOrder, editOrder } = useOrders();
+    const { order, getOrder, imageUrl, getImageUrl } = useOrders();
     const params = useParams();
-    const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
+    const ref = useRef(null);
+    let searchImage = true;
 
     useEffect(() => {
         if (!isUndefinedOrNull(params.id) && isUndefinedOrNull(order)) {
-            console.log("Si encontro el id de la orden");
             getOrder(params.id);
+            getImageUrl(params.id);
         }
-    }, []);
+        if (!isUndefinedOrNull(params.id) && searchImage && !isUndefinedOrNull(imageUrl)) {
+            searchImage = false;
+        }
+    }, [imageUrl]);
     return <>
-        <VStack  h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
+        <VStack h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
             "&::-webkit-scrollbar": {
                 width: "7px",
                 backgroundColor: "transparent",
@@ -62,7 +66,7 @@ export default function SeeOrder() {
             },
         }}>
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading  fontWeight="bold" size='2xl'>Pedido</Heading>
+                <Heading fontWeight="bold" size='2xl'>Pedido</Heading>
             </Box>
             {(order != null) ?
                 <Formik
@@ -94,11 +98,6 @@ export default function SeeOrder() {
                             .required('Requerido'),
                         dateHour: Yup.date().required('Este campo es obligatorio'),
                     })}
-
-                    onSubmit={(values, actions) => {
-                        console.log(values);
-                        editOrder(values, actions);
-                    }}
                 >
                     {(props) => (
                         <Container bg='blackAlpha.800' p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='70%' boxShadow='dark-lg'>
@@ -200,11 +199,30 @@ export default function SeeOrder() {
                                         </Field>
                                     </SimpleGrid>
                                 </HStack>
-                                <Box p='5'>
-                                    <Heading size='md'>Lista de articulos:</Heading>
-                                </Box>
+                                {(order.specialOrder) ?
+                                    <Box>
+                                        <Box p='4' display="flex" justifyContent={'center'}>
+                                            <Heading size='md'>Imagen de ejemplo</Heading>
+                                        </Box>
+                                        {imageUrl ? (
+                                            <Box mt={4} pos="relative">
+                                                <Image src={imageUrl}
+                                                    width='200px'
+                                                    height='200px'
+                                                    alt="Imagen seleccionada" />
+                                            </Box>
+                                        ) : null}
+                                    </Box>
 
-                                <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' />
+                                    : <Box>
+                                        <Box p='5'>
+                                            <Heading size='md'>Lista de articulos:</Heading>
+                                        </Box>
+
+                                        <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' />
+                                    </Box>
+                                }
+
                             </Form>
 
                         </Container>

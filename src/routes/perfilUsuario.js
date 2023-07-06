@@ -111,8 +111,8 @@ export default function PerfilUsuario() {
     };
 
     useEffect(() => {
-        if (!isUndefinedOrNull(customer) && (typeof ordersCustomer == 'undefined' || ordersCustomer.length <= 0)) {
-            getOrdersCustomer(customer._id);//TODO:
+        if (!isUndefinedOrNull(customer) && (isUndefinedOrNull(ordersCustomer) || ordersCustomer.length <= 0)) {
+            getOrdersCustomer(customer._id);
         }
     }, [customer])
 

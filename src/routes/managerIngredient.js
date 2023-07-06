@@ -8,9 +8,11 @@ import IngredientFilter from '../componets/IngredientFilter';
 export default function ManageIngredient() {
     const { ingredient, ingredients, deliteIngredient, editIngredients, ingredientsAux, setIngredient, setIngredients, getIngredients, getIngredientsAux } = useIngredient();
     const navigate = useNavigate();
+    const [searchIngredients, setSearchIngredients] = useState(true)
 
     useEffect(() => {
-        if (typeof ingredients == 'undefined' || ingredients.length <= 0) {
+        if ((typeof ingredients == 'undefined' || ingredients.length <= 0) && searchIngredients) {
+            setSearchIngredients(false);
             getIngredients();//TODO:
         }
     },)

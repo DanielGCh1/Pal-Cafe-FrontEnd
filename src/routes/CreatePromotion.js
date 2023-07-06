@@ -1,72 +1,53 @@
-import { Container, HStack, Image, VStack, Icon } from "@chakra-ui/react";
+import { useParams } from 'react-router-dom';
 import {
-    FormControl, FormLabel, FormErrorMessage, Button, Box, Input,
-    SimpleGrid, GridItem, Heading, Select
+    FormControl, FormLabel, FormErrorMessage, Button, Box, Input, SimpleGrid, GridItem,
+    Heading, Image, VStack, Icon, Select
 } from '@chakra-ui/react'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
-import useIngredient from '../context/Ingredient/UseIngredient';
-import { useEffect } from 'react';
+import UsePromotion from '../context/Promotion/UsePromotion';
 
-const isUndefined = obj => {
-    if (obj === "undefined" || typeof obj === "undefined") {
-        return true;
-    }
-    return false;
-};
-
-const isNull = obj => {
-    if (obj === null) {
-        return true;
-    }
-    return false;
-};
-
-const isUndefinedOrNull = obj => {
-    if (isUndefined(obj) || isNull(obj)) {
-        return true;
-    }
-    return false;
-};
-
-
-export default function CreateIngredient() {
-    const { addIngredient } = useIngredient();
+export default function CreatePromotion() {
+    const { id } = useParams();
+    const { findPromotionById } = UsePromotion();
+    const promotion = findPromotionById(id);
     const [imagePreviewUrl, setImagePreviewUrl] = useState();
     const ref = useRef(null);
+    const { editPromocion } = UsePromotion();
 
     const handleImageChange = (event) => {
         event.preventDefault();
         let reader = new FileReader();
         let file = event.target.files[0];
-        ref.current.values.image = file;
+
+        // ref.current.values.image = file;
+        validateImage(ref.current.values.image);
         reader.onloadend = () => {
             setImagePreviewUrl(reader.result);
         };
         reader.readAsDataURL(file);
     };
-    const handleImageDelete = () => { /*Se activa cuando se elimina la imagen*/
+
+    const handleImageDelete = () => {
+
         setImagePreviewUrl(null);
-        ref.current.values.image = null;
+        // ref.current.values.image = null;
     };
-    function validateImage(value) { /*Valida si el archivo que se subio, es de tipo imagen*/
-        let error
-        if (isNull(value)) {
-            return error = 'La imagen del ingrediente es requerida'
-        }
-        if (value.type === "image/png" || value.type === "image/jpg" || value.type === "image/jpeg") {
-            if (value.size > 1500000) {
-                return error = "La imagen no puede pesar mas de 1500000";
-            }
-        }
-        else {
-            return error = "Ingrese una imagen válida, solo se admite los formatos: png, jpg  y jpeg."
-        }
-        return error
+
+    function validateImage(value) {
+        // let error
+        // if (isNull(value)) {
+        //   return error = 'La imagen del producto es requerida'
+        // }
+        // if (!value.type.includes("image")) {
+        //   return error = "Ingrese una imagen válida"
+        // }
+        // return error
     }
+
     return <>
         <VStack h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
             "&::-webkit-scrollbar": {
@@ -83,44 +64,37 @@ export default function CreateIngredient() {
             },
         }}>
             <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="white" fontWeight="bold" size='2xl'>Crear Ingrediente</Heading>
+                <Heading color="white" fontWeight="bold" size='2xl'>Crear Promocion</Heading>
             </Box>
             <Box>
                 <Formik
                     innerRef={ref}
                     initialValues={{
-                        name: '',
-                        description: '',
-                        price: 0,
-                        drive_type: 'Gramos',
-                        amount: 0,
-                        image: null,
-                        stock: 0,
+                        /*
+                                            image: null,
+                                            */
+                        image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
+                        name: promotion.name,
+                        price: promotion.price.$numberDecimal,
+                        description: promotion.description,
+                        activo: promotion.active,
+                        stock: promotion.stock,
                     }}
 
                     validationSchema={Yup.object({
                         name: Yup.string()
-                            .required('El ingrediente requiere un nombre'),
-                        description: Yup.string()
-                            .required('El ingrediente requiere una descripción'),
+                            .required('La promocion requiere un nombre'),
                         price: Yup.number()
-                            .required('El ingrediente requiere un precio'),
-                        drive_type: Yup.string()
-                            .required('Requerido'),
-                        amount: Yup.number()
-                            .required('El ingrediente requiere una cantidad'),
+                            .required('La promocion requiere un precio'),
+                        description: Yup.string()
+                            .required('La promocion requiere una descripción'),
                         stock: Yup.number()
-                            .required('Se requiere saber las existencias del producto, aunque sean negativas')
-                    })}
-                    /*el onSubmit, solo se activa cuando, el formulario no tiene errores*/
+                            .required('Se requiere saber las existencias las promociones, aunque sean negativas')
+                        //   console.error(error);
+                        // }
+                    }, 1000)}
                     onSubmit={(values, actions) => {
-                        if (window.confirm("¿Está seguro que desea registrar el nuevo ingrediente?")) {
-                            addIngredient(values, actions);
-                        }
-                        else {
-                            actions.setSubmitting(false);
-                        }
-
+                        editPromocion(values, actions, id);
                     }}
                 >
                     {(props) => (
@@ -129,8 +103,7 @@ export default function CreateIngredient() {
                                 <HStack spacing='28'>
                                     <SimpleGrid columns={[1, 2, 3]} spacing='30px' alignItems='center' w="100%">
                                         <GridItem rowSpan={2}>
-                                            {/* Este fiel, es el de imagen, aqui es donde se busca la imagen*/}
-                                            <Field name="image" validate={validateImage} >
+                                            <Field name="image" validate={validateImage} h='calc(100vh)'>
                                                 {({ field, form }) => (
                                                     <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
                                                         display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
@@ -166,7 +139,7 @@ export default function CreateIngredient() {
                                                             placeholder='Debe incluir una imagen'
                                                             id="image"
                                                             type="file"
-                                                            accept=".jpg, .png, .jpeg"
+                                                            accept="image/*"
                                                             onChange={handleImageChange}
                                                         />
                                                         <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
@@ -183,44 +156,12 @@ export default function CreateIngredient() {
                                                 </FormControl>
                                             )}
                                         </Field>
-                                        {/* name, apunta al valor de los initialValues, en este caso apunta a "price" */}
                                         <Field name='price'>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.price && form.touched.price}>
                                                     <FormLabel>Precio</FormLabel>
-                                                    <Input {...field} min={1} type='number' />
+                                                    <Input {...field} type='number' />
                                                     <FormErrorMessage fontWeight="bold">{form.errors.price}</FormErrorMessage>
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                        <Field name='drive_type'>
-                                            {({ field, form }) => (
-                                                <FormControl isInvalid={form.errors.drive_type && form.touched.drive_type}>
-                                                    <FormLabel htmlFor="tipo_unidad">Tipo de unidad</FormLabel>
-                                                    <Select {...field} className="selectStyle">
-                                                        <Box as="option" value="Gramos" className="optionStyle" >
-                                                            Gramos
-                                                        </Box>
-                                                        <Box as="option" value="Mililitros" className="optionStyle">
-                                                            Mililitros
-                                                        </Box>
-                                                        <Box as="option" value="Pendiente" className="optionStyle">
-                                                            Pendiente
-                                                        </Box>
-                                                        <Box as="option" value="Unidades" className="optionStyle" >
-                                                            Unidades
-                                                        </Box>
-                                                    </Select>
-                                                    <FormErrorMessage fontWeight="bold">{form.errors.drive_type}</FormErrorMessage>
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                        <Field name='amount'>
-                                            {({ field, form }) => (
-                                                <FormControl isInvalid={form.errors.amount && form.touched.amount}>
-                                                    <FormLabel>Cantidad</FormLabel>
-                                                    <Input {...field} min={1} type='number' />
-                                                    <FormErrorMessage fontWeight="bold">{form.errors.amount}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
@@ -242,13 +183,27 @@ export default function CreateIngredient() {
                                                 </FormControl>
                                             )}
                                         </Field>
+
+                                        <Field name='activo'>
+                                            {({ field, form }) => (
+                                                <FormControl isInvalid={form.errors.activo && form.touched.activo}>
+                                                    <FormLabel htmlFor='activo'>Activo</FormLabel>
+                                                    <Select {...field} id='activo'>
+                                                        <option value={true}>Sí</option>
+                                                        <option value={false}>No</option>
+                                                    </Select>
+                                                    <FormErrorMessage>{form.errors.activo}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+
                                         <Button
                                             mt={4}
                                             colorScheme='red'
                                             isLoading={props.isSubmitting}
                                             type='submit'
                                         >
-                                            Crear Ingrediente
+                                            Editar Promocion
                                         </Button>
                                     </SimpleGrid>
                                 </HStack>

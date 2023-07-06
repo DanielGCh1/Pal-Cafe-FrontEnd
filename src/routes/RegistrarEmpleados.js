@@ -124,7 +124,7 @@ export default function EditEmployee() {
     }
 
     return <>
-        <VStack  bg="rgba(0,0,0,.4)" w={"100%"} h={"100%"} overflow="auto">
+        <VStack bg="rgba(0,0,0,.4)" w={"100%"} h={"100%"} overflow="auto">
             <Box p='4' display="flex" justifyContent={'center'}>
                 <Heading color="white" fontWeight="bold" size='2xl'>Registrar Empleado</Heading>
             </Box>
@@ -143,9 +143,9 @@ export default function EditEmployee() {
                     direccion: "",
                     correo: "",
                     password: "",
-                    roles: [],
+                    roles: roles[0],
                 }
-            }
+                }
 
                 validationSchema={Yup.object({
                     nombre: Yup.string()
@@ -164,8 +164,8 @@ export default function EditEmployee() {
                         .required("Se necesita un contraseña")
                 }, 1000)}
                 onSubmit={(values, actions) => {
-                    values.roles = rolesAsignados;
-
+                    //values.roles = rolesAsignados;
+                    console.log(values);
                     addEmployee(values, actions);
                 }}
             >

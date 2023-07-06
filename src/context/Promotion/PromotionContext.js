@@ -32,7 +32,7 @@ const PromotionProvider = props => {
         
         setPromociones(updatedPromotions);
     }else{
-      console.log("Errror al ingresar la promocion");
+      console.log("Error al ingresar la promocion");
     }
     } catch (error) {
       console.log(error);

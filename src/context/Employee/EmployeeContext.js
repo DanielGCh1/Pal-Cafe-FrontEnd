@@ -84,7 +84,7 @@ const EmployeeProvider = props => {
 
   const deleteEmployee = async (id) => {
     try {
-      const response = await Axios.delete(`/promociones/delete/${id}`);
+      const response = await Axios.delete(`/users/delete/${id}`);// 
       if (response.status === 200) {
         setEmployees((employees) => employees.filter((employees) => employees._id !== id));
       } else {

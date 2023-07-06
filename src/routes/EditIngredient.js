@@ -83,7 +83,6 @@ export default function EditIngredient() {
     }
     useEffect(() => {
         if (!isUndefinedOrNull(params.id) && isUndefinedOrNull(ingredient)) {
-            console.log("Si encontro el id del ingrediente");
             getIngredient(params.id);
             getIngredientImageUrl(params.id);
         }
@@ -225,10 +224,19 @@ export default function EditIngredient() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.drive_type && form.touched.drive_type}>
                                                     <FormLabel htmlFor="tipo_unidad">Tipo de unidad</FormLabel>
-                                                    <Select id="drive_type" {...field} color='black'>
-                                                        <option value="Gramos">Gramos</option>
-                                                        <option value="Mililitros">Mililitros</option>
-                                                        <option value="Unidades">Unidades</option>
+                                                    <Select id="drive_type" {...field} className="selectStyle">
+                                                        <Box as="option" value="Gramos" className="optionStyle" >
+                                                            Gramos
+                                                        </Box>
+                                                        <Box as="option" value="Mililitros" className="optionStyle">
+                                                            Mililitros
+                                                        </Box>
+                                                        <Box as="option" value="Pendiente" className="optionStyle">
+                                                            Pendiente
+                                                        </Box>
+                                                        <Box as="option" value="Unidades" className="optionStyle" >
+                                                            Unidades
+                                                        </Box>
                                                     </Select>
                                                     <FormErrorMessage fontWeight="bold">{form.errors.drive_type}</FormErrorMessage>
                                                 </FormControl>

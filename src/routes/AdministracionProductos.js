@@ -9,9 +9,11 @@ export default function AdministracionProductos() {
 
     const { admProduct, admProducts,setAdmProducts, admProductsAux, deleteAdmProduct, editAdmProducts, getAdmProducts, setAdmProduct, getProductsAux } = useAdmProduct();
     const navigate = useNavigate();
+    const [searchProducts, setSearchProducts] = useState(true)
 
     useEffect(() => {
-        if (typeof admProducts == 'undefined' || admProducts.length <= 0) {
+        if ((typeof admProducts == 'undefined' || admProducts.length <= 0) && searchProducts ) {
+            setSearchProducts(false);
             getAdmProducts();
         }
     }, [admProducts])

@@ -35,7 +35,14 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesOrders, getListProd
 
   const saveChanges = () => {
     if (window.confirm("¿Esta seguro que desea, guardar los cambios?")) {
-      saveChangesOrders();
+      if (data.length > 0) {
+        if (ref.current.errors.stock != 'Existencias requeridas') {
+          saveChangesOrders();
+        }
+      }
+      else {
+        window.alert("No existen pedidos, para guardar cambios");
+      }
     }
   };
 
@@ -103,11 +110,19 @@ const TableComponent = ({ data, onEdit, onDelete, saveChangesOrders, getListProd
                               <Field name='state'>
                                 {({ field, form }) => (
                                   <FormControl isInvalid={form.errors.state && form.touched.state}>
-                                    <FormLabel>Estado</FormLabel>
-                                    <Select {...field} color='black'>
-                                      <option value="Pendiente">Pendiente</option>
-                                      <option value="Aceptado">Aceptado</option>
-                                      <option value="Rechazado">Rechazado</option>
+                                    <Select {...field} className="selectStyle">
+                                      <Box as="option" value="Aceptado" className="optionStyle" >
+                                        Aceptado
+                                      </Box>
+                                      <Box as="option" value="Rechazado" className="optionStyle">
+                                        Rechazado
+                                      </Box>
+                                      <Box as="option" value="Pendiente" className="optionStyle">
+                                        Pendiente
+                                      </Box>
+                                      <Box as="option" value="Fallido" className="optionStyle" >
+                                        Concluido
+                                      </Box>
                                     </Select>
                                     <FormErrorMessage fontWeight="bold">{form.errors.state}</FormErrorMessage>
                                   </FormControl>

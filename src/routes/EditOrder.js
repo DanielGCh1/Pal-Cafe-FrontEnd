@@ -36,19 +36,23 @@ const isUndefinedOrNull = obj => {
 };
 
 export default function EditOrder() {
-    const { order, getOrder, editOrder } = useOrders();
+    const { order, getOrder, editOrder, imageUrl, getImageUrl } = useOrders();
     const params = useParams();
     const ref = useRef(null);
+    let searchImage = true;
 
     useEffect(() => {
         if (!isUndefinedOrNull(params.id) && isUndefinedOrNull(order)) {
-            console.log("Si encontro el id de la orden");
             getOrder(params.id);
+            getImageUrl(params.id);
         }
-    }, []);
+        if (!isUndefinedOrNull(params.id) && searchImage && !isUndefinedOrNull(imageUrl)) {
+            searchImage = false;
+        }
+    }, [imageUrl]);
 
     return <>
-        <VStack bgColor="rgba(0,0,0,.2)" h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
+        <VStack h='100vh' overflowY="scroll" maxHeight="55rem" sx={{
             "&::-webkit-scrollbar": {
                 width: "7px",
                 backgroundColor: "transparent",
@@ -81,7 +85,8 @@ export default function EditOrder() {
                         cost: order.cost,
                         reasonRejection: order.reasonRejection,
                         dateHour: order.dateHour,
-                        sendOrder: order.sendOrder
+                        sendOrder: order.sendOrder,
+                        specialOrder: order.specialOrder,
                     }}
 
                     validationSchema={Yup.object({
@@ -97,12 +102,16 @@ export default function EditOrder() {
                     })}
 
                     onSubmit={(values, actions) => {
-                        console.log(values);
-                        editOrder(values, actions);
+                        if (window.confirm("¿Está seguro que desea editar el pedido?")) {
+                            editOrder(values, actions);
+                        }
+                        else {
+                            actions.setSubmitting(false);
+                        }
                     }}
                 >
                     {(props) => (
-                        <Container p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
+                        <Container bgColor="rgba(0,0,0,.1)" p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
                             <Form>
                                 <HStack spacing='28'>
                                     <SimpleGrid columns={[1, 2, 3]} spacing='30px' alignItems='center' w="100%">
@@ -155,10 +164,19 @@ export default function EditOrder() {
                                             {({ field, form }) => (
                                                 <FormControl>
                                                     <FormLabel>Estado</FormLabel>
-                                                    <Select {...field} color='black'>
-                                                        <option value="Pendiente">Pendiente</option>
-                                                        <option value="Aceptado">Aceptado</option>
-                                                        <option value="Rechazado">Rechazado</option>
+                                                    <Select {...field} className="selectStyle">
+                                                        <Box as="option" value="Aceptado" className="optionStyle" >
+                                                            Aceptado
+                                                        </Box>
+                                                        <Box as="option" value="Rechazado" className="optionStyle">
+                                                            Rechazado
+                                                        </Box>
+                                                        <Box as="option" value="Pendiente" className="optionStyle">
+                                                            Pendiente
+                                                        </Box>
+                                                        <Box as="option" value="Fallido" className="optionStyle" >
+                                                            Concluido
+                                                        </Box>
                                                     </Select>
                                                 </FormControl>
                                             )}
@@ -204,11 +222,29 @@ export default function EditOrder() {
                                         </Field>
                                     </SimpleGrid>
                                 </HStack>
-                                <Box p='5'>
-                                    <Heading size='md'>Lista de articulos:</Heading>
-                                </Box>
+                                {(order.specialOrder) ?
+                                    <Box>
+                                        <Box p='4' display="flex" justifyContent={'center'}>
+                                            <Heading size='md'>Imagen de ejemplo</Heading>
+                                        </Box>
+                                        {imageUrl ? (
+                                            <Box mt={4} pos="relative">
+                                                <Image src={imageUrl}
+                                                    width='200px'
+                                                    height='200px'
+                                                    alt="Imagen seleccionada" />
+                                            </Box>
+                                        ) : null}
+                                    </Box>
 
-                                <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' edit={true} />
+                                    : <Box>
+                                        <Box p='5'>
+                                            <Heading size='md'>Lista de articulos:</Heading>
+                                        </Box>
+
+                                        <ProductListOrder listProductsOrder={order.listProductsOrder} color='black' />
+                                    </Box>
+                                }
                                 <Button
                                     mt={4}
                                     colorScheme='red'

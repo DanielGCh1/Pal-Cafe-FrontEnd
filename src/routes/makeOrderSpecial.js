@@ -227,7 +227,7 @@ export default function MakeOrderSpecial() {
                             </HStack>
 
                             <Box p='4' display="flex" justifyContent={'center'}>
-                                <Heading size='md'>Imagenes del pedido</Heading>
+                                <Heading size='md'>Imagen de ejemplo</Heading>
                             </Box>
 
                             <GridItem rowSpan={2}>

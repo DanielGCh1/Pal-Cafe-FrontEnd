@@ -221,7 +221,7 @@ export default function MakeOrder() {
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.dateHour && form.touched.dateHour}>
                                                     <FormLabel>Fecha y hora del pedido</FormLabel>
-                                                    <Input isReadOnly={true} type="datetime-local" {...field} />
+                                                    <Input type="datetime-local" {...field} />
                                                     <FormErrorMessage>{form.errors.dateHour}</FormErrorMessage>
                                                 </FormControl>
                                             )}
