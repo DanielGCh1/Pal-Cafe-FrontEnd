@@ -6,35 +6,107 @@ const EmployeeContext = createContext(null)
 const EmployeeProvider = props => {
 
   const [employees, setEmployees] = useState([])
-  const [selected, setSelected] = useState(null)
+  const [employee, setEmployee] = useState(null)
   const [roles, setRoles] = useState([])
+  const [imageUrl, setImageUrl] = useState(null)
+
+
+  const getEmployeeId = async id => {
+    try {
+      const response = await Axios.get(`/users/${id}`);
+      const data = response.data[0];
+      console.log(data);
+      setEmployee(data);
+    } catch (error) {
+    }
+  };
 
   const findEmployeeById = (id) => {
-    const employee = employees.find(emp => emp._id === id);
+    const emplo = employees.find(emp => emp._id === id);
+    setEmployee(emplo);
     return employee;
   }
 
-  const addEmployee = async (values, actions) => {
-
+  const getImageUrl = async id => {
     try {
-      const response = await Axios.post(`/users/addemployee`, values);
-
-      if (response.status == 200) {
-        console.log(response.data)
-
-      } else {
-        console.log("Errror al ingresar el empleado");
+      const response = await Axios.get(`/usuarios/imagen/${id}`);
+      if (response.status = 200) {
+        setImageUrl(`http://localhost:3001/api/usuarios/imagen/${id}`);
+      }
+      else {
+        setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
       }
     } catch (error) {
-      console.log(error);
+      console.log('La consulta para obtener la imagen del usuario falló');
+      setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+    }
+  };
+  const addEmployee = async (values, actions) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', values.image);
+      formData.append('nombre', values.nombre);
+      formData.append('usuario', values.usuario);
+      formData.append('primerApellido', values.primerApellido);
+      formData.append('segundoApellido', values.segundoApellido);
+      formData.append('telefonoPrimer', values.telefonoPrimer);
+      formData.append('telefonoSegundo', values.telefonoSegundo);
+      formData.append('direccion', values.direccion);
+      formData.append('correo', values.correo);
+      formData.append('password', values.password);
+      formData.append('newPassword', values.newPassword);
+      formData.append('state', "Aceptado");
+      formData.append('roles', JSON.stringify(values.roles));
+
+      console.log(formData);
+      const response = await Axios.post('/users/addemployee', formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 200) {
+        window.alert(response.data.message);
+      }
+      else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      window.alert("Error inesperado al agregar el empleado");
     }
     actions.setSubmitting(false);
   };
 
   const editEmployee = async (values, actions, _id) => {
-
     try {
-      const response = await Axios.put(`/users/edit/${_id}`, values);
+      const formData = new FormData();
+      formData.append('image', values.image);
+      formData.append('nombre', values.nombre);
+      formData.append('usuario', values.usuario);
+      formData.append('primerApellido', values.primerApellido);
+      formData.append('segundoApellido', values.segundoApellido);
+      formData.append('telefonoPrimer', values.telefonoPrimer);
+      formData.append('telefonoSegundo', values.telefonoSegundo);
+      formData.append('direccion', values.direccion);
+      formData.append('correo', values.correo);
+      formData.append('password', values.password);
+      formData.append('newPassword', values.newPassword);
+      formData.append('roles', JSON.stringify(values.roles));
+      formData.append('newImage', values.newImage);
+      formData.append('state', "Aceptado");
+      formData.append('imageUrlLocal', values.imageUrlLocal);//TODO: si esta en null, es
+      //TODO: porque borro la foto, y no planea dejar ninguna, pero solo aplica para clientes
+      // TODO: pero se ocupa aqui, porque los empleados si ocupan foto, y ocupo saber si lo intento
+
+      console.log(formData);
+      const response = await Axios.put(`/users/edit/${_id}`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.status == 200) {
         // Find the index of the edited promotion in the promotions array
@@ -46,12 +118,12 @@ const EmployeeProvider = props => {
 
         setEmployees(updatedEmployees);
 
-        console.log(response.data);
+        window.alert(response.data.message);
       } else {
-        console.log("Errror al ingresar el empleado");
+        window.alert(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      window.alert("Error inesperado al editar el empleado");
     }
     actions.setSubmitting(false);
   };
@@ -75,6 +147,7 @@ const EmployeeProvider = props => {
         withCredentials: true
       });
       const data = res.data;
+      console.log(data);
       setRoles(data)
     } catch (error) {
       console.error(error);
@@ -84,14 +157,17 @@ const EmployeeProvider = props => {
 
   const deleteEmployee = async (id) => {
     try {
-      const response = await Axios.delete(`/users/delete/${id}`);// 
-      if (response.status === 200) {
+      let response;
+      await Axios.delete(`/users/delete/${id}`).then((data => response = data));
+      if (response.status == 200) {
         setEmployees((employees) => employees.filter((employees) => employees._id !== id));
-      } else {
-        console.log('Ocurrió un error al eliminar la promoción');
+        window.alert("Empleado eliminado de forma exitosa");
+      }
+      else {
+        window.alert(response.data.message);
       }
     } catch (error) {
-      console.error('Ocurrió un error al eliminar la promoción', error);
+      window.alert("Error inesperado al eliminar el empleado");
     }
   };
 
@@ -100,14 +176,18 @@ const EmployeeProvider = props => {
     <EmployeeContext.Provider
       value={{
         employees,
-        selected,
+        employee,
         roles,
         getEmployee,
         deleteEmployee,
         findEmployeeById,
         editEmployee,
         getRoles,
-        addEmployee
+        addEmployee,
+        imageUrl,
+        getImageUrl,
+        setImageUrl,
+        getEmployeeId
       }}
     >
       {props.children}

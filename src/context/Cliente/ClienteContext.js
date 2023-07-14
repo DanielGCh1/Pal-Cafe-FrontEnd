@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { useEffect } from 'react';
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const ClienteContext = createContext(null)
 
@@ -10,6 +11,33 @@ const ClienteProvider = props => {
   const [clienteSelecionado, setClienteSelecionado] = useState(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null)
+  const [customerEditAdm, setCustomerEditAdm] = useState(null)
+  const navigate = useNavigate();
+
+  const getCustomerId = async id => {
+    try {
+      const response = await axios.get(`/users/${id}`);
+      const data = response.data[0];
+      setCustomerEditAdm(data);
+    } catch (error) {
+    }
+  };
+
+  const getImageUrl = async id => {
+    try {
+      const response = await axios.get(`/usuarios/imagen/${id}`);
+      if (response.status = 200) {
+        setImageUrl(`http://localhost:3001/api/usuarios/imagen/${id}`);
+      }
+      else {
+        setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+      }
+    } catch (error) {
+      console.log('La consulta para obtener la imagen del usuario falló');
+      setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+    }
+  };
 
   useEffect(() => {
     setError(null);
@@ -109,37 +137,133 @@ const ClienteProvider = props => {
 
   const editClient = async (values, actions) => {
     try {
-      const res = await axios.put(`/cliente/edit/${values._id}`, values);
-      if (res.status == 200) {
+      const formData = new FormData();
+      formData.append('image', values.image);
+      formData.append('nombre', values.name);
+      formData.append('usuario', values.user);
+      formData.append('primerApellido', values.surname);
+      formData.append('segundoApellido', values.secondSurname);
+      formData.append('telefonoPrimer', values.firstNumber);
+      formData.append('telefonoSegundo', values.secondNumber);
+      formData.append('direccion', values.address);
+      formData.append('correo', values.email);
+      formData.append('password', values.password);
+      formData.append('newPassword', values.newPassword);
+      formData.append('roles', JSON.stringify(values.roles));
+      formData.append('newImage', values.newImage);
+      formData.append('state', values.state);
+      formData.append('imageUrlLocal', values.imageUrlLocal);//TODO: si esta en null, es
+      //TODO: porque borro la foto, y no planea dejar ninguna, pero solo aplica para clientes
+      // TODO: pero se ocupa aqui, porque los empleados si ocupan foto, y ocupo saber si lo intento
+
+      console.log(formData);
+      const response = await axios.put(`/users/edit/${values._id}`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 200) {
         // Find the index of the edited promotion in the promotions array
         const editedClientesIndex = clientes.findIndex(cliente => cliente._id === values._id);
 
         const updatedCliente = {
+          usu_foto_url: values.image,
           usu_nombre: values.name,
-          usu_correo: values.email,
-          usu_direccion: values.address,
-          usu_numero_telefono1: values.firstNumber,
-          usu_contrasenna: values.newPassword,
-          usu_numero_telefono2: values.secondNumber,
-          usu_segundo_apellido: values.secondSurname,
+          usu_usuario: values.user,
           usu_primer_apellido: values.surname,
-          usu_usuario: values.user
+          usu_segundo_apellido: values.secondSurname,
+          usu_numero_telefono1: values.firstNumber,
+          usu_numero_telefono2: values.secondNumber,
+          usu_direccion: values.address,
+          usu_correo: values.email,
+          usu_contrasenna: values.password,
+          usu_roles: [],
+          usu_estado: values.state
         };
-        
+
         // Replace the edited promotion with the updated promotionif 
         const updatedClientes = [...clientes];
-        updatedClientes[editedClientesIndex] = { ...clientes[editedClientesIndex], ...updatedCliente};
+        updatedClientes[editedClientesIndex] = { ...clientes[editedClientesIndex], ...updatedCliente };
 
         console.log(updatedClientes[editedClientesIndex])
         setClientes(updatedClientes);
+
+        window.alert(response.data.message);
+      } else {
+        window.alert(response.data.message);
       }
-      return res.data
     } catch (error) {
-      console.error(error);
-      return error
+      window.alert("Error inesperado al editar el empleado");
     }
+    actions.setSubmitting(false);
+    /*
+        try {
+          const res = await axios.put(`/cliente/edit/${values._id}`, values);
+          if (res.status == 200) {
+            // Find the index of the edited promotion in the promotions array
+            const editedClientesIndex = clientes.findIndex(cliente => cliente._id === values._id);
+    
+            const updatedCliente = {
+              usu_nombre: values.name,
+              usu_usuario: values.user,
+              usu_primer_apellido: values.surname,
+              usu_segundo_apellido: values.secondSurname,
+              usu_numero_telefono1: values.firstNumber,
+              usu_numero_telefono2: values.secondNumber,
+              usu_direccion: values.address,
+              usu_correo: values.email,
+              usu_contrasenna: values.newPassword,
+            };
+            
+            // Replace the edited promotion with the updated promotionif 
+            const updatedClientes = [...clientes];
+            updatedClientes[editedClientesIndex] = { ...clientes[editedClientesIndex], ...updatedCliente};
+    
+            console.log(updatedClientes[editedClientesIndex])
+            setClientes(updatedClientes);
+          }
+          return res.data
+        } catch (error) {
+          console.error(error);
+          return error
+        }*/
   }
 
+  const addClient = async (values, actions) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', values.image);
+      formData.append('nombre', values.name);
+      formData.append('usuario', values.user);
+      formData.append('primerApellido', values.surname);
+      formData.append('segundoApellido', values.secondSurname);
+      formData.append('telefonoPrimer', values.firstNumber);
+      formData.append('telefonoSegundo', values.secondNumber);
+      formData.append('direccion', values.address);
+      formData.append('correo', values.email);
+      formData.append('password', values.password);
+                
+      console.log(formData);
+      const response = await axios.post("/users/add", formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 200) {
+        window.alert(response.data.message);
+        navigate("/PalCafe/LoginCustomer")
+      } else {
+        window.alert(response.data.message);
+      }
+    } catch (error) {
+      window.alert("Error inesperado al editar el empleado");
+    }
+    actions.setSubmitting(false);
+  }
   return (
     <ClienteContext.Provider
       value={{
@@ -153,7 +277,14 @@ const ClienteProvider = props => {
         setCliente,
         modifyClientes,
         editClient,
-        deleteCliente
+        deleteCliente,
+        imageUrl,
+        getImageUrl,
+        setImageUrl,
+        customerEditAdm,
+        setCustomerEditAdm,
+        getCustomerId,
+        addClient
       }}
     >
       {props.children}

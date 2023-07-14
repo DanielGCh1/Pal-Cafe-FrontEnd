@@ -19,7 +19,7 @@ const AdministracionEmpleados = () => {
 
   const { employees,
     getEmployee,
-    deleteEmpleado } = useEmployees();
+    deleteEmployee } = useEmployees();
   const [filteredEmployees, setEmployeesFilters] = useState([]);
   const history = createBrowserHistory();
   const [filters, setFilters] = useState("");
@@ -74,7 +74,7 @@ const AdministracionEmpleados = () => {
   };
 
   const confirmDelete = () => {
-    deleteEmpleado(selectedEmployees);
+    deleteEmployee(selectedEmployees._id);
     onClose();
   };
 

@@ -11,6 +11,26 @@ import { FaTimes } from "react-icons/fa";
 import useEmployees from '../context/Employee/UseEmployees';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+const isUndefined = obj => {
+    if (obj === "undefined" || typeof obj === "undefined") {
+        return true;
+    }
+    return false;
+};
+
+const isNull = obj => {
+    if (obj === null) {
+        return true;
+    }
+    return false;
+};
+const isUndefinedOrNull = obj => {
+    if (isUndefined(obj) || isNull(obj)) {
+        return true;
+    }
+    return false;
+};
+
 export default function EditEmployee() {
     const [imagePreviewUrl, setImagePreviewUrl] = useState();/*esta es la url de la image, para el image */
     const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
@@ -18,6 +38,37 @@ export default function EditEmployee() {
     const [rolesNoAsignados, setRolesNoAsignados] = useState([]);
     const [rolesAsignados, setRolesAsignados] = useState([]);
     const [rolesSeleccionados, setRolesSeleccionados] = useState([]);
+
+    const handleImageChange = (event) => {
+        event.preventDefault();
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        ref.current.values.image = file;
+        reader.onloadend = () => {
+            setImagePreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+    const handleImageDelete = () => { /*Se activa cuando se elimina la imagen*/
+        setImagePreviewUrl(null);
+        ref.current.values.image = null;
+    };
+    function validateImage(value) { /*Valida si el archivo que se subio, es de tipo imagen*/
+        let error
+        if (isNull(value)) {
+            return error = 'La foto del empleado es requerida'
+        }
+        if (value.type === "image/png" || value.type === "image/jpg" || value.type === "image/jpeg") {
+            if (value.size > 1500000) {
+                return error = "La foto no puede pesar mas de 1500000";
+            }
+        }
+        else {
+            return error = "Ingrese una imagen válida, solo se admite los formatos: png, jpg  y jpeg."
+        }
+        return error
+    }
+
 
     useEffect(() => {
         getRoles()
@@ -92,48 +143,16 @@ export default function EditEmployee() {
         }
     };
 
-
-    const handleImageChange = (event) => {
-        event.preventDefault();
-        let reader = new FileReader();
-        let file = event.target.files[0];
-
-        // ref.current.values.image = file;
-        validateImage(ref.current.values.image);
-        reader.onloadend = () => {
-            setImagePreviewUrl(reader.result);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleImageDelete = () => {
-
-        setImagePreviewUrl(null);
-        // ref.current.values.image = null;
-    };
-
-    function validateImage(value) {
-        // let error
-        // if (isNull(value)) {
-        //   return error = 'La imagen del producto es requerida'
-        // }
-        // if (!value.type.includes("image")) {
-        //   return error = "Ingrese una imagen válida"
-        // }
-        // return error
-    }
-
     return <>
-        <VStack bg="rgba(0,0,0,.4)" w={"100%"} h={"100%"} overflow="auto">
-            <Box p='4' display="flex" justifyContent={'center'}>
-                <Heading color="white" fontWeight="bold" size='2xl'>Registrar Empleado</Heading>
-            </Box>
+        <Box p='4' display="flex" justifyContent={'center'}>
+            <Heading color="white" fontWeight="bold" size='2xl'>Registrar Empleado</Heading>
+        </Box>
+        <Box>
             <Formik
                 style={{ maxWidth: '100%' }}
                 innerRef={ref}
                 initialValues={{
-                    /*      image: null,     */
-                    image: "https://scontent.fsyq5-1.fna.fbcdn.net/v/t39.30808-6/317458173_676689817496166_2616952165804500300_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=730e14&_nc_ohc=rLRjnHMeEyUAX-sdLtZ&_nc_ht=scontent.fsyq5-1.fna&oh=00_AfDDWJObBaRx1D-LosUvAnjztaPAqjYyJYyg2grFJXtZWw&oe=640FCC4E",
+                    image: null,
                     nombre: "",
                     usuario: "",
                     primerApellido: "",
@@ -143,7 +162,7 @@ export default function EditEmployee() {
                     direccion: "",
                     correo: "",
                     password: "",
-                    roles: roles[0],
+                    roles: roles,
                 }
                 }
 
@@ -164,212 +183,219 @@ export default function EditEmployee() {
                         .required("Se necesita un contraseña")
                 }, 1000)}
                 onSubmit={(values, actions) => {
-                    //values.roles = rolesAsignados;
-                    console.log(values);
-                    addEmployee(values, actions);
+                    if (window.confirm("¿Está seguro que desea registrar el nuevo empleado?")) {
+                        values.roles = roles;
+                        addEmployee(values, actions);
+                    }
+                    else {
+                        actions.setSubmitting(false);
+                    }
                 }}
             >
                 {(props) => (
-                    <Form>
-                        <SimpleGrid columns={[1, 2, 3]} spacing='5%' alignItems='center' color='white'>
-                            <GridItem rowSpan={2}>
-                                <Field name="image" validate={validateImage} h='calc(100vh)'>
-                                    {({ field, form }) => (
-                                        <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
-                                            display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
-                                            <FormLabel htmlFor="foto">Foto</FormLabel>
-                                            {imagePreviewUrl ? (
-                                                <Box mt={4} pos="relative">
-                                                    <Image src={imagePreviewUrl}
-                                                        width='200px'
-                                                        height='200px'
-                                                        alt="Imagen seleccionada" />
+                    <Container bgColor="rgba(0,0,0,.1)" p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
+                        <Form>
+                            <HStack spacing='28'>
+                                <SimpleGrid columns={[1, 2, 3]} spacing='30px' alignItems='center' w="100%">
+                                    <GridItem rowSpan={2}>
+                                        <Field name="image" validate={validateImage} >
+                                            {({ field, form }) => (
+                                                <FormControl maxW='100%' isInvalid={form.errors.image && form.touched.image}
+                                                    display="flex" justifyContent='center' alignItems='center' flexDirection='column'>
+                                                    <FormLabel htmlFor="foto">Foto</FormLabel>
+                                                    {imagePreviewUrl ? (
+                                                        <Box mt={4} pos="relative">
+                                                            <Image src={imagePreviewUrl}
+                                                                width='200px'
+                                                                height='200px'
+                                                                alt="Imagen seleccionada" />
+                                                            <Button
+                                                                pos="absolute"
+                                                                top="0"
+                                                                right="0"
+                                                                colorScheme="red"
+                                                                onClick={handleImageDelete}
+                                                            >
+                                                                <Icon as={FaTimes} />
+                                                            </Button>
+                                                        </Box>
+                                                    ) : null}
                                                     <Button
-                                                        pos="absolute"
-                                                        top="0"
-                                                        right="0"
-                                                        colorScheme="red"
-                                                        onClick={handleImageDelete}
+                                                        colorScheme="green"
+                                                        size="sm"
+                                                        borderRadius="md"
+                                                        onClick={() => document.getElementById('image').click()}
                                                     >
-                                                        <Icon as={FaTimes} />
+                                                        Buscar
                                                     </Button>
-                                                </Box>
-                                            ) : null}
+                                                    <Input
+                                                        style={{ display: 'none' }}
+                                                        placeholder='Debe incluir una imagen'
+                                                        id="image"
+                                                        type="file"
+                                                        accept=".jpg, .png, .jpeg"
+                                                        onChange={handleImageChange}
+                                                    />
+                                                    <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+                                    </GridItem>
+                                    <Field name='nombre'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
+                                                <FormLabel>Nombre:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.nombre}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='primerApellido'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.primerApellido && form.touched.primerApellido}>
+                                                <FormLabel>Primer Apellido:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.primerApellido}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='segundoApellido'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.segundoApellido && form.touched.segundoApellido}>
+                                                <FormLabel>Segundo Apellido:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.segundoApellido}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='usuario'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.usuario && form.touched.usuario}>
+                                                <FormLabel>Usuario:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.usuario}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <Field name='telefonoPrimer'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.telefonoPrimer && form.touched.telefonoPrimer}>
+                                                <FormLabel>Numero principal:</FormLabel>
+                                                <Input {...field} type='number' />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.telefonoPrimer}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
 
-                                            <Button
-                                                colorScheme="green"
-                                                size="sm"
-                                                borderRadius="md"
-                                                onClick={() => document.getElementById('image').click()}
-                                            >
-                                                Buscar
+                                    <Field name='telefonoSegundo'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.telefonoSegundo && form.touched.telefonoSegundo}>
+                                                <FormLabel>Numero segundario:</FormLabel>
+                                                <Input {...field} type='number' />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.telefonoSegundo}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+
+                                    <Field name='direccion'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.direccion && form.touched.direccion}>
+                                                <FormLabel>Dirección:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.direccion}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+
+                                    <Field name='correo'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.correo && form.touched.correo}>
+                                                <FormLabel>Correo:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.correo}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+
+                                    <Field name='password'>
+                                        {({ field, form }) => (
+                                            <FormControl isInvalid={form.errors.password && form.touched.password}>
+                                                <FormLabel>Contraseña:</FormLabel>
+                                                <Input {...field} />
+                                                <FormErrorMessage fontWeight="bold">{form.errors.password}</FormErrorMessage>
+                                            </FormControl>
+                                        )}
+                                    </Field>
+                                    <VStack bg={"white"} color={"black"} padding={"5px 4px 5px 4px"}>
+                                        <HStack w={"100%"} alignItems={'flex-start'}>
+                                            <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
+                                                <Text>Roles asignados:</Text>
+                                                {rolesAsignados?.map((role, index) => (
+                                                    <Container
+                                                        key={role.id}
+                                                        style={{
+                                                            border: "1px solid lightgray",
+                                                            padding: 5,
+                                                            margin: 5,
+                                                            width: "100%",
+                                                            borderColor: rolesSeleccionados.includes(role) ? "red" : "lightgray",
+                                                        }}
+                                                        _hover={{ cursor: "pointer" }}
+                                                        onClick={() => seleccionarRol(role)}
+                                                    >
+                                                        {role.rol_tipo}
+                                                    </Container>
+                                                ))}
+                                            </VStack>
+                                            <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
+                                                <Text>Roles no asignados:</Text>
+                                                {rolesNoAsignados?.map((role, index) => (
+                                                    <Container
+                                                        key={role.id}
+                                                        style={{
+                                                            border: '1px solid lightgray',
+                                                            padding: 5,
+                                                            margin: 5,
+                                                            width: '100%',
+                                                            borderColor: rolesSeleccionados.includes(role) ? 'red' : 'lightgray',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        _hover={{ cursor: "pointer" }}
+                                                        onClick={() => seleccionarRol(role)}
+                                                    >
+                                                        {role.rol_tipo}
+                                                    </Container>
+                                                ))}
+                                            </VStack>
+                                        </HStack>
+                                        <HStack width={'100%'}>
+                                            <Button w={'100%'} bg={'red'} onClick={moverDerecha}
+                                                disabled={rolesSeleccionados.length === 0}>
+                                                {"<"}
                                             </Button>
-                                            <Input
-                                                style={{ display: 'none' }}
-                                                placeholder='Debe incluir una imagen'
-                                                id="image"
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handleImageChange}
-                                            />
-                                            <FormErrorMessage fontWeight="bold">{form.errors.image}</FormErrorMessage>
-                                        </FormControl>
-                                    )}
-                                </Field>
-                            </GridItem>
-                            <Field name='nombre'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
-                                        <FormLabel>Nombre:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.nombre}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                            <Field name='primerApellido'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.primerApellido && form.touched.primerApellido}>
-                                        <FormLabel>Primer Apellido:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.primerApellido}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                            <Field name='segundoApellido'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.segundoApellido && form.touched.segundoApellido}>
-                                        <FormLabel>Segundo Apellido:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.segundoApellido}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                            <Field name='usuario'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.usuario && form.touched.usuario}>
-                                        <FormLabel>Usuario:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.usuario}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                            <Field name='telefonoPrimer'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.telefonoPrimer && form.touched.telefonoPrimer}>
-                                        <FormLabel>Numero principal:</FormLabel>
-                                        <Input {...field} type='number' />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.telefonoPrimer}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-
-                            <Field name='telefonoSegundo'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.telefonoSegundo && form.touched.telefonoSegundo}>
-                                        <FormLabel>Numero segundario:</FormLabel>
-                                        <Input {...field} type='number' />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.telefonoSegundo}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-
-                            <Field name='direccion'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.direccion && form.touched.direccion}>
-                                        <FormLabel>Dirección:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.direccion}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-
-                            <Field name='correo'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.correo && form.touched.correo}>
-                                        <FormLabel>Correo:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.correo}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-
-                            <Field name='password'>
-                                {({ field, form }) => (
-                                    <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                        <FormLabel>Contraseña:</FormLabel>
-                                        <Input {...field} />
-                                        <FormErrorMessage fontWeight="bold">{form.errors.password}</FormErrorMessage>
-                                    </FormControl>
-                                )}
-                            </Field>
-                            <VStack bg={"white"} color={"black"} padding={"5px 4px 5px 4px"}>
-                                <HStack w={"100%"} alignItems={'flex-start'}>
-                                    <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles asignados:</Text>
-                                        {rolesAsignados?.map((role, index) => (
-                                            <Container
-                                                key={role.id}
-                                                style={{
-                                                    border: "1px solid lightgray",
-                                                    padding: 5,
-                                                    margin: 5,
-                                                    width: "100%",
-                                                    borderColor: rolesSeleccionados.includes(role) ? "red" : "lightgray",
-                                                }}
-                                                _hover={{ cursor: "pointer" }}
-                                                onClick={() => seleccionarRol(role)}
-                                            >
-                                                {role.rol_tipo}
-                                            </Container>
-                                        ))}
+                                            <Button w={'100%'} bg={'red'} onClick={moverIzquierda}
+                                                disabled={rolesSeleccionados.length === 0}>
+                                                {">"}
+                                            </Button>
+                                        </HStack>
                                     </VStack>
-                                    <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
-                                        <Text>Roles no asignados:</Text>
-                                        {rolesNoAsignados?.map((role, index) => (
-                                            <Container
-                                                key={role.id}
-                                                style={{
-                                                    border: '1px solid lightgray',
-                                                    padding: 5,
-                                                    margin: 5,
-                                                    width: '100%',
-                                                    borderColor: rolesSeleccionados.includes(role) ? 'red' : 'lightgray',
-                                                    cursor: 'pointer',
-                                                }}
-                                                _hover={{ cursor: "pointer" }}
-                                                onClick={() => seleccionarRol(role)}
-                                            >
-                                                {role.rol_tipo}
-                                            </Container>
-                                        ))}
-                                    </VStack>
-                                </HStack>
-                                <HStack width={'100%'}>
-                                    <Button w={'100%'} bg={'red'} onClick={moverDerecha}
-                                        disabled={rolesSeleccionados.length === 0}>
-                                        {"<"}
-                                    </Button>
-                                    <Button w={'100%'} bg={'red'} onClick={moverIzquierda}
-                                        disabled={rolesSeleccionados.length === 0}>
-                                        {">"}
-                                    </Button>
-                                </HStack>
-                            </VStack>
 
-                            <Button
-                                mt={4}
-                                colorScheme='red'
-                                isLoading={props.isSubmitting}
-                                type='submit'
-                            >
-                                Guardar empleado
-                            </Button>
-                        </SimpleGrid>
-                    </Form>
+                                    <Button
+                                        mt={4}
+                                        colorScheme='red'
+                                        isLoading={props.isSubmitting}
+                                        type='submit'
+                                    >
+                                        Guardar empleado
+                                    </Button>
+                                </SimpleGrid>
+                            </HStack>
+                        </Form>
+                    </Container>
 
                 )}
             </Formik>
-        </VStack>
+        </Box>
 
     </>
 } 

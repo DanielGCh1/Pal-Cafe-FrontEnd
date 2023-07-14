@@ -41,7 +41,6 @@ export default function EditIngredient() {
     const ref = useRef(null);
     let searchImage = true; // me indica si debo buscar la imagen
 
-
     const handleImageChange = (event) => {
         event.preventDefault();
         let reader = new FileReader();

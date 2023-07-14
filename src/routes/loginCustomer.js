@@ -141,7 +141,7 @@ export default function LoginCustomer() {
 
       <HStack>
         <Text>¿Aún no no está registrado/a?</Text>
-        <Link className='linksto' to="/RegistrarCliente">Registrar</Link>
+        <Link className='linksto' to="/PalCafe/RegistrarCliente">Registrar</Link>
       </HStack>
     </Flex>
   </>

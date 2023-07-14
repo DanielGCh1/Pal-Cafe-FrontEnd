@@ -84,6 +84,22 @@ const CustomerProvider = props => {
 
     const [customer, setCustomer] = useState(null)
     const navigate = useNavigate();
+    const [imageUrl, setImageUrl] = useState(null)
+
+    const getImageUrl = async id => {
+        try {
+          const response = await Axios.get(`/usuarios/imagen/${id}`);
+          if (response.status = 200) {
+            setImageUrl(`http://localhost:3001/api/usuarios/imagen/${id}`);
+          }
+          else {
+            setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+          }
+        } catch (error) {
+          console.log('La consulta para obtener la imagen del usuario falló');
+          setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
+        }
+      };
 
     const getCookie = async () => {
         await Axios.get("/getCookie", {
@@ -148,6 +164,7 @@ const CustomerProvider = props => {
     }
     const signOff = async () => {
         eliminarCookie();
+        navigate("/PalCafe/LoginCustomer")
         /*
         try {
             const custom = localStorage.getItem("usu_id_usuario");
@@ -161,24 +178,41 @@ const CustomerProvider = props => {
 
     const editCustomer = async (values, actions) => {
         try {
-            console.log(values);
-            const val = {
-                _id: values._id,
-                usu_nombre: values.name,
-                usu_usuario: values.user,
-                usu_primer_apellido: values.surname,
-                usu_segundo_apellido: values.secondSurname,
-                usu_fecha_registro: values.registrationDate,
-                usu_numero_telefono1: values.firstNumber,
-                usu_numero_telefono2: values.secondNumber,
-                usu_direccion: values.address,
-                usu_estado: values.state,
-                usu_correo: values.email,
-                usu_contraseña: values.password
-            };
-            Axios.put(`/users/edit/${values._id}`, val).then((data => console.log(data)))
-        } catch (error) { }
-        actions.setSubmitting(false);
+            const formData = new FormData();
+            formData.append('image', values.image);
+            formData.append('nombre', values.name);
+            formData.append('usuario', values.user);
+            formData.append('primerApellido', values.surname);
+            formData.append('segundoApellido', values.secondSurname);
+            formData.append('telefonoPrimer', values.firstNumber);
+            formData.append('telefonoSegundo', values.secondNumber);
+            formData.append('direccion', values.address);
+            formData.append('correo', values.email);
+            formData.append('password', values.password);
+            formData.append('newPassword', values.newPassword);
+            formData.append('newImage', values.newImage);
+            formData.append('imageUrlLocal', values.imageUrlLocal);//TODO: si esta en null, es
+            //TODO: porque borro la foto, y no planea dejar ninguna, pero solo aplica para clientes
+            // TODO: pero se ocupa aqui, porque los empleados si ocupan foto, y ocupo saber si lo intento
+      
+            console.log(formData);
+            const response = await Axios.put(`/users/edit-customer/${values._id}`, formData, {
+              withCredentials: true,
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+      
+            if (response.status == 200) {
+                console.log(response.data);
+              window.alert(response.data.message);
+            } else {
+              window.alert(response.data.message);
+            }
+          } catch (error) {
+            window.alert("Error inesperado al editar el empleado");
+          }
+          actions.setSubmitting(false);
     };
     return (
         <CustomerContext.Provider
@@ -188,7 +222,10 @@ const CustomerProvider = props => {
                 loginCustomer,
                 signOff,
                 getDate,
-                editCustomer
+                editCustomer,
+                imageUrl,
+                setImageUrl,
+                getImageUrl
             }}
         >
             {props.children}
