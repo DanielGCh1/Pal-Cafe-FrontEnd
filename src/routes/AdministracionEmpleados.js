@@ -125,7 +125,7 @@ const AdministracionEmpleados = () => {
           },
         },
       }} >
-        <Table variant="simple" width="100%" bg="rgba(0,0,0,0.5)" bgOpacity="25%">
+        <Table variant="simple" width="100%" bg="rgba(0,0,0,0.5)">
           <Thead color="white">
             <Tr>
               <Th color="white" fontWeight={"bold"}>Nombre</Th>

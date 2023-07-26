@@ -30,15 +30,26 @@ const isUndefinedOrNull = obj => {
     }
     return false;
 };
+const getDate = (fechaISO) => {
+    let fechaObj = new Date(fechaISO);
+    let dia = fechaObj.getDate();
+    let mes = fechaObj.getMonth() + 1;
+    let anio = fechaObj.getFullYear();
+    let hora = fechaObj.getHours();
+    let minutos = fechaObj.getMinutes();
+    let segundos = fechaObj.getSeconds();
+
+    return `${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`;
+}
 
 export default function EditEmployee() {
     const { id } = useParams();
     const ref = useRef(null); /*Esta es una referencia a los valores del formulario */
-    const { editEmployee, getRoles, roles, imageUrl, getImageUrl, setImageUrl, employee, getEmployeeId } = useEmployees();
+    const { getRoles, roles, imageUrl, setImageUrl, employee, editEmployee, findEmployeeById, setEmployee} = useEmployees();
     const [rolesNoAsignados, setRolesNoAsignados] = useState([]);
     const [rolesAsignados, setRolesAsignados] = useState([]);
     const [rolesSeleccionados, setRolesSeleccionados] = useState([]);
-    let searchImage = true; // me indica si debo buscar la imagen
+    const [searchImage, setSearchImage] = useState(true);
 
     const handleImageChange = (event) => {
         event.preventDefault();
@@ -52,15 +63,44 @@ export default function EditEmployee() {
             ref.current.values.imageUrlLocal = reader.result;
         };
         reader.readAsDataURL(file);
-        //fin nuevo
     };
+
+    useEffect(() => {
+        setEmployee(undefined)
+
+        // Fetch employee data and image URL if they are not available
+        findEmployeeById(id);
+
+        if (id && searchImage && ref.current && imageUrl) {
+            setSearchImage(false);
+            ref.current.values.imageUrlLocal = imageUrl;
+        }
+
+        console.log(roles)
+
+        // Filter roles based on employee's assigned roles
+        if (employee && employee.usu_roles) {
+            const rolesNoAsignados = roles.filter((rol) => {
+                return !employee.usu_roles.some((r) => r.rol_tipo === rol.rol_tipo);
+            });
+
+            // Update the state with filtered roles
+            setRolesNoAsignados(rolesNoAsignados);
+            setRolesAsignados(employee.usu_roles);
+        }
+
+    }, []);
+
+    useEffect(() => {
+        getRoles()
+    }, [])
+
     const handleImageDelete = () => {
         setImageUrl(null);
-        //nuevo
         ref.current.values.newImage = null;
         ref.current.values.imageUrlLocal = null;
-        //nuevo
     };
+
     function validateImage() {
         let value = ref.current.values.newImage;
         if (isUndefinedOrNull(imageUrl) || !isUndefinedOrNull(value)) {
@@ -79,50 +119,6 @@ export default function EditEmployee() {
             return error
         }
     }
-    useEffect(() => {
-        if (!isUndefinedOrNull(id) && isUndefinedOrNull(employee)) {
-            getEmployeeId(id);
-            getImageUrl(id);
-        }
-        if (!isUndefinedOrNull(id) && searchImage && !isUndefinedOrNull(ref.current) && !isUndefinedOrNull(imageUrl)) {
-            searchImage = false;
-            ref.current.values.imageUrlLocal = imageUrl;
-        }
-        if (!isUndefinedOrNull(employee) && !isUndefinedOrNull(employee.usu_roles)) {
-            // Creamos una copia del array de roles original
-            const rolesCopy = [...roles];
-
-            // Filtramos los roles no asignados
-            const rolesNoAsignados = rolesCopy.filter((rol) => {
-                // Verificamos si el rol no está asignado al empleado
-                return !employee.usu_roles.some((r) => r.rol_tipo === rol.rol_tipo);
-            });
-            console.log(rolesNoAsignados);
-            // Actualizamos los estados de los roles no asignados y asignados
-            setRolesNoAsignados(rolesNoAsignados);
-            setRolesAsignados(employee.usu_roles);
-        }
-    }, [imageUrl, employee, roles, rolesAsignados]);
-
-    useEffect(() => {
-        getRoles()
-    }, [])
-    /*
-        useEffect(() => {
-            // Creamos una copia del array de roles original
-            const rolesCopy = [...roles];
-    
-            // Filtramos los roles no asignados
-            const rolesNoAsignados = rolesCopy.filter((rol) => {
-                // Verificamos si el rol no está asignado al empleado
-                return !employee.usu_roles.some((r) => r.rol_tipo === rol.rol_tipo);
-            });
-            console.log(rolesNoAsignados);
-            // Actualizamos los estados de los roles no asignados y asignados
-            setRolesNoAsignados(rolesNoAsignados);
-            setRolesAsignados(employee.usu_roles);
-        }, [roles, employee.usu_roles]);
-        */
 
     const seleccionarRol = (rol) => {
         // verifica si el rol ya está en la lista de roles seleccionados
@@ -227,7 +223,9 @@ export default function EditEmployee() {
                         /*roles: employee.usu_roles, */
                         newImage: null,
                         imageUrlLocal: null,
+                        currentPassword: "",
                         newPassword: "",
+                        verifyPassword: "",
                         roles: employee.usu_roles,
                     }}
 
@@ -242,12 +240,12 @@ export default function EditEmployee() {
                             .required('La empleado requiere un numero de telefono'),
                         correo: Yup.string().email()
                             .required('Ingrese un email valido'),
-                        password: Yup.string()
-                            .required("Se necesita un contraseña")
+                        verifyPassword: Yup.string()
+                            .oneOf([Yup.ref('newPassword')], 'Passwords do not match'),
                     }, 1000)}
                     onSubmit={(values, actions) => {
                         if (window.confirm("¿Está seguro que desea editar el empleado?")) {
-                            editEmployee(values, actions, id);
+                            editEmployee(values, actions, id)
                         }
                         else {
                             actions.setSubmitting(false);
@@ -255,9 +253,17 @@ export default function EditEmployee() {
                     }}
                 >
                     {(props) => (
-                        <Container bgColor="rgba(0,0,0,.1)" p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
+                        <Container display={'flex'} flexDirection={'column'} bgColor="rgba(0,0,0,.1)" p='20px' color='white' borderRadius='10px' alignSelf='center' alignItems='center' gap='2' maxW='80%' boxShadow='dark-lg'>
+                            <HStack alignSelf={'flex-end'}>
+                                <Text fontWeight={'bold'}>
+                                    Fecha de registro:
+                                </Text>
+                                <Text >
+                                    {getDate(employee.usu_fecha_registro)}
+                                </Text>
+                            </HStack>
                             <Form>
-                                <HStack spacing='28'>
+                                <HStack spacing='28' >
                                     <SimpleGrid columns={[1, 2, 3]} spacing='30px' alignItems='center' w="100%">
                                         <GridItem rowSpan={2}>
                                             <Field name="imageUrlLocal" validate={validateImage} h='calc(100vh)'>
@@ -304,12 +310,22 @@ export default function EditEmployee() {
                                                 )}
                                             </Field>
                                         </GridItem>
+
                                         <Field name='nombre'>
                                             {({ field, form }) => (
                                                 <FormControl isInvalid={form.errors.nombre && form.touched.nombre}>
                                                     <FormLabel>Nombre:</FormLabel>
                                                     <Input {...field} />
                                                     <FormErrorMessage fontWeight="bold">{form.errors.nombre}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+                                        <Field name='usuario'>
+                                            {({ field, form }) => (
+                                                <FormControl isInvalid={form.errors.usuario && form.touched.usuario}>
+                                                    <FormLabel>Usuario:</FormLabel>
+                                                    <Input {...field} />
+                                                    <FormErrorMessage fontWeight="bold">{form.errors.usuario}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
@@ -380,22 +396,34 @@ export default function EditEmployee() {
                                             )}
                                         </Field>
 
-                                        <Field name='password'>
+
+                                        <Field name="newPassword">
                                             {({ field, form }) => (
-                                                <FormControl isInvalid={form.errors.password && form.touched.password}>
-                                                    <FormLabel>Contraseña:</FormLabel>
-                                                    <Input {...field} />
-                                                    <FormErrorMessage fontWeight="bold">{form.errors.password}</FormErrorMessage>
+                                                <FormControl isInvalid={form.errors.newPassword && form.touched.newPassword}>
+                                                    <FormLabel>New Password:</FormLabel>
+                                                    <Input type="password" {...field} />
+                                                    <FormErrorMessage fontWeight="bold">{form.errors.newPassword}</FormErrorMessage>
                                                 </FormControl>
                                             )}
                                         </Field>
+
+                                        <Field name="verifyPassword">
+                                            {({ field, form }) => (
+                                                <FormControl isInvalid={form.errors.verifyPassword && form.touched.verifyPassword}>
+                                                    <FormLabel>Verify Password:</FormLabel>
+                                                    <Input type="password" {...field} />
+                                                    <FormErrorMessage fontWeight="bold">{form.errors.verifyPassword}</FormErrorMessage>
+                                                </FormControl>
+                                            )}
+                                        </Field>
+
                                         <VStack bg={"white"} color={"black"} padding={"5px 4px 5px 4px"}>
                                             <HStack w={"100%"} alignItems={'flex-start'}>
                                                 <VStack width={'45%'} justifyContent={'flex-start'} alignContent={'flex-start'} borderStyle={'solid'} borderColor={'black'}>
                                                     <Text>Roles asignados:</Text>
                                                     {rolesAsignados?.map((role, index) => (
                                                         <Container
-                                                            key={role.id}
+                                                            key={index}
                                                             style={{
                                                                 border: "1px solid lightgray",
                                                                 padding: 5,
@@ -414,7 +442,7 @@ export default function EditEmployee() {
                                                     <Text>Roles no asignados:</Text>
                                                     {rolesNoAsignados?.map((role, index) => (
                                                         <Container
-                                                            key={role.id}
+                                                            key={index}
                                                             style={{
                                                                 border: '1px solid lightgray',
                                                                 padding: 5,
@@ -442,24 +470,24 @@ export default function EditEmployee() {
                                                 </Button>
                                             </HStack>
                                         </VStack>
-
-                                        <Button
-                                            mt={4}
-                                            colorScheme='red'
-                                            isLoading={props.isSubmitting}
-                                            type='submit'
-                                        >
-                                            Editar empleado
-                                        </Button>
                                     </SimpleGrid>
                                 </HStack>
+                                <Button
+                                    mt={4}
+                                    colorScheme='red'
+                                    isLoading={props.isSubmitting}
+                                    type='submit'
+                                    alignSelf={'flex-end'}
+                                >
+                                    Editar empleado
+                                </Button>
                             </Form>
                         </Container>
                     )}
                 </Formik>
                 : null
             }
-        </VStack>
+        </VStack >
 
     </>
 }

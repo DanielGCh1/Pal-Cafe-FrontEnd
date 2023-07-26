@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 
 const EmployeeContext = createContext(null)
 
@@ -11,36 +11,45 @@ const EmployeeProvider = props => {
   const [imageUrl, setImageUrl] = useState(null)
 
 
-  const getEmployeeId = async id => {
+  const getEmployeeById = async (id) => {
     try {
-      const response = await Axios.get(`/users/${id}`);
-      const data = response.data[0];
-      console.log(data);
-      setEmployee(data);
+      const response = await Axios.get(`/users/${id}`, {
+        withCredentials: true
+      });
+      return response.data[0];
     } catch (error) {
+      console.error('Error fetching employee data:', error);
+      return undefined;
     }
   };
 
-  const findEmployeeById = (id) => {
-    const emplo = employees.find(emp => emp._id === id);
-    setEmployee(emplo);
-    return employee;
-  }
-
-  const getImageUrl = async id => {
+  const findEmployeeById = async (id) => {
     try {
-      const response = await Axios.get(`/usuarios/imagen/${id}`);
-      if (response.status = 200) {
-        setImageUrl(`http://localhost:3001/api/usuarios/imagen/${id}`);
+      let employee;
+      if (employees) {
+        employee = await getEmployeeById(id);
+        console.log(employee)
+      } else {
+        employee = employees.find((emp) => emp._id === id);
       }
-      else {
+
+      const response = await Axios.get(`/usuarios/imagen/${id}`);
+      if (response.status === 200) {
+        setImageUrl(`http://localhost:3001/api/usuarios/imagen/${id}`);
+      } else {
         setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
       }
+
+      setEmployee(employee);
     } catch (error) {
-      console.log('La consulta para obtener la imagen del usuario falló');
+      if(error.response.message === "error"){
+
+      }
+      setEmployee((undefined));
       setImageUrl(require('../../assets/ImagenNoEncontrada.png'));
     }
   };
+
   const addEmployee = async (values, actions) => {
     try {
       const formData = new FormData();
@@ -53,7 +62,6 @@ const EmployeeProvider = props => {
       formData.append('telefonoSegundo', values.telefonoSegundo);
       formData.append('direccion', values.direccion);
       formData.append('correo', values.correo);
-      formData.append('password', values.password);
       formData.append('newPassword', values.newPassword);
       formData.append('state', "Aceptado");
       formData.append('roles', JSON.stringify(values.roles));
@@ -91,7 +99,7 @@ const EmployeeProvider = props => {
       formData.append('telefonoSegundo', values.telefonoSegundo);
       formData.append('direccion', values.direccion);
       formData.append('correo', values.correo);
-      formData.append('password', values.password);
+      formData.append('password', values.currentPassword);
       formData.append('newPassword', values.newPassword);
       formData.append('roles', JSON.stringify(values.roles));
       formData.append('newImage', values.newImage);
@@ -134,7 +142,6 @@ const EmployeeProvider = props => {
         withCredentials: true
       });
       const data = res.data;
-      console.log(data)
       setEmployees(data)
     } catch (error) {
       console.error(error);
@@ -147,7 +154,6 @@ const EmployeeProvider = props => {
         withCredentials: true
       });
       const data = res.data;
-      console.log(data);
       setRoles(data)
     } catch (error) {
       console.error(error);
@@ -185,9 +191,9 @@ const EmployeeProvider = props => {
         getRoles,
         addEmployee,
         imageUrl,
-        getImageUrl,
+        setEmployee,
         setImageUrl,
-        getEmployeeId
+        getEmployeeById
       }}
     >
       {props.children}
